@@ -109,7 +109,7 @@ namespace Presenters.Title {
 						break;
 				}
 			}
-
+			
 			Logger.Debug( "End" );
 		}
 

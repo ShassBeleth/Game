@@ -1,4 +1,5 @@
 ﻿using Presenters.ChapterSelect;
+using Presenters.Customize;
 using Presenters.Gallery;
 using Presenters.SelectSaveData;
 using Presenters.Title;
@@ -117,6 +118,9 @@ namespace SceneManagers {
 					break;
 				case "ChapterSelect":
 					new ChapterSelectPresenter();
+					break;
+				case "Customize":
+					new CustomizePresenter();
 					break;
 				default:
 					Logger.Warning( "Loaded Scene Name is Unexpected Name." );

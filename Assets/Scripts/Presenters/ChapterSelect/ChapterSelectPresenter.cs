@@ -45,7 +45,7 @@ namespace Presenters.ChapterSelect {
 		#region TODO 仮
 		public void OnClickTempButtonEvent() {
 			Logger.Debug( "Start" );
-			UnityEngine.SceneManagement.SceneManager.LoadScene( "SelectSaveData" );
+			UnityEngine.SceneManagement.SceneManager.LoadScene( "Customize" );
 			Logger.Debug( "End" );
 		}
 		#endregion
