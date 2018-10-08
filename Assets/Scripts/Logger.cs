@@ -1,38 +1,46 @@
-﻿/// <summary>
-/// ログ出力クラス
+﻿
+/// <summary>
+/// Logger設定クラス
 /// </summary>
-public static class Logger {
+public class LoggerConfiguer {
 
 	/// <summary>
 	/// デバッグログを出力するかどうか
 	/// </summary>
-	private static bool HasOutputDebugLog = true;
+	public static bool HasOutputDebugLog = true;
 
 	/// <summary>
 	/// 警告ログを出力するかどうか
 	/// </summary>
-	private static bool HasOutputWarningLog = true;
+	public static bool HasOutputWarningLog = true;
 
 	/// <summary>
 	/// エラーログを出力するかどうか
 	/// </summary>
-	private static bool HasOutputErrorLog = true;
+	public static bool HasOutputErrorLog = true;
 
 	/// <summary>
 	/// Viewのログを出力するかどうか
 	/// </summary>
-	private static bool HasOutputViewLog = true;
+	public static bool HasOutputViewLog = true;
 
 	/// <summary>
 	/// Presenterのログを出力するかどうか
 	/// </summary>
-	private static bool HasOutputPresenterLog = true;
+	public static bool HasOutputPresenterLog = true;
 
 	/// <summary>
 	/// ViewとPresenterのログを出力するかどうか
 	/// </summary>
-	private static bool HasOutputOtherLog = true;
+	public static bool HasOutputOtherLog = true;
 
+}
+
+/// <summary>
+/// ログ出力クラス
+/// </summary>
+public static class Logger {
+	
 	/// <summary>
 	/// ログレベル
 	/// </summary>
@@ -51,24 +59,24 @@ public static class Logger {
 	private static bool HasOutputLog( LogLevel logLevel , string className ) {
 
 		// ログレベル毎に出力フラグを見て判定
-		if( logLevel == LogLevel.Debug && !HasOutputDebugLog ) {
+		if( logLevel == LogLevel.Debug && !LoggerConfiguer.HasOutputDebugLog ) {
 			return false;
 		}
-		if( logLevel == LogLevel.Warning && !HasOutputWarningLog ) {
+		if( logLevel == LogLevel.Warning && !LoggerConfiguer.HasOutputWarningLog ) {
 			return false;
 		}
-		if( logLevel == LogLevel.Error && !HasOutputErrorLog ) {
+		if( logLevel == LogLevel.Error && !LoggerConfiguer.HasOutputErrorLog ) {
 			return false;
 		}
 
 		// クラス名毎に出力フラグを見て判定
-		if( className.EndsWith( "View" ) && !HasOutputViewLog ) {
+		if( className.EndsWith( "View" ) && !LoggerConfiguer.HasOutputViewLog ) {
 			return false;
 		}
-		if( className.EndsWith( "Presenter" ) && !HasOutputPresenterLog ) {
+		if( className.EndsWith( "Presenter" ) && !LoggerConfiguer.HasOutputPresenterLog ) {
 			return false;
 		}
-		if( !className.EndsWith( "View" ) && !className.EndsWith( "Presenter" ) && !HasOutputOtherLog ) {
+		if( !className.EndsWith( "View" ) && !className.EndsWith( "Presenter" ) && !LoggerConfiguer.HasOutputOtherLog ) {
 			return false;
 		}
 

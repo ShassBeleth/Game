@@ -28,7 +28,7 @@ namespace Views.SelectSaveData {
 			/// 最終更新日
 			/// </summary>
 			public DateTime latestUpdateDataTime { set; get; }
-
+			
 		}
 		
 		/// <summary>
@@ -45,30 +45,6 @@ namespace Views.SelectSaveData {
 			Logger.Debug( "End" );
 		}
 		
-		/// <summary>
-		/// セーブデータの描画
-		/// </summary>
-		/// <param name="saveDataList">セーブデータのリスト</param>
-		public void ShowSaveData( List<SaveData> saveDataList ) {
-			Logger.Debug( "Start" );
-			for( int i = 0 ; i < saveDataList.Count ; i++ ) {
-				Logger.Debug( "saveDataList[" + i + "]" );
-				Logger.Debug( "Id is " + saveDataList[ i ].Id );
-				Logger.Debug( "User Name is " + saveDataList[ i ].userName );
-				Logger.Debug( "Latest Update Date Time is " + saveDataList[ i ].latestUpdateDataTime.ToString( "yyyy/MM/dd hh:mm:ss" ) );
-			}
-			Logger.Debug( "End" );
-		}
-
-		#region TODO セーブ機能作るまでの仮のボタン
-		public Action OnClickTempButtonEventHandler { set; get; }
-		public void OnClickTempButtonEvent() {
-			Logger.Debug( "Start" );
-			this.OnClickTempButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
-		}
-		#endregion
-
 	}
 
 }
