@@ -89,7 +89,6 @@ namespace Presenters.ChapterSelect {
 			}
 			Logger.Debug( "End" );
 			return list;
-
 		}
 
 		/// <summary>

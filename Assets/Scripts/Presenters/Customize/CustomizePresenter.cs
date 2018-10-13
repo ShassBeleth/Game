@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SceneManagers.Parameters;
 using UnityEngine;
 using Views.Customize;
@@ -16,29 +17,22 @@ namespace Presenters.Customize {
 		private CustomizeView CustomizeView { set; get; }
 
 		/// <summary>
-		/// パラメータカスタマイズGameObject
-		/// </summary>
-		private GameObject CustomParameterGameObject { set; get; }
-
-		/// <summary>
-		/// 装備カスタマイズGameObject
-		/// </summary>
-		private GameObject CustomEquipmentGameObject { set; get; }
-
-		/// <summary>
-		/// 装備メニューGameObject
-		/// </summary>
-		private GameObject EquipmentMenuGameObject { set; get; }
-
-		/// <summary>
-		/// 素体一覧GameObject
-		/// </summary>
-		private GameObject BodiesGameObject { set; get; }
-
-		/// <summary>
 		/// 素体一覧
 		/// </summary>
+		/// TODO Viewの形で持つのは嫌だ
 		private List<CustomizeView.Body> bodies { set; get; }
+
+		/// <summary>
+		/// 装備一覧
+		/// </summary>
+		/// TODO Viewの形で持つのは嫌だ
+		private List<CustomizeView.Equipment> equipments { set; get; }
+
+		/// <summary>
+		/// パラメータチップ一覧
+		/// </summary>
+		/// TODO Viewの形で持つのは嫌だ
+		public List<CustomizeView.ParameterChip> parameterChips { set;get; }
 
 		/// <summary>
 		/// コンストラクタ
@@ -48,10 +42,6 @@ namespace Presenters.Customize {
 
 			// hierarchyからViewを持つGameObject取得
 			GameObject customizeGameObject = GameObject.Find( "Canvas" );
-			this.CustomEquipmentGameObject = customizeGameObject.transform.Find( "Equipment" ).gameObject;
-			this.CustomParameterGameObject = customizeGameObject.transform.Find( "Parameter" ).gameObject;
-			this.EquipmentMenuGameObject = this.CustomEquipmentGameObject.transform.Find( "Menu" ).gameObject;
-			this.BodiesGameObject = this.CustomEquipmentGameObject.transform.Find( "Bodies" ).gameObject;
 
 			// Viewを取得
 			this.CustomizeView = customizeGameObject.GetComponent<CustomizeView>();
@@ -64,8 +54,35 @@ namespace Presenters.Customize {
 			this.CustomizeView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
 			this.CustomizeView.OnClickBodyButtonEventHandler = this.ClickedBodyButtonFromMenuEvent;
 
-			// TODO 素体一覧取得
-			this.bodies = new List<CustomizeView.Body>() {
+			// 素体一覧取得
+			// TODO 実際は型が違うから変換が必要
+			this.bodies = this.GetAcquiredBodies();
+			this.CustomizeView.SetBodies( this.bodies );
+
+			// 装備一覧取得
+			// TODO 実際は型が違うから変換が必要
+			this.equipments = this.GetAcquiredEquipments();
+			this.CustomizeView.SetEqupments( this.equipments );
+
+			// パラメータチップ一覧取得
+			// TODO 実際は型が違うから変換が必要
+			this.parameterChips = this.GetAcquiredParameterChip();
+			this.CustomizeView.SetParameterChips( this.parameterChips );
+
+			// 初期表示
+			this.CustomizeView.ShowCustomEquipment();
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 取得済み素体一覧取得
+		/// </summary>
+		/// <returns>取得済み素体一覧</returns>
+		/// TODO サーバ等から取得する　返り値もレスポンスのデータそのまま
+		private List<CustomizeView.Body> GetAcquiredBodies() {
+			Logger.Debug( "Start" );
+			List<CustomizeView.Body> list = new List<CustomizeView.Body>() {
 				new CustomizeView.Body(){
 					Id = 0 ,
 					Name = "A" ,
@@ -287,27 +304,46 @@ namespace Presenters.Customize {
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
 				}
 			};
-			this.CustomizeView.SetBodies( this.bodies );
-
-			// TODO 装備一覧取得
-			List<CustomizeView.Equipment> equipments = new List<CustomizeView.Equipment>() {
+			Logger.Debug( "End" );
+			return list;
+		}
+		
+		/// <summary>
+		/// 取得済み装備一覧取得
+		/// </summary>
+		/// <returns>取得済み装備一覧</returns>
+		/// TODO サーバ等から取得する　返り値もレスポンスデータのまま
+		private List<CustomizeView.Equipment> GetAcquiredEquipments() {
+			Logger.Debug( "Start" );
+			List<CustomizeView.Equipment> list = new List<CustomizeView.Equipment>() {
 				new CustomizeView.Equipment(){
 					Id = 0 ,
-					Name = "スシコラ"
+					Name = "スシコラ",
+					DecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
 				} ,
 				new CustomizeView.Equipment() {
 					Id = 1 ,
-					Name = "リッター"
+					Name = "リッター",
+					DecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
 				} ,
 				new CustomizeView.Equipment() {
 					Id = 2 ,
-					Name = "スパッタリー"
+					Name = "スパッタリー",
+					DecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
 				}
 			};
-			this.CustomizeView.SetEqupments( equipments );
+			Logger.Debug( "End" );
+			return list;
+		}
 
-			// TODO パラメータチップ一覧取得
-			List<CustomizeView.ParameterChip> parameterChips = new List<CustomizeView.ParameterChip>() {
+		/// <summary>
+		/// 取得済みパラメータチップ一覧取得
+		/// </summary>
+		/// <returns>取得済みパラメータチップ一覧</returns>
+		/// TODO サーバ等から取得する　返り値もレスポンスデータのまま
+		private List<CustomizeView.ParameterChip> GetAcquiredParameterChip() {
+			Logger.Debug( "Start" );
+			List<CustomizeView.ParameterChip> list = new List<CustomizeView.ParameterChip>() {
 				new CustomizeView.ParameterChip(){
 					Id = 0 ,
 					Name = "メイン効率UP"
@@ -321,13 +357,8 @@ namespace Presenters.Customize {
 					Name = "イカニンジャ"
 				}
 			};
-			this.CustomizeView.SetParameterChips( parameterChips );
-
-			// 初期表示
-			this.BodiesGameObject.SetActive( false );
-			this.CustomParameterGameObject.SetActive( false );
-
 			Logger.Debug( "End" );
+			return list;
 		}
 
 		/// <summary>
@@ -344,8 +375,7 @@ namespace Presenters.Customize {
 		/// </summary>
 		public void ClickedSwitchEquipmentButtonEvent() {
 			Logger.Debug( "Start" );
-			this.CustomEquipmentGameObject.SetActive( true );
-			this.CustomParameterGameObject.SetActive( false );
+			this.CustomizeView.ShowCustomEquipment();
 			Logger.Debug( "End" );
 		}
 
@@ -354,8 +384,7 @@ namespace Presenters.Customize {
 		/// </summary>
 		public void ClickedSwitchParameterButtonEvent() {
 			Logger.Debug( "Start" );
-			this.CustomParameterGameObject.SetActive( true );
-			this.CustomEquipmentGameObject.SetActive( false );
+			this.CustomizeView.ShowCustomParameter();
 			Logger.Debug( "End" );
 		}
 
@@ -382,8 +411,7 @@ namespace Presenters.Customize {
 		/// </summary>
 		public void ClickedBodyButtonFromMenuEvent() {
 			Logger.Debug( "Start" );
-			this.BodiesGameObject.SetActive( true );
-			this.EquipmentMenuGameObject.SetActive( false );
+			this.CustomizeView.ShowEquipmentBodies();
 			Logger.Debug( "End" );
 		}
 
@@ -396,13 +424,7 @@ namespace Presenters.Customize {
 			Logger.Debug( "Body Id is " + bodyId );
 
 			// 素体IDからどの素体が選ばれたか調べる
-			CustomizeView.Body selectedBody = null;
-			foreach( CustomizeView.Body body in this.bodies ) {
-				if( bodyId == body.Id ) {
-					selectedBody = body;
-					break;
-				}
-			}
+			CustomizeView.Body selectedBody = this.bodies.FirstOrDefault( body => bodyId == body.Id );
 			if( selectedBody == null ) {
 				Logger.Warning( "Selected Body is Null" );
 			}
@@ -411,8 +433,7 @@ namespace Presenters.Customize {
 			this.CustomizeView.SetEquipablePlaces( selectedBody.EqupablePlaces );
 
 			// 表示切替
-			this.EquipmentMenuGameObject.SetActive( true );
-			this.BodiesGameObject.SetActive( false );
+			this.CustomizeView.ShowEquipmentMenu();
 
 			Logger.Debug( "End" );
 		}
@@ -423,6 +444,27 @@ namespace Presenters.Customize {
 		/// <param name="equipablePlaceId">装備可能箇所ID</param>
 		public void ClickedEquipablePlaceNodeDecisionButtonEvent( int equipablePlaceId ) {
 			Logger.Debug( "Start" );
+			Logger.Debug( $"Equipable Place Id is {equipablePlaceId}" );
+
+			// TODO 装備可能箇所IDから所持装備のうち、装備できるものだけリストにする
+			this.CustomizeView.SetEqupments( this.equipments );
+
+			// 表示切替
+			this.CustomizeView.ShowEquipments();
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 装備選択時イベント
+		/// </summary>
+		/// <param name="equipmentId">装備ID</param>
+		public void ClickedEquipmentNodeDecisionButtonEvent( int equipmentId ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Equipment Id is {equipmentId}" );
+
+			// 表示切替
+			this.CustomizeView.ShowCustomEquipment();
 
 			Logger.Debug( "End" );
 		}

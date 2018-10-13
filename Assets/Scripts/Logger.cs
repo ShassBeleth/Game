@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics;
 /// <summary>
 /// Logger設定クラス
 /// </summary>
@@ -154,6 +155,7 @@ public static class Logger {
 	/// デバッグログ出力
 	/// </summary>
 	/// <param name="message">メッセージ</param>
+	[Conditional("DEBUG")]
 	public static void Debug( string message )
 		=> WriteLog( LogLevel.Debug , message );
 
