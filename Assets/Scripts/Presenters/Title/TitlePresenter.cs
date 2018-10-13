@@ -1,4 +1,7 @@
-﻿using SceneManagers;
+﻿using Saves.Models;
+using Saves.Serializers;
+using SceneManagers;
+using SceneManagers.Parameters;
 using UnityEditor;
 using UnityEngine;
 using Views.Title;
@@ -9,12 +12,7 @@ namespace Presenters.Title {
 	/// タイトルPresenter
 	/// </summary>
 	public class TitlePresenter {
-		
-		/// <summary>
-		/// 遷移前画面名
-		/// </summary>
-		public static string SceneNameBeforeTransition = null;
-
+				
 		/// <summary>
 		/// タイトルView
 		/// </summary>
@@ -31,41 +29,25 @@ namespace Presenters.Title {
 		private OptionView OptionView { set; get; }
 
 		/// <summary>
-		/// タイトルGameObject
+		/// コンストラクタ
 		/// </summary>
-		private GameObject TitleGameObject { set; get; }
-
-		/// <summary>
-		/// PleasePushAnyKeyのテキストGameObject
-		/// </summary>
-		private GameObject PleasePushAnyKeyTextGameObject { set; get; }
-
-		/// <summary>
-		/// メインメニューGameObject
-		/// </summary>
-		private GameObject MainMenuGameObject { set; get; }
-
-		/// <summary>
-		/// オプションGameObject
-		/// </summary>
-		private GameObject OptionGameObject { set; get; }
-
+		public TitlePresenter() : this( null ) { }
+		
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public TitlePresenter() {
+		/// <param name="parameter">前画面から受け取るパラメータ</param>
+		public TitlePresenter( TitleParameter parameter ) {
 			Logger.Debug( "Start" );
-
-			// hierarchyからViewを持つGameObject取得
-			this.TitleGameObject = GameObject.Find( "Canvas" );
-			this.MainMenuGameObject = GameObject.Find( "MainMenu" );
-			this.PleasePushAnyKeyTextGameObject = GameObject.Find( "PleasePushAnyKey" );
-			this.OptionGameObject = GameObject.Find( "OptionMenu" );
+			Logger.Debug( "Parameter Exists..." + ( parameter == null ? "NG" : "OK." ) );
+			if( parameter != null ) {
+				Logger.Debug( "Initial Title Part is " + parameter.InitialTitlePart.Value );
+			}
 
 			// Viewを取得
-			this.TitleView = this.TitleGameObject.GetComponent<TitleView>();
-			this.MainMenuView = this.MainMenuGameObject.GetComponent<MainMenuView>();
-			this.OptionView = this.OptionGameObject.GetComponent<OptionView>();
+			this.TitleView = GameObject.Find( "Canvas" ).GetComponent<TitleView>();
+			this.MainMenuView = GameObject.Find( "MainMenu" ).GetComponent<MainMenuView>();
+			this.OptionView = GameObject.Find( "OptionMenu" ).GetComponent<OptionView>();
 
 			// タイトルViewのEventHandler設定
 			this.TitleView.OnClickAnyKeyEventHandler = this.ClickedAnyKeyEvent;
@@ -81,28 +63,25 @@ namespace Presenters.Title {
 			// オプションViewのEventHandler設定
 			this.OptionView.OnClickBackButtonEventHandler = this.ClickedOptionBackButtonEvent;
 
-			// TODO オプション設定値をストレージから取得
-			OptionView.OptionValue optionValue = new OptionView.OptionValue();
+			// オプション設定値をストレージから取得
+			OptionView.OptionValue optionValue = this.ConvertOptionValue( OptionSaveDataSerializer.LoadOptionSaveData() );
 
 			// オプション設定値の設定
 			this.OptionView.SetOptionValue( optionValue );
 
-			// ゲーム起動により遷移した場合
-			if( SceneManager.BeforeSingleModeSceneName == null ) {
-				Logger.Debug( "Before Scene Name is Null." );
-				this.PleasePushAnyKeyTextGameObject.SetActive( true );
-				this.MainMenuGameObject.SetActive( false );
-				this.OptionGameObject.SetActive( false );
+			// 遷移前画面の情報がなければShow Please Push Any Keyの表示
+			if( parameter?.InitialTitlePart == null ) {
+				Logger.Debug( "Initial Title Part Enum is Null." );
+				this.TitleView.ShowPleasePushAnyKey();
 			}
 			else {
-				switch( SceneManager.BeforeSingleModeSceneName ) {
-					case "Gallery":
-					case "SelectSaveData":
-					case "ChapterSelect":
-						Logger.Debug( "Before Scene Name is Gallery" );
-						this.PleasePushAnyKeyTextGameObject.SetActive( false );
-						this.MainMenuGameObject.SetActive( true );
-						this.OptionGameObject.SetActive( false );
+				Logger.Debug( "Initial Title Part Enum is " + parameter.InitialTitlePart.Value );
+				switch( parameter.InitialTitlePart.Value ) {
+					case TitleParameter.InitialTitlePartEnum.MainMenu:
+						this.TitleView.ShowMainMenu();
+						break;
+					case TitleParameter.InitialTitlePartEnum.PleasePushAnyKey:
+						this.TitleView.ShowPleasePushAnyKey();
 						break;
 					default:
 						Logger.Warning( "Before Scene Name is Unexpected Name." );
@@ -114,15 +93,23 @@ namespace Presenters.Title {
 		}
 
 		/// <summary>
+		/// オプションのセーブデータから描画用に値を変換する
+		/// </summary>
+		/// <param name="model">オプションのセーブデータ</param>
+		/// <returns></returns>
+		private OptionView.OptionValue ConvertOptionValue( OptionSaveDataModel model ) {
+			Logger.Debug( "Start" );
+			Logger.Warning( "未実装" );
+			Logger.Debug( "End" );
+			return new OptionView.OptionValue();
+		}
+
+		/// <summary>
 		/// 何かのボタン押下時イベント
 		/// </summary>
 		private void ClickedAnyKeyEvent() {
 			Logger.Debug( "Start" );
-
-			// オブジェクトの切り替え
-			this.PleasePushAnyKeyTextGameObject.SetActive( false );
-			this.MainMenuGameObject.SetActive( true );
-
+			this.TitleView.ShowMainMenu();
 			Logger.Debug( "End" );
 		}
 
@@ -133,7 +120,12 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedSinglePlayButtonEvent() {
 			Logger.Debug( "Start" );
-			UnityEngine.SceneManagement.SceneManager.LoadScene( "SelectSaveData" );
+			SceneManager.GetInstance().LoadScene( 
+				"SelectSaveData" , 
+				new SelectSaveDataParameter() {
+					IsSinglePlayMode = true
+				} 
+			);
 			Logger.Debug( "End" );
 		}
 
@@ -142,7 +134,12 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedMultiPlayButtonEvent() {
 			Logger.Debug( "Start" );
-
+			SceneManager.GetInstance().LoadScene(
+				"SelectSaveData" ,
+				new SelectSaveDataParameter() {
+					IsSinglePlayMode = false
+				}
+			);
 			Logger.Debug( "End" );
 		}
 
@@ -151,7 +148,7 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedGalleryButtonEvent() {
 			Logger.Debug( "Start" );
-			UnityEngine.SceneManagement.SceneManager.LoadScene( "Gallery" );
+			SceneManager.GetInstance().LoadScene( "Gallery" , null );
 			Logger.Debug( "End" );
 		}
 
@@ -160,15 +157,16 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedRankingButtonEvent() {
 			Logger.Debug( "Start" );
+			SceneManager.GetInstance().LoadScene( "Ranking" , null );
 			Logger.Debug( "End" );
 		}
+
 		/// <summary>
 		/// オプションボタン押下時イベント
 		/// </summary>
 		private void ClickedOptionButtonEvent() {
 			Logger.Debug( "Start" );
-			this.MainMenuGameObject.SetActive( false );
-			this.OptionGameObject.SetActive( true );
+			this.TitleView.ShowOption();
 			Logger.Debug( "End" );
 		}
 
@@ -192,6 +190,17 @@ namespace Presenters.Title {
 		#endregion
 
 		/// <summary>
+		/// 画面上の項目をセーブデータように変換
+		/// </summary>
+		/// <param name="optionValue">画面上のオプションの項目</param>
+		/// <returns>オプションセーブデータ</returns>
+		private OptionSaveDataModel ConvertOptionSaveDataModel( OptionView.OptionValue optionValue ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( "End" );
+			return new OptionSaveDataModel();
+		}
+
+		/// <summary>
 		/// オプションの戻るボタン押下時イベント
 		/// </summary>
 		private void ClickedOptionBackButtonEvent() {
@@ -200,13 +209,15 @@ namespace Presenters.Title {
 			// 設定値の取得
 			OptionView.OptionValue optionValue = this.OptionView.GetOptionValue();
 
-			// TODO 設定値の保存
+			// 設定値の保存
+			OptionSaveDataSerializer.WriteOptionSaveData( 
+				this.ConvertOptionSaveDataModel( optionValue ) 
+			);
 
 			// TODO 設定値の反映
-			
+
 			// GameObjectの表示切り替え
-			this.OptionGameObject.SetActive( false );
-			this.MainMenuGameObject.SetActive( true );
+			this.TitleView.ShowMainMenu();
 
 			Logger.Debug( "End" );
 		}

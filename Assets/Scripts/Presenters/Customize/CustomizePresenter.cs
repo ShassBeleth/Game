@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SceneManagers.Parameters;
 using UnityEngine;
 using Views.Customize;
 
@@ -42,7 +43,7 @@ namespace Presenters.Customize {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public CustomizePresenter() {
+		public CustomizePresenter( CustomizeParameter parameter ) {
 			Logger.Debug( "Start" );
 
 			// hierarchyからViewを持つGameObject取得

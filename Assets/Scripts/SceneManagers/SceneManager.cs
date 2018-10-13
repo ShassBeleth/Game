@@ -1,8 +1,10 @@
 ﻿using Presenters.ChapterSelect;
 using Presenters.Customize;
 using Presenters.Gallery;
+using Presenters.Ranking;
 using Presenters.SelectSaveData;
 using Presenters.Title;
+using SceneManagers.Parameters;
 using UnityEngine.SceneManagement;
 
 namespace SceneManagers {
@@ -16,7 +18,7 @@ namespace SceneManagers {
 		/// インスタンス
 		/// </summary>
 		private static SceneManager Instance;
-
+		
 		/// <summary>
 		/// インスタンス取得
 		/// </summary>
@@ -30,6 +32,11 @@ namespace SceneManagers {
 			Logger.Debug( "End" );
 			return Instance;
 		}
+
+		/// <summary>
+		/// 画面遷移時に渡すパラメータ
+		/// </summary>
+		private static object Parameter;
 
 		/// <summary>
 		/// シングルモードで遷移した場合の前シーンの名前
@@ -71,6 +78,18 @@ namespace SceneManagers {
 		}
 
 		/// <summary>
+		/// シーン読み込み
+		/// </summary>
+		/// <param name="sceneName">読み込みシーン名</param>
+		/// <param name="parameter">遷移先シーンに渡すパラメータ</param>
+		public void LoadScene( string sceneName , object parameter ) {
+			Logger.Debug( "Start" );
+			Parameter = parameter;
+			UnityEngine.SceneManagement.SceneManager.LoadScene( sceneName );
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
 		/// 現在のシーン名が指定のシーン名と一致するかどうか
 		/// </summary>
 		/// <param name="sceneName">シーン名</param>
@@ -108,24 +127,31 @@ namespace SceneManagers {
 			// シーン切り替え時にはおおもとになるPresenterのインスタンスを生成
 			switch( scene.name ) {
 				case "Title":
-					new TitlePresenter();
+					new TitlePresenter( Parameter as TitleParameter );
 					break;
 				case "Gallery":
 					new GalleryPresenter();
 					break;
+				case "Ranking":
+					new RankingPresenter();
+					break;
 				case "SelectSaveData":
-					new SelectSaveDataPresenter();
+					new SelectSaveDataPresenter( Parameter as SelectSaveDataParameter );
 					break;
 				case "ChapterSelect":
-					new ChapterSelectPresenter();
+					new ChapterSelectPresenter( Parameter as ChapterSelectParameter );
 					break;
 				case "Customize":
-					new CustomizePresenter();
+					new CustomizePresenter( Parameter as CustomizeParameter );
 					break;
 				default:
 					Logger.Warning( "Loaded Scene Name is Unexpected Name." );
 					break;
 			}
+			
+			// staticフィールドなので、一回使ったらパラメータ内を削除
+			Parameter = null;
+
 			Logger.Debug( "End" );
 		}
 

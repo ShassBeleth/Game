@@ -1,31 +1,31 @@
 ﻿using SceneManagers;
 using SceneManagers.Parameters;
 using UnityEngine;
-using Views.Gallery;
+using Views.Ranking;
 
-namespace Presenters.Gallery {
+namespace Presenters.Ranking {
 
 	/// <summary>
-	/// ギャラリーPresenter
+	/// ランキングSceneのPresenter
 	/// </summary>
-	public class GalleryPresenter{
-		
+	public class RankingPresenter {
+
 		/// <summary>
-		/// ギャラリーView
+		/// ランキングView
 		/// </summary>
-		private GalleryView GalleryView { set; get; }
+		private RankingView rankingView { set; get; }
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GalleryPresenter() {
+		public RankingPresenter() {
 			Logger.Debug( "Start" );
-			
-			// Viewを取得
-			this.GalleryView = GameObject.Find( "Canvas" ).GetComponent<GalleryView>();
 
-			// ギャラリーViewのEventHandler設定
-			this.GalleryView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
+			// hierarchyからViewを取得
+			this.rankingView = GameObject.Find( "Canvas" ).GetComponent<RankingView>();
+
+			// ランキングViewのEventHandler設定
+			this.rankingView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
 
 			Logger.Debug( "End" );
 		}
@@ -35,8 +35,8 @@ namespace Presenters.Gallery {
 		/// </summary>
 		private void ClickedBackButtonEvent() {
 			Logger.Debug( "Start" );
-			SceneManager.GetInstance().LoadScene( 
-				"Title" , 
+			SceneManager.GetInstance().LoadScene(
+				"Title" ,
 				new TitleParameter() {
 					InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu
 				}

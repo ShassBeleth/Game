@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace Save {
-
+namespace Saves.Models {
+	
 	/// <summary>
 	/// 一人プレイのセーブデータのモデル
 	/// </summary>
@@ -10,17 +11,22 @@ namespace Save {
 		/// <summary>
 		/// ID
 		/// </summary>
-		public int Id { set; get; }
+		public int id;
 
 		/// <summary>
 		/// ユーザ名
 		/// </summary>
-		public string userName { set; get; }
+		public string userName;
 
 		/// <summary>
 		/// 最終更新日
 		/// </summary>
-		public DateTime latestUpdateDataTime { set; get; }
+		public DateTime latestUpdateDateTime;
+
+		/// <summary>
+		/// クリア済みチャプター一覧
+		/// </summary>
+		public ChapterSaveDataModel[] clearedChapters;
 
 	}
 

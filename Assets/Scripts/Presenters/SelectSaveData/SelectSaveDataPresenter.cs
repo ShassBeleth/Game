@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Save;
+using Saves.Models;
+using Saves.Serializers;
+using SceneManagers;
+using SceneManagers.Parameters;
 using UnityEngine;
-using UnityEngine.UI;
 using Views.SelectSaveData;
 
 namespace Presenters.SelectSaveData {
@@ -18,10 +20,24 @@ namespace Presenters.SelectSaveData {
 		private SelectSaveDataView selectSaveDataView;
 
 		/// <summary>
+		/// 一人プレイかどうか
+		/// </summary>
+		private bool isSinglePlayMode;
+
+		/// <summary>
+		/// セーブデータモデル一覧
+		/// </summary>
+		private List<SinglePlaySaveDataModel> saveDataModels;
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SelectSaveDataPresenter() {
+		/// <param name="parameter">前画面から引き継ぐパラメータ</param>
+		public SelectSaveDataPresenter( SelectSaveDataParameter parameter ) {
 			Logger.Debug( "Start" );
+			Logger.Debug( "Single Play Mode is " + parameter.IsSinglePlayMode );
+
+			this.isSinglePlayMode = parameter.IsSinglePlayMode;
 			
 			// hierarchyからViewを取得
 			this.selectSaveDataView = GameObject.Find( "Canvas" ).GetComponent<SelectSaveDataView>();
@@ -29,72 +45,57 @@ namespace Presenters.SelectSaveData {
 			// セーブデータ選択ViewのEventHandler設定
 			this.selectSaveDataView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
 
+			// セーブデータ取得
+			this.saveDataModels = new List<SinglePlaySaveDataModel>() {
+				SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 0 ) ,
+				SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 1 ) ,
+				SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 2 ) ,
+				SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 3 )
+			};
+
 			// Viewに必要な情報に加工
 			List<SelectSaveDataView.SaveData> saveDataList = new List<SelectSaveDataView.SaveData>() {
-				this.ConvertSaveData( SaveDataSerializer.LoadSinglePlaySaveData( 0 ) ) ,
-				this.ConvertSaveData( SaveDataSerializer.LoadSinglePlaySaveData( 1 ) ) ,
-				this.ConvertSaveData( SaveDataSerializer.LoadSinglePlaySaveData( 2 ) ) ,
-				this.ConvertSaveData( SaveDataSerializer.LoadSinglePlaySaveData( 3 ) )
+				this.ConvertSaveData( 0 , this.saveDataModels[0] ) ,
+				this.ConvertSaveData( 1 , this.saveDataModels[1] ) ,
+				this.ConvertSaveData( 2 , this.saveDataModels[2] ) ,
+				this.ConvertSaveData( 3 , this.saveDataModels[3] )
 			};
+
+			// セーブデータリストの描画
+			this.selectSaveDataView.ShowSaveDataList( saveDataList );
 			
-			// セーブデータを見て描画
-			GameObject savesGameObject = this.selectSaveDataView.transform.Find( "Saves" ).gameObject;
-			for( int i = 0 ; i < savesGameObject.transform.childCount ; i++ ) {
-				// ラムダ式に直接カウントを使用するので、一時変数を使用する
-				int index = i;
-
-				GameObject save = savesGameObject.transform.GetChild( index ).gameObject;
-
-				Button newButton = save.transform.Find( "NewButton" ).gameObject.GetComponent<Button>();
-				Button decisionButton = save.transform.Find( "DecisionButton" ).gameObject.GetComponent<Button>();
-				Button copyButton = save.transform.Find( "CopyButton" ).gameObject.GetComponent<Button>();
-				Button deleteButton = save.transform.Find( "DeleteButton" ).gameObject.GetComponent<Button>();
-
-				// nullの場合は新規追加ボタンの描画
-				if( saveDataList[ index ] == null ) {
-					Logger.Debug( "Save Data [" + index + "] is Null" );
-					newButton.gameObject.SetActive( true );
-					decisionButton.gameObject.SetActive( false );
-					copyButton.gameObject.SetActive( false );
-					deleteButton.gameObject.SetActive( false );
-					newButton.onClick.AddListener( () => { this.ClickedNewButtonEvent( index ); } );
-				}
-				// nullでない場合は新規追加ボタン以外を描画
-				else {
-					Logger.Debug( "saveDataList[" + index + "]" );
-					Logger.Debug( "Id is " + saveDataList[ index ].Id );
-					Logger.Debug( "User Name is " + saveDataList[ index ].userName );
-					Logger.Debug( "Latest Update Date Time is " + saveDataList[ index ].latestUpdateDataTime.ToString( "yyyy/MM/dd hh:mm:ss" ) );
-					newButton.gameObject.SetActive( false );
-					decisionButton.gameObject.SetActive( true );
-					copyButton.gameObject.SetActive( true );
-					deleteButton.gameObject.SetActive( true );
-					decisionButton.onClick.AddListener( () => { this.ClickedDecisionButtonEvent( index ); } );
-					copyButton.onClick.AddListener( () => { this.ClickedCopyButtonEvent( index ); } );
-					deleteButton.onClick.AddListener( () => { this.ClickedDeleteButtonEvent( index ); } );
-				}
-			}
 			Logger.Debug( "End" );
 		}
 
 		/// <summary>
 		/// 読み込んだセーブデータをViewに渡す形に変換する
 		/// </summary>
+		/// <param name="id">ID</param>
 		/// <param name="singlePlaySaveDataModel">読み込んだセーブデータ</param>
 		/// <returns>Viewに表示するセーブデータ</returns>
-		private SelectSaveDataView.SaveData ConvertSaveData( SinglePlaySaveDataModel singlePlaySaveDataModel ) {
+		private SelectSaveDataView.SaveData ConvertSaveData( int id , SinglePlaySaveDataModel singlePlaySaveDataModel ) {
 			Logger.Debug( "Start" );
 
-			if( singlePlaySaveDataModel == null ) {
-				Logger.Debug( "Single Play Save Data Model is Null." );
-				return null;
+			Logger.Debug( "Exists Already Data is " + ( singlePlaySaveDataModel != null ) );
+			if( singlePlaySaveDataModel != null ) {
+				Logger.Debug( "Id is " + id );
+				Logger.Debug( "User Name is " + singlePlaySaveDataModel.userName );
+				Logger.Debug( "Latest Update Date Time is " + singlePlaySaveDataModel.latestUpdateDateTime );
 			}
-			Logger.Debug( "End" );
-			return new SelectSaveDataView.SaveData() {
-				Id = singlePlaySaveDataModel.Id ,
-				userName = singlePlaySaveDataModel.userName ,
-				latestUpdateDataTime = singlePlaySaveDataModel.latestUpdateDataTime
+
+			SelectSaveDataView.SaveData saveData = new SelectSaveDataView.SaveData() {
+				ExistsAlreadyData = ( singlePlaySaveDataModel != null ) ,
+				Id = id ,
+				userName = singlePlaySaveDataModel?.userName ,
+				latestUpdateDateTime = singlePlaySaveDataModel?.latestUpdateDateTime ?? new DateTime() ,
+				OnClickNewButtonEventHandler = () => this.ClickedNewButtonEvent( id ) ,
+				OnClickDecisionButtonEventHandler = () => this.ClickedDecisionButtonEvent( id ) ,
+				OnClickCopyButtonEventHandler = () => this.ClickedCopyButtonEvent( id ) ,
+				OnClickDeleteButtonEventHandler = () => this.ClickedDeleteButtonEvent( id )
 			};
+
+			Logger.Debug( "End" );
+			return saveData;
 		}
 
 		/// <summary>
@@ -102,7 +103,79 @@ namespace Presenters.SelectSaveData {
 		/// </summary>
 		private void ClickedBackButtonEvent() {
 			Logger.Debug( "Start" );
-			UnityEngine.SceneManagement.SceneManager.LoadScene( "Title" );
+			SceneManager.GetInstance().LoadScene( 
+				"Title" , 
+				new TitleParameter() {
+					InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu
+				}
+			);
+			Logger.Debug( "End" );
+		}
+		
+		/// <summary>
+		/// セーブデータを作成する
+		/// </summary>
+		/// <param name="id">セーブデータID</param>
+		/// <returns>作成したセーブデータModel</returns>
+		private SinglePlaySaveDataModel CreateSinglePlaySaveData( int id ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( "Id is " + id );
+
+			SinglePlaySaveDataModel model = new SinglePlaySaveDataModel() {
+				id = id ,
+				userName = Guid.NewGuid().ToString() ,
+				latestUpdateDateTime = new DateTime()
+			};
+			// TODO 仮
+			{
+				model.clearedChapters = new ChapterSaveDataModel[ 3 ];
+				model.clearedChapters[ 0 ] = new ChapterSaveDataModel() {
+					id = 4 ,
+					Name = "a"
+				};
+				model.clearedChapters[ 1 ] = new ChapterSaveDataModel() {
+					id = 7 ,
+					Name = "b"
+				};
+				model.clearedChapters[ 2 ] = new ChapterSaveDataModel() {
+					id = 13 ,
+					Name = "c"
+				};
+			}
+
+			this.saveDataModels[ id ] = model;
+
+			// セーブデータに書き込み
+			SinglePlaySaveDataSerializer.WriteSinglePlaySaveData( id , model );
+
+			Logger.Debug( "End" );
+			return model;
+		}
+
+		/// <summary>
+		/// チャプター選択画面へ遷移
+		/// </summary>
+		/// <param name="saveDataModel">セーブデータモデル</param>
+		private void TransitionToChapterSelect( SinglePlaySaveDataModel saveDataModel ) {
+			Logger.Debug( "Start" );
+
+			ChapterSelectParameter parameter = new ChapterSelectParameter() {
+				Id = saveDataModel.id ,
+				IsSinglePlayMode = this.isSinglePlayMode
+			};
+			parameter.ClearedChapters = new List<ChapterSelectParameter.Chapter>();
+			Logger.Debug( "Cleared Chapters Length is " + ( saveDataModel.clearedChapters?.Length ?? 0 ) );
+			if( saveDataModel.clearedChapters != null ) {
+				foreach( ChapterSaveDataModel chapter in saveDataModel.clearedChapters ) {
+					parameter.ClearedChapters.Add(
+						new ChapterSelectParameter.Chapter {
+							Id = chapter.id
+						}
+					);
+				}
+			}
+
+			SceneManager.GetInstance().LoadScene( "ChapterSelect" , parameter );
 			Logger.Debug( "End" );
 		}
 
@@ -113,6 +186,12 @@ namespace Presenters.SelectSaveData {
 		private void ClickedNewButtonEvent( int id ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( "Id is " + id );
+
+			// 新規にセーブデータを作成する
+			this.saveDataModels[ id ] = this.CreateSinglePlaySaveData( id );
+
+			// チャプターセレクトに遷移
+			this.TransitionToChapterSelect( this.saveDataModels[ id ] );
 
 			Logger.Debug( "End" );
 		}
@@ -125,6 +204,9 @@ namespace Presenters.SelectSaveData {
 			Logger.Debug( "Start" );
 			Logger.Debug( "Id is " + id );
 
+			// チャプターセレクトに遷移
+			this.TransitionToChapterSelect( this.saveDataModels[ id ] );
+			
 			Logger.Debug( "End" );
 		}
 
@@ -147,6 +229,10 @@ namespace Presenters.SelectSaveData {
 		private void ClickedDeleteButtonEvent( int id ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( "Id is " + id );
+
+			SinglePlaySaveDataSerializer.DeleteSinglePlaySaveData( id );
+
+			// TODO レイアウトの更新
 
 			Logger.Debug( "End" );
 		}
