@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SceneManagers;
 using SceneManagers.Parameters;
 using UnityEngine;
 using Views.Customize;
@@ -366,7 +367,7 @@ namespace Presenters.Customize {
 		/// </summary>
 		public void ClickedDecisionButtonEvent() {
 			Logger.Debug( "Start" );
-
+			SceneManager.GetInstance().LoadScene( "MainGame" , null );
 			Logger.Debug( "End" );
 		}
 
