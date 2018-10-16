@@ -2402,6 +2402,11 @@ MonoBehaviour:
   equipmentNodePrefab: {fileID: 1378866945200182, guid: 2b5a3a9e3ce0ce344b490b8f17fbc97c,
     type: 2}
   equipmentScrollViewContent: {fileID: 1439296620}
+  customParameterGameObject: {fileID: 641809316}
+  customEquipmentGameObject: {fileID: 256315317}
+  equipmentMenuGameObject: {fileID: 2018066563}
+  bodiesGameObject: {fileID: 1950423155}
+  equipmentsGameObject: {fileID: 398524337}
 --- !u!1 &1208154125
 GameObject:
   m_ObjectHideFlags: 0
