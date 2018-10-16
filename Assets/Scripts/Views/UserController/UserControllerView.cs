@@ -16,12 +16,6 @@ namespace Views.UserController {
 		/// </summary>
 		public string[] MenuButtonKeyNames { get; } = new string[] {
 			
-			// カーソル移動
-			"CursorUp" ,
-			"CursorDown" ,
-			"CursorLeft" ,
-			"CursorRight" ,
-
 			// 決定
 			"Submit" ,
 
@@ -59,11 +53,7 @@ namespace Views.UserController {
 		/// <summary>
 		/// キャラクター左回転
 		/// </summary>
-		public int TurnCharacterLeft { private set; get; } = 0;
-		/// <summary>
-		/// キャラクター右回転
-		/// </summary>
-		public int TurnCharacterRight { private set; get; } = 0;
+		public int TurnCharacter { private set; get; } = 0;
 
 		#endregion
 
@@ -99,19 +89,7 @@ namespace Views.UserController {
 			"Guard" ,
 
 			// オプション
-			"Option" ,
-
-			// メニューを開く
-			"OpenSubMenu" ,
-
-			// サブメニュー選択正
-			"PositiveSubMenuMove" ,
-
-			// サブメニュー選択負
-			"NegativeSubMenuMove" ,
-
-			// サブメニューを閉じる
-			"CloseSubMenu"
+			"Option"
 			
 		};
 
@@ -160,7 +138,40 @@ namespace Views.UserController {
 					this.MenuButtons[ menuButtonKeyName ] = 0;
 				}
 			}
-						
+			
+			// カーソル左
+			if( Input.GetAxis( "Horizontal" ) < 0 ) {
+				this.MenuButtons[ "CursorLeft" ]++;
+				Logger.Debug( $"CursorLeft is {this.MenuButtons[ "CursorLeft" ]}" );
+			}
+			else {
+				this.MenuButtons[ "CursorLeft" ] = 0;
+			}
+			// カーソル右
+			if( 0 < Input.GetAxis( "Horizontal" ) ) {
+				this.MenuButtons[ "CursorRight" ]++;
+				Logger.Debug( $"CursorRight is {this.MenuButtons[ "CursorRight" ]}" );
+			}
+			else {
+				this.MenuButtons[ "CursorRight" ] = 0;
+			}
+			// カーソル下
+			if( Input.GetAxis( "Vertical" ) < 0 ) {
+				this.MenuButtons[ "CursorDown" ]++;
+				Logger.Debug( $"CursorDown is {this.MenuButtons[ "CursorDown" ]}" );
+			}
+			else {
+				this.MenuButtons[ "CursorDown" ] = 0;
+			}
+			// カーソル上
+			if( 0 < Input.GetAxis( "Vertical" ) ) {
+				this.MenuButtons[ "CursorUp" ]++;
+				Logger.Debug( $"CursorUp is {this.MenuButtons[ "CursorUp" ]}" );
+			}
+			else {
+				this.MenuButtons[ "CursorUp" ] = 0;
+			}
+			
 			// カーソル上下
 			this.CursorVertical = (int)( Input.GetAxis( "CursorVertical" ) * 1000 );
 			if( this.CursorVertical != 0 ) {
@@ -173,18 +184,12 @@ namespace Views.UserController {
 				Logger.Debug( $"CursorHorizontal is {this.CursorHorizontal}" );
 			}
 
-			// キャラクター左回転
-			this.TurnCharacterLeft = (int)( Input.GetAxis( "TurnCharacterLeft" ) * 1000 );
-			if( this.TurnCharacterLeft != 0 ) {
-				Logger.Debug( $"TurnCharacterLeft is {this.TurnCharacterLeft}" );
+			// キャラクター回転
+			this.TurnCharacter = (int)( Input.GetAxis( "TurnCharacter" ) * 1000 );
+			if( this.TurnCharacter != 0 ) {
+				Logger.Debug( $"TurnCharacter is {this.TurnCharacter}" );
 			}
-
-			// キャラクター右回転
-			this.TurnCharacterRight = (int)( Input.GetAxis( "TurnCharacterRight" ) * 1000 );
-			if( this.TurnCharacterRight != 0 ) {
-				Logger.Debug( $"TurnCharacterRight is {this.TurnCharacterRight}" );
-			}
-
+			
 			#endregion
 
 			#region バトル時の操作

@@ -8,6 +8,13 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+*.exe
+
+# 追加
+Game_Data/**
+MonoBleedingEdge/**
+UnityPlayer.dll
+
 
 # Visual Studio cache directory
 .vs/
