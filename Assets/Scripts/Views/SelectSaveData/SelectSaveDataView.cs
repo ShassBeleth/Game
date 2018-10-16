@@ -93,7 +93,7 @@ namespace Views.SelectSaveData {
 				
 				// 新規追加の場合
 				if( !saveDataList[ index ].ExistsAlreadyData ) {
-					Logger.Debug( "Save Data [ " + index + " ] Don't Exists Save Data" );
+					Logger.Debug( $"Save Data [ {index} ] Don't Exists Save Data" );
 					newButton.gameObject.SetActive( true );
 					decisionButton.gameObject.SetActive( false );
 					copyButton.gameObject.SetActive( false );
@@ -102,10 +102,10 @@ namespace Views.SelectSaveData {
 				}
 				// 新規追加でない場合
 				else {
-					Logger.Debug( "Save Data List[ " + index + " ] Exists Save Data" );
-					Logger.Debug( "Id is " + saveDataList[ index ].Id );
-					Logger.Debug( "User Name is " + saveDataList[ index ].userName );
-					Logger.Debug( "Latest Update Date Time is " + saveDataList[ index ].latestUpdateDateTime.ToString( "yyyy/MM/dd hh:mm:ss" ) );
+					Logger.Debug( $"Save Data List[ {index} ] Exists Save Data" );
+					Logger.Debug( $"Id is {saveDataList[ index ].Id}" );
+					Logger.Debug( $"User Name is {saveDataList[ index ].userName}" );
+					Logger.Debug( $"Latest Update Date Time is {saveDataList[ index ].latestUpdateDateTime.ToString( "yyyy/MM/dd hh:mm:ss" )}" );
 					newButton.gameObject.SetActive( false );
 					decisionButton.gameObject.SetActive( true );
 					copyButton.gameObject.SetActive( true );

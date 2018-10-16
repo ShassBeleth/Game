@@ -29,15 +29,15 @@ namespace Presenters.ChapterSelect {
 		/// <param name="parameter">前画面から受けとるパラメータ</param>
 		public ChapterSelectPresenter( ChapterSelectParameter parameter ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Id is " + parameter.Id );
-			Logger.Debug( "Single Play Mode is " + parameter.IsSinglePlayMode );
+			Logger.Debug( $"Id is {parameter.Id}" );
+			Logger.Debug( $"Single Play Mode is {parameter.IsSinglePlayMode}" );
 			// デバッグ用
 			{
 				string cleardChapterIds = "";
 				foreach( ChapterSelectParameter.Chapter chapter in parameter.ClearedChapters ) {
 					cleardChapterIds += chapter.Id.ToString() + " ";
 				}
-				Logger.Debug( "Cleared Chapter Id is " + cleardChapterIds );
+				Logger.Debug( $"Cleared Chapter Id is {cleardChapterIds}" );
 			}
 
 			this.isSinglePlayMode = parameter.IsSinglePlayMode;
@@ -97,7 +97,7 @@ namespace Presenters.ChapterSelect {
 		/// <param name="id"></param>
 		private void ClickedDecisionButtonEvent( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Id is " + id );
+			Logger.Debug( $"Id is {id}" );
 			SceneManager.GetInstance().LoadScene(
 				"Customize" ,
 				null

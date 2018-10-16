@@ -20,7 +20,7 @@ namespace Saves.Serializers {
 			Logger.Debug( "Start" );
 			
 			string filePath = DirectoryPath + id + ".json";
-			Logger.Debug( "File Path is " + filePath );
+			Logger.Debug( $"File Path is {filePath}" );
 
 			SinglePlaySaveDataModel data = SaveDataSerializerBase.LoadSaveData<SinglePlaySaveDataModel>( filePath );
 			
@@ -40,11 +40,11 @@ namespace Saves.Serializers {
 		) {
 			Logger.Debug( "Start" );
 
-			Logger.Debug( "Id is " + singlePlaySaveDataModel.id );
-			Logger.Debug( "User Name is " + singlePlaySaveDataModel.userName );
+			Logger.Debug( $"Id is {singlePlaySaveDataModel.id}" );
+			Logger.Debug( $"User Name is {singlePlaySaveDataModel.userName}" );
 			
 			string filePath = DirectoryPath + id + ".json";
-			Logger.Debug( "File Path is " + filePath );
+			Logger.Debug( $"File Path is {filePath}" );
 
 			SaveDataSerializerBase.WriteSaveData<SinglePlaySaveDataModel>(
 				filePath , 
@@ -60,10 +60,10 @@ namespace Saves.Serializers {
 		/// <param name="id"></param>
 		public static void DeleteSinglePlaySaveData( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Id is " + id );
+			Logger.Debug( $"Id is {id}" );
 
 			string filePath = DirectoryPath + id + ".json";
-			Logger.Debug( "File Path is " + filePath );
+			Logger.Debug( $"File Path is {filePath}" );
 
 			SaveDataSerializerBase.DeleteSaveData( filePath );
 

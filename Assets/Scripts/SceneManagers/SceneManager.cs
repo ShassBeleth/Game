@@ -96,7 +96,7 @@ namespace SceneManagers {
 		/// <returns>現在のシーン名が指定のシーン名と一致するかどうか</returns>
 		private static bool EqualsActiveSceneName( string sceneName ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Scene Name is " + sceneName );
+			Logger.Debug( $"Scene Name is {sceneName}" );
 			Logger.Debug( "End" );
 			return UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals( sceneName );
 		}
@@ -112,8 +112,8 @@ namespace SceneManagers {
 		) {
 			Logger.Debug( "Start" );
 
-			Logger.Debug( "Scene Name is " + scene.name );
-			Logger.Debug( "Load Scene Mode is " + loadSceneMode );
+			Logger.Debug( $"Scene Name is {scene.name}" );
+			Logger.Debug( $"Load Scene Mode is {loadSceneMode}" );
 
 			// シングルモードで遷移した場合は前シーンの名前を保持しておく
 			if( loadSceneMode == LoadSceneMode.Single ) {
@@ -121,8 +121,8 @@ namespace SceneManagers {
 				CurrentSingleModeSceneName = scene.name;
 			}
 
-			Logger.Debug( "Before Single Mode Scene Name is " + BeforeSingleModeSceneName );
-			Logger.Debug( "Current Single Mode Scene Name is " + CurrentSingleModeSceneName );
+			Logger.Debug( $"Before Single Mode Scene Name is {BeforeSingleModeSceneName}" );
+			Logger.Debug( $"Current Single Mode Scene Name is {CurrentSingleModeSceneName}" );
 
 			// シーン切り替え時にはおおもとになるPresenterのインスタンスを生成
 			switch( scene.name ) {

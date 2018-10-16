@@ -100,10 +100,10 @@ public static class Logger {
 
 		string processedMessage = "[" + className + "." + methodName + "]" + message;
 		if( className.EndsWith( "View" ) ) {
-			return "<color=blue>" + processedMessage + "</color>";
+			return $"<color=blue>{processedMessage}</color>";
 		}
 		else if( className.EndsWith( "Presenter" ) ) {
-			return "<color=green>" + processedMessage + "</color>";
+			return $"<color=green>{processedMessage}</color>";
 		}
 
 		return processedMessage;

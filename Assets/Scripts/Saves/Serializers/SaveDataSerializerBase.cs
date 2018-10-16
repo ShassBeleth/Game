@@ -27,7 +27,7 @@ namespace Saves.Serializers {
 		/// <returns>読み込んだセーブデータモデル</returns>
 		protected static T LoadSaveData<T>( string filePath ) where T : class {
 			Logger.Debug( "Start" );
-			Logger.Debug( "File Path is " + filePath );
+			Logger.Debug( $"File Path is {filePath}" );
 
 			string jsonData = "";
 			try {
@@ -38,10 +38,10 @@ namespace Saves.Serializers {
 			}
 			// 何かしらエラーがあった場合にはnullを返す
 			catch( Exception e ) {
-				Logger.Warning( "Load File is Error : " + e.Message );
+				Logger.Warning( $"Load File is Error : {e.Message}" );
 				return null;
 			}
-			Logger.Debug( "Json Data is " + jsonData );
+			Logger.Debug( $"Json Data is {jsonData}" );
 
 			// 何かしらエラーの影響で取得したjsonデータが空文字だった場合nullを返す
 			if( "".Equals( jsonData ) ) {
@@ -65,16 +65,16 @@ namespace Saves.Serializers {
 		/// <param name="model">モデル</param>
 		protected static void WriteSaveData<T>( string filePath , T model ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "File Path is " + filePath );
+			Logger.Debug( $"File Path is {filePath}" );
 
 			// モデルをjsonに変換
 			string jsonData = JsonUtility.ToJson( model );
-			Logger.Debug( "Json Data is " + jsonData );
+			Logger.Debug( $"Json Data is {jsonData}" );
 
 			// ディレクトリが存在するか確認
-			Logger.Debug( "Directory Path is " + DirectoryPath + filePath );
+			Logger.Debug( $"Directory Path is {DirectoryPath + filePath}" );
 			string directoryName = Path.GetDirectoryName( DirectoryPath + filePath );
-			Logger.Debug( "Directory Name is " + directoryName );
+			Logger.Debug( $"Directory Name is {directoryName}" );
 			if( !Directory.Exists( directoryName ) ) {
 				Logger.Debug( "Directory Doesn't Exist." );
 				Directory.CreateDirectory( directoryName );
@@ -101,7 +101,7 @@ namespace Saves.Serializers {
 		/// <param name="filePath">ファイルパス</param>
 		protected static void DeleteSaveData( string filePath ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "File Path is " + filePath );
+			Logger.Debug( $"File Path is {filePath}" );
 
 			File.Delete( DirectoryPath + filePath );
 

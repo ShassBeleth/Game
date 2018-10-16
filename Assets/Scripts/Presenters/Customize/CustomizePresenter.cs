@@ -422,7 +422,7 @@ namespace Presenters.Customize {
 		/// <param name="bodyId">素体ID</param>
 		public void ClickedBodyNodeDecisionButtonEvent( int bodyId ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Body Id is " + bodyId );
+			Logger.Debug( $"Body Id is {bodyId}" );
 
 			// 素体IDからどの素体が選ばれたか調べる
 			CustomizeView.Body selectedBody = this.bodies.FirstOrDefault( body => bodyId == body.Id );

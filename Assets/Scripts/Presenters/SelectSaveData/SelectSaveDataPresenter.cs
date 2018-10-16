@@ -35,7 +35,7 @@ namespace Presenters.SelectSaveData {
 		/// <param name="parameter">前画面から引き継ぐパラメータ</param>
 		public SelectSaveDataPresenter( SelectSaveDataParameter parameter ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Single Play Mode is " + parameter.IsSinglePlayMode );
+			Logger.Debug( $"Single Play Mode is {parameter.IsSinglePlayMode}" );
 
 			this.isSinglePlayMode = parameter.IsSinglePlayMode;
 			
@@ -76,11 +76,11 @@ namespace Presenters.SelectSaveData {
 		private SelectSaveDataView.SaveData ConvertSaveData( int id , SinglePlaySaveDataModel singlePlaySaveDataModel ) {
 			Logger.Debug( "Start" );
 
-			Logger.Debug( "Exists Already Data is " + ( singlePlaySaveDataModel != null ) );
+			Logger.Debug( $"Exists Already Data is {( singlePlaySaveDataModel != null )}" );
 			if( singlePlaySaveDataModel != null ) {
-				Logger.Debug( "Id is " + id );
-				Logger.Debug( "User Name is " + singlePlaySaveDataModel.userName );
-				Logger.Debug( "Latest Update Date Time is " + singlePlaySaveDataModel.latestUpdateDateTime );
+				Logger.Debug( $"Id is {id}" );
+				Logger.Debug( $"User Name is {singlePlaySaveDataModel.userName}" );
+				Logger.Debug( $"Latest Update Date Time is {singlePlaySaveDataModel.latestUpdateDateTime}" );
 			}
 
 			SelectSaveDataView.SaveData saveData = new SelectSaveDataView.SaveData() {
@@ -119,7 +119,7 @@ namespace Presenters.SelectSaveData {
 		/// <returns>作成したセーブデータModel</returns>
 		private SinglePlaySaveDataModel CreateSinglePlaySaveData( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Id is " + id );
+			Logger.Debug( $"Id is {id}" );
 
 			SinglePlaySaveDataModel model = new SinglePlaySaveDataModel() {
 				id = id ,
@@ -164,7 +164,7 @@ namespace Presenters.SelectSaveData {
 				IsSinglePlayMode = this.isSinglePlayMode
 			};
 			parameter.ClearedChapters = new List<ChapterSelectParameter.Chapter>();
-			Logger.Debug( "Cleared Chapters Length is " + ( saveDataModel.clearedChapters?.Length ?? 0 ) );
+			Logger.Debug( $"Cleared Chapters Length is {( saveDataModel.clearedChapters?.Length ?? 0 )}" );
 			if( saveDataModel.clearedChapters != null ) {
 				foreach( ChapterSaveDataModel chapter in saveDataModel.clearedChapters ) {
 					parameter.ClearedChapters.Add(
@@ -185,7 +185,7 @@ namespace Presenters.SelectSaveData {
 		/// <param name="id">セーブデータID</param>
 		private void ClickedNewButtonEvent( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Id is " + id );
+			Logger.Debug( $"Id is {id}" );
 
 			// 新規にセーブデータを作成する
 			this.saveDataModels[ id ] = this.CreateSinglePlaySaveData( id );
@@ -202,7 +202,7 @@ namespace Presenters.SelectSaveData {
 		/// <param name="id">セーブデータID</param>
 		private void ClickedDecisionButtonEvent( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Id is " + id );
+			Logger.Debug( $"Id is {id}" );
 
 			// チャプターセレクトに遷移
 			this.TransitionToChapterSelect( this.saveDataModels[ id ] );
@@ -216,7 +216,7 @@ namespace Presenters.SelectSaveData {
 		/// <param name="id">セーブデータID</param>
 		private void ClickedCopyButtonEvent( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Id is " + id );
+			Logger.Debug( $"Id is {id}" );
 
 			Logger.Warning( "未実装" );
 			Logger.Debug( "End" );
@@ -228,7 +228,7 @@ namespace Presenters.SelectSaveData {
 		/// <param name="id">セーブデータID</param>
 		private void ClickedDeleteButtonEvent( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Id is " + id );
+			Logger.Debug( $"Id is {id}" );
 
 			SinglePlaySaveDataSerializer.DeleteSinglePlaySaveData( id );
 

@@ -39,9 +39,9 @@ namespace Presenters.Title {
 		/// <param name="parameter">前画面から受け取るパラメータ</param>
 		public TitlePresenter( TitleParameter parameter ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( "Parameter Exists..." + ( parameter == null ? "NG" : "OK." ) );
+			Logger.Debug( $"Parameter Exists...{( parameter == null ? "NG" : "OK." )}" );
 			if( parameter != null ) {
-				Logger.Debug( "Initial Title Part is " + parameter.InitialTitlePart.Value );
+				Logger.Debug( $"Initial Title Part is {parameter.InitialTitlePart.Value}" );
 			}
 
 			// Viewを取得
@@ -75,7 +75,7 @@ namespace Presenters.Title {
 				this.TitleView.ShowPleasePushAnyKey();
 			}
 			else {
-				Logger.Debug( "Initial Title Part Enum is " + parameter.InitialTitlePart.Value );
+				Logger.Debug( $"Initial Title Part Enum is {parameter.InitialTitlePart.Value}" );
 				switch( parameter.InitialTitlePart.Value ) {
 					case TitleParameter.InitialTitlePartEnum.MainMenu:
 						this.TitleView.ShowMainMenu();

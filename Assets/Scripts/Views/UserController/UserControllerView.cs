@@ -123,9 +123,22 @@ namespace Views.UserController {
 		public int Boost { private set; get; } = 0;
 
 		#endregion
-		
-		void Update() {
 
+		private void Awake() {
+			foreach( string menuButtonKeyName in this.MenuButtonKeyNames ) {
+				this.MenuButtons[ menuButtonKeyName ] = 0;
+			}
+			this.MenuButtons[ "CursorLeft" ] = 0;
+			this.MenuButtons[ "CursorRight" ] = 0;
+			this.MenuButtons[ "CursorUp" ] = 0;
+			this.MenuButtons[ "CursorDown" ] = 0;
+			foreach( string buttleButtonKeyName in this.ButtleButtonKeyNames ) {
+				this.ButtleButtons[ buttleButtonKeyName ] = 0;
+			}
+		}
+
+		void Update() {
+			
 			#region メニュー時の操作
 
 			// ボタンが押されていたら1増加、押されていないときは0

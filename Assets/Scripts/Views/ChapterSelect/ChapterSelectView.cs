@@ -60,9 +60,9 @@ namespace Views.ChapterSelect {
 			Logger.Debug( "Start" );
 			foreach( ChapterData chapter in chapterDataList ) {
 				Logger.Debug( "Chapter-----------------------------" );
-				Logger.Debug( "Id is " + chapter.Id );
-				Logger.Debug( "Name is " + chapter.Name );
-				Logger.Debug( "Shown is " + chapter.IsShown );
+				Logger.Debug( $"Id is {chapter.Id}" );
+				Logger.Debug( $"Name is {chapter.Name}" );
+				Logger.Debug( $"Shown is {chapter.IsShown}" );
 			}
 
 			GameObject chaptersGameObject = GameObject.Find( "Canvas" ).transform.Find( "Chapters").gameObject;
