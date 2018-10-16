@@ -54,6 +54,7 @@ namespace Presenters.Customize {
 			this.CustomizeView.OnClickUpdateButtonEventHandler = this.ClickedUpdateButtonEvent;
 			this.CustomizeView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
 			this.CustomizeView.OnClickBodyButtonEventHandler = this.ClickedBodyButtonFromMenuEvent;
+			this.CustomizeView.OnClickBodyBackButtonEventHandler = this.ClickedBodyBackButtonEvent;
 
 			// 素体一覧取得
 			// TODO 実際は型が違うから変換が必要
@@ -73,6 +74,15 @@ namespace Presenters.Customize {
 			// 初期表示
 			this.CustomizeView.ShowCustomEquipment();
 
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 素体選択時の戻るボタン押下時イベント
+		/// </summary>
+		private void ClickedBodyBackButtonEvent() {
+			Logger.Debug( "Start" );
+			this.CustomizeView.ShowEquipmentMenu();
 			Logger.Debug( "End" );
 		}
 

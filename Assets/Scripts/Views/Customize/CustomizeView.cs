@@ -93,27 +93,27 @@ namespace Views.Customize {
 		/// <summary>
 		/// パラメータカスタマイズGameObject
 		/// </summary>
-		private GameObject customParameterGameObject;
+		public GameObject customParameterGameObject;
 
 		/// <summary>
 		/// 装備カスタマイズGameObject
 		/// </summary>
-		private GameObject customEquipmentGameObject;
+		public GameObject customEquipmentGameObject;
 
 		/// <summary>
 		/// 装備メニューGameObject
 		/// </summary>
-		private GameObject equipmentMenuGameObject;
+		public GameObject equipmentMenuGameObject;
 
 		/// <summary>
 		/// 装備素体一覧GameObject
 		/// </summary>
-		private GameObject bodiesGameObject;
+		public GameObject bodiesGameObject;
 
 		/// <summary>
 		/// 装備一覧GameObject
 		/// </summary>
-		private GameObject equipmentsGameObject;
+		public GameObject equipmentsGameObject;
 
 		#endregion
 		
@@ -304,49 +304,20 @@ namespace Views.Customize {
 		}
 
 		/// <summary>
-		/// 素体ボタン
+		/// 素体選択時の戻るボタン押下時イベントハンドラ
 		/// </summary>
 		public Action OnClickBodyBackButtonEventHandler { set; get; }
 
+		/// <summary>
+		/// 素体選択時の戻るボタン押下時イベント
+		/// </summary>
+		public void OnClickBodyBackButtonEvent() {
+			Logger.Debug( "Start" );
+			this.OnClickBackButtonEventHandler?.Invoke();
+			Logger.Debug( "End" );
+		}
+
 		#region 画面切り替え用Showメソッド群
-
-		/// <summary>
-		/// GameObjectのActive切り替え
-		/// </summary>
-		/// <param name="gameObject">GameObject</param>
-		/// <param name="gameObjectName">オブジェクト名</param>
-		/// <param name="active">表示／非表示</param>
-		private void SetActive( ref GameObject gameObject , string gameObjectName , bool active ) {
-			Logger.Debug( "Start" );
-
-			if( gameObject == null ) {
-				Logger.Debug( $"{gameObjectName} is Null" );
-				gameObject = GameObject.Find( gameObjectName );
-			}
-			gameObject.SetActive( active );
-
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// Equipment内のGameObjectのActive切り替え
-		/// </summary>
-		/// <param name="gameObject">GameObject</param>
-		/// <param name="gameObjectName">オブジェクト名</param>
-		/// <param name="active">表示／非表示</param>
-		private void SetActiveOfEquipment( ref GameObject gameObject , string gameObjectName , bool active ) {
-			Logger.Debug( "Start" );
-
-			this.SetActive( ref this.customEquipmentGameObject , "Equipment" , true );
-			
-			if( gameObject == null ) {
-				Logger.Debug( $"{gameObjectName} is Null" );
-				gameObject = this.customEquipmentGameObject.transform.Find( gameObjectName ).gameObject;
-			}
-			gameObject.SetActive( active );
-
-			Logger.Debug( "End" );
-		}
 
 		/// <summary>
 		/// 装備カスタマイズ表示
@@ -354,12 +325,12 @@ namespace Views.Customize {
 		public void ShowCustomEquipment() {
 			Logger.Debug( "Start" );
 
-			this.SetActive( ref this.customEquipmentGameObject , "Equipment" , true );
-			this.SetActive( ref this.customParameterGameObject , "Parameter" , false );
+			this.customEquipmentGameObject.SetActive( true );
+			this.customParameterGameObject.SetActive( false );
 
-			this.SetActiveOfEquipment( ref this.equipmentMenuGameObject , "Menu" , true );
-			this.SetActiveOfEquipment( ref this.bodiesGameObject , "Bodies" , false );
-			this.SetActiveOfEquipment( ref this.equipmentsGameObject , "Equipments" , false );
+			this.equipmentMenuGameObject.SetActive( true );
+			this.bodiesGameObject.SetActive( false );
+			this.equipmentsGameObject.SetActive( false );
 			
 			Logger.Debug( "End" );
 		}
@@ -370,8 +341,8 @@ namespace Views.Customize {
 		public void ShowCustomParameter() {
 			Logger.Debug( "Start" );
 
-			this.SetActive( ref this.customParameterGameObject , "Parameter" , true );
-			this.SetActive( ref this.customEquipmentGameObject , "Equipment" , false );
+			this.customParameterGameObject.SetActive( true );
+			this.customEquipmentGameObject.SetActive( false );
 
 			Logger.Debug( "End" );
 		}
@@ -382,12 +353,12 @@ namespace Views.Customize {
 		public void ShowEquipmentBodies() {
 			Logger.Debug( "Start" );
 
-			this.SetActive( ref this.customEquipmentGameObject , "Equipment" , true );
-			this.SetActive( ref this.customParameterGameObject , "Parameter" , false );
+			this.customEquipmentGameObject.SetActive( true );
+			this.customParameterGameObject.SetActive( false );
 			
-			this.SetActiveOfEquipment( ref this.bodiesGameObject , "Bodies" , true );
-			this.SetActiveOfEquipment( ref this.equipmentMenuGameObject , "Menu" , false );
-			this.SetActiveOfEquipment( ref this.equipmentsGameObject , "Equipments" , false );
+			this.bodiesGameObject.SetActive( true );
+			this.equipmentMenuGameObject.SetActive( false );
+			this.equipmentsGameObject.SetActive( false );
 
 			Logger.Debug( "End" );
 		}
@@ -398,12 +369,12 @@ namespace Views.Customize {
 		public void ShowEquipmentMenu() {
 			Logger.Debug( "Start" );
 
-			this.SetActive( ref this.customEquipmentGameObject , "Equipment" , true );
-			this.SetActive( ref this.customParameterGameObject , "Parameter" , false );
+			this.customEquipmentGameObject.SetActive( true );
+			this.customParameterGameObject.SetActive( false );
 
-			this.SetActiveOfEquipment( ref this.equipmentMenuGameObject , "Menu" , true );
-			this.SetActiveOfEquipment( ref this.bodiesGameObject , "Bodies" , false );
-			this.SetActiveOfEquipment( ref this.equipmentsGameObject , "Equipments" , false );
+			this.equipmentMenuGameObject.SetActive( true );
+			this.bodiesGameObject.SetActive( false );
+			this.equipmentsGameObject.SetActive( false );
 
 			Logger.Debug( "End" );
 		}
@@ -414,15 +385,14 @@ namespace Views.Customize {
 		public void ShowEquipments() {
 			Logger.Debug( "Start" );
 
-			this.SetActive( ref this.customEquipmentGameObject , "Equipment" , true );
-			this.SetActive( ref this.customParameterGameObject , "Parameter" , false );
+			this.customEquipmentGameObject.SetActive( true );
+			this.customParameterGameObject.SetActive( false );
 
-			this.SetActiveOfEquipment( ref this.equipmentsGameObject , "Equipments" , true );
-			this.SetActiveOfEquipment( ref this.equipmentMenuGameObject , "Menu" , false );
-			this.SetActiveOfEquipment( ref this.bodiesGameObject , "Bodies" , false );
+			this.equipmentsGameObject.SetActive( true );
+			this.equipmentMenuGameObject.SetActive( false );
+			this.bodiesGameObject.SetActive( false );
 
 			Logger.Debug( "End" );
-
 		}
 
 		#endregion

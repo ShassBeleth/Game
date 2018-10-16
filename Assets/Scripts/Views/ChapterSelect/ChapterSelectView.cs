@@ -39,6 +39,11 @@ namespace Views.ChapterSelect {
 		}
 
 		/// <summary>
+		/// チャプター一覧GameObject
+		/// </summary>
+		public GameObject chaptersGameObject;
+
+		/// <summary>
 		/// 戻るボタン押下時イベントハンドラ
 		/// </summary>
 		public Action OnClickBackButtonEventHandler { set; get; }
@@ -65,9 +70,9 @@ namespace Views.ChapterSelect {
 				Logger.Debug( $"Shown is {chapter.IsShown}" );
 			}
 
-			GameObject chaptersGameObject = GameObject.Find( "Canvas" ).transform.Find( "Chapters").gameObject;
-			foreach( int i in Enumerable.Range( 0 , chaptersGameObject.transform.childCount ) ) {
-				Button chapterButton = chaptersGameObject.transform.GetChild( i ).gameObject.GetComponent<Button>();
+			this.chaptersGameObject = GameObject.Find( "Canvas" ).transform.Find( "Chapters").gameObject;
+			foreach( int i in Enumerable.Range( 0 , this.chaptersGameObject.transform.childCount ) ) {
+				Button chapterButton = this.chaptersGameObject.transform.GetChild( i ).gameObject.GetComponent<Button>();
 				chapterButton.onClick.AddListener( () => { chapterDataList[ i ].OnClickDecisionButtonEventHandler?.Invoke(); } );
 			}
 

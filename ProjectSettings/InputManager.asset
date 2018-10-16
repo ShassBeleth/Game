@@ -6,41 +6,9 @@ InputManager:
   serializedVersion: 2
   m_Axes:
   - serializedVersion: 3
-    m_Name: CursorUp
+    m_Name: Vertical
     descriptiveName: "\u30AB\u30FC\u30BD\u30EB\u4E0A\u79FB\u52D5"
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 1000
-    dead: 0.05
-    sensitivity: 1
-    snap: 1
-    invert: 0
-    type: 2
-    axis: 6
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: CursorDown
-    descriptiveName: "\u30AB\u30FC\u30BD\u30EB\u4E0B\u79FB\u52D5"
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 1000
-    dead: 0.05
-    sensitivity: 0.01
-    snap: 1
-    invert: 0
-    type: 2
-    axis: 7
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: CursorLeft
-    descriptiveName: "\u30AB\u30FC\u30BD\u30EB\u5DE6\u79FB\u52D5"
-    descriptiveNegativeName: 
+    descriptiveNegativeName: "\u30AB\u30FC\u30BD\u30EB\u4E0B\u79FB\u52D5"
     negativeButton: 
     positiveButton: 
     altNegativeButton: 
@@ -54,9 +22,9 @@ InputManager:
     axis: 8
     joyNum: 0
   - serializedVersion: 3
-    m_Name: CursorRight
-    descriptiveName: "\u30AB\u30FC\u30BD\u30EB\u5DE6\u79FB\u52D5"
-    descriptiveNegativeName: 
+    m_Name: Horizontal
+    descriptiveName: "\u30AB\u30FC\u30BD\u30EB\u53F3\u79FB\u52D5"
+    descriptiveNegativeName: "\u30AB\u30FC\u30BD\u30EB\u5DE6\u79FB\u52D5"
     negativeButton: 
     positiveButton: 
     altNegativeButton: 
@@ -67,7 +35,7 @@ InputManager:
     snap: 1
     invert: 0
     type: 2
-    axis: 9
+    axis: 7
     joyNum: 0
   - serializedVersion: 3
     m_Name: Submit
