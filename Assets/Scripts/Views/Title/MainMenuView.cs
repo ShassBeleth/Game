@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Views.Title {
 
@@ -8,7 +9,17 @@ namespace Views.Title {
 	/// </summary>
 	public class MainMenuView : MonoBehaviour {
 
+		/// <summary>
+		/// event system
+		/// </summary>
+		public EventSystem eventSystem;
+
 		#region 一人プレイボタンについて
+		/// <summary>
+		/// 一人プレイGameObject
+		/// </summary>
+		public GameObject singlePlayGameObject;
+
 		/// <summary>
 		/// 一人プレイボタン押下時イベントハンドラ
 		/// </summary>
@@ -26,6 +37,11 @@ namespace Views.Title {
 
 		#region マルチプレイボタンについて
 		/// <summary>
+		/// マルチプレイGameObject
+		/// </summary>
+		public GameObject multiPlayGameObject;
+
+		/// <summary>
 		/// マルチプレイボタン押下時イベントハンドラ
 		/// </summary>
 		public Action OnClickMultiPlayButtonEventHandler { set; get; }
@@ -41,6 +57,11 @@ namespace Views.Title {
 		#endregion
 
 		#region ギャラリーボタンについて
+		/// <summary>
+		/// ギャラリーGameObject
+		/// </summary>
+		public GameObject galleryGameObject;
+
 		/// <summary>
 		/// ギャラリーボタン押下時イベントハンドラ
 		/// </summary>
@@ -58,6 +79,11 @@ namespace Views.Title {
 
 		#region ランキングボタンについて
 		/// <summary>
+		/// ランキングGameObject
+		/// </summary>
+		public GameObject rankingGameObject;
+
+		/// <summary>
 		/// ランキングボタン押下時イベントハンドラ
 		/// </summary>
 		public Action OnClickRankingButtonEventHandler { set; get; }
@@ -73,6 +99,10 @@ namespace Views.Title {
 		#endregion
 
 		#region オプションボタンについて
+		/// <summary>
+		/// オプションGameObject
+		/// </summary>
+		public GameObject optionGameObject;
 		/// <summary>
 		/// オプションボタン押下時イベントハンドラ
 		/// </summary>
@@ -90,6 +120,11 @@ namespace Views.Title {
 
 		#region ゲーム終了ボタンについて
 		/// <summary>
+		/// ゲーム終了GameObject
+		/// </summary>
+		public GameObject exitGameObject;
+
+		/// <summary>
 		/// ゲーム終了ボタン押下時イベントハンドラ
 		/// </summary>
 		public Action OnClickExitButtonEventHandler { set; get; }
@@ -103,6 +138,16 @@ namespace Views.Title {
 			Logger.Debug( "End" );
 		}
 		#endregion
+		
+		/// <summary>
+		/// 強制的に選択肢を設定する
+		/// </summary>
+		/// <param name="selectable">選択肢</param>
+		public void SetSelectedGameObject( GameObject selectable ) {
+			Logger.Debug( "Start" );
+			this.eventSystem.SetSelectedGameObject( selectable );
+			Logger.Debug( "End" );
+		}
 
 	}
 

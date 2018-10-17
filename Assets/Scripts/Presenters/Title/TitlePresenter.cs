@@ -2,6 +2,7 @@
 using Saves.Serializers;
 using SceneManagers;
 using SceneManagers.Parameters;
+using UniRx;
 using UnityEditor;
 using UnityEngine;
 using Views.Title;
@@ -12,7 +13,14 @@ namespace Presenters.Title {
 	/// タイトルPresenter
 	/// </summary>
 	public class TitlePresenter {
-				
+
+		private class WindowModel {
+			public ReactiveProperty<string> windowName = new ReactiveProperty<string>( "PleasePushAnyKey" );
+		}
+
+		private WindowModel windowModel = new WindowModel();
+		
+
 		/// <summary>
 		/// タイトルView
 		/// </summary>
@@ -29,6 +37,11 @@ namespace Presenters.Title {
 		private OptionView OptionView { set; get; }
 
 		/// <summary>
+		/// 何かキーを押してくださいView
+		/// </summary>
+		private PleasePushAnyKeyView PleasePushAnyKeyView { set; get; }
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public TitlePresenter() : this( null ) { }
@@ -43,14 +56,31 @@ namespace Presenters.Title {
 			if( parameter != null ) {
 				Logger.Debug( $"Initial Title Part is {parameter.InitialTitlePart.Value}" );
 			}
-
+			
 			// Viewを取得
 			this.TitleView = GameObject.Find( "Canvas" ).GetComponent<TitleView>();
 			this.MainMenuView = GameObject.Find( "MainMenu" ).GetComponent<MainMenuView>();
 			this.OptionView = GameObject.Find( "OptionMenu" ).GetComponent<OptionView>();
+			this.PleasePushAnyKeyView = GameObject.Find( "PleasePushAnyKey" ).GetComponent<PleasePushAnyKeyView>();
 
-			// タイトルViewのEventHandler設定
-			this.TitleView.OnClickAnyKeyEventHandler = this.ClickedAnyKeyEvent;
+			this.windowModel.windowName.Subscribe( ( name ) => {
+				switch( name ) {
+					case "PleasePushAnyKey":
+						this.TitleView.ShowPleasePushAnyKey();
+						break;
+					case "MainMenu":
+						this.TitleView.ShowMainMenu();
+						this.MainMenuView.SetSelectedGameObject( this.MainMenuView.singlePlayGameObject );
+						break;
+					case "Option":
+						this.TitleView.ShowOption();
+						this.OptionView.SetSelectedGameObject( this.OptionView.backGameObject );
+						break;
+				}
+			} );
+
+			// PleasePushAnyKeyViewのEventHandler設定
+			this.PleasePushAnyKeyView.OnClickAnyKeyEventHandler = this.ClickedAnyKeyEvent;
 
 			// メインメニューViewのEventHandler設定
 			this.MainMenuView.OnClickSinglePlayButtonEventHandler = this.ClickedSinglePlayButtonEvent;
@@ -78,10 +108,10 @@ namespace Presenters.Title {
 				Logger.Debug( $"Initial Title Part Enum is {parameter.InitialTitlePart.Value}" );
 				switch( parameter.InitialTitlePart.Value ) {
 					case TitleParameter.InitialTitlePartEnum.MainMenu:
-						this.TitleView.ShowMainMenu();
+						this.windowModel.windowName.Value = "MainMenu";
 						break;
 					case TitleParameter.InitialTitlePartEnum.PleasePushAnyKey:
-						this.TitleView.ShowPleasePushAnyKey();
+						this.windowModel.windowName.Value = "PleasePushAnyKey";
 						break;
 					default:
 						Logger.Warning( "Before Scene Name is Unexpected Name." );
@@ -109,7 +139,7 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedAnyKeyEvent() {
 			Logger.Debug( "Start" );
-			this.TitleView.ShowMainMenu();
+			this.windowModel.windowName.Value = "MainMenu";
 			Logger.Debug( "End" );
 		}
 
@@ -166,7 +196,7 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedOptionButtonEvent() {
 			Logger.Debug( "Start" );
-			this.TitleView.ShowOption();
+			this.windowModel.windowName.Value = "Option";
 			Logger.Debug( "End" );
 		}
 
@@ -190,7 +220,7 @@ namespace Presenters.Title {
 		#endregion
 
 		/// <summary>
-		/// 画面上の項目をセーブデータように変換
+		/// 画面上の項目をセーブデータ用に変換
 		/// </summary>
 		/// <param name="optionValue">画面上のオプションの項目</param>
 		/// <returns>オプションセーブデータ</returns>
@@ -217,7 +247,7 @@ namespace Presenters.Title {
 			// TODO 設定値の反映
 
 			// GameObjectの表示切り替え
-			this.TitleView.ShowMainMenu();
+			this.windowModel.windowName.Value = "MainMenu";
 
 			Logger.Debug( "End" );
 		}
