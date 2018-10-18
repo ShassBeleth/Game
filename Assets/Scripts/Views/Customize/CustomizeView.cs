@@ -240,12 +240,12 @@ namespace Views.Customize {
 		/// <param name="bodies">素体一覧</param>
 		public void SetBodies( List<Body> bodies ) {
 			Logger.Debug( "Start" );
-			foreach( Body body in bodies ) {
+			bodies.ForEach( ( body ) => {
 				GameObject node = GameObject.Instantiate( this.bodyNodePrefab );
 				node.transform.SetParent( this.bodyScrollViewContent.transform , false );
 				BodyNodeView view = node.GetComponent<BodyNodeView>();
 				view.SetOnClickDecisionButtonEventHandler( body.DecisionEventHandler );
-			}
+			} );
 			Logger.Debug( "End" );
 		}
 
@@ -255,12 +255,12 @@ namespace Views.Customize {
 		/// <param name="equipablePlaces">装備可能箇所一覧</param>
 		public void SetEquipablePlaces( List<EquipablePlace> equipablePlaces ) {
 			Logger.Debug( "Start" );
-			foreach( EquipablePlace equipablePlace in equipablePlaces ) {
+			equipablePlaces.ForEach( ( equipablePlace ) => {
 				GameObject node = GameObject.Instantiate( this.equipablePlaceNodePrefab );
 				node.transform.SetParent( this.equipablePlaceScrollViewContent.transform , false );
 				EquipablePlaceNodeView view = node.GetComponent<EquipablePlaceNodeView>();
 				view.SetOnClickDecisionButtonEventHandler( equipablePlace.DecisionEventHandler );
-			}
+			} );
 			Logger.Debug( "End" );
 		}
 
@@ -270,12 +270,12 @@ namespace Views.Customize {
 		/// <param name="equipments">装備一覧</param>
 		public void SetEqupments( List<Equipment> equipments ) {
 			Logger.Debug( "Start" );
-			foreach( Equipment equipment in equipments ) {
+			equipments.ForEach( ( equipment ) => {
 				GameObject node = GameObject.Instantiate( this.equipmentNodePrefab );
 				node.transform.SetParent( this.equipmentScrollViewContent.transform , false );
 				EquipmentNodeView view = node.GetComponent<EquipmentNodeView>();
 				view.SetOnClickDecisionButtonEventHandler( equipment.DecisionEventHandler );
-			}
+			} );
 			Logger.Debug( "End" );
 		}
 
@@ -285,7 +285,9 @@ namespace Views.Customize {
 		/// <param name="parameterChips">パラメータチップ一覧</param>
 		public void SetParameterChips( List<ParameterChip> parameterChips ) {
 			Logger.Debug( "Start" );
-
+			parameterChips.ForEach( ( parameterChip ) => {
+				// TODO ここ何もしてない
+			} );
 			Logger.Debug( "End" );
 		}
 

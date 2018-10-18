@@ -1,4 +1,7 @@
-﻿using Saves.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Models;
+using Saves.Models;
 using Saves.Serializers;
 using SceneManagers;
 using SceneManagers.Parameters;
@@ -13,13 +16,16 @@ namespace Presenters.Title {
 	/// タイトルPresenter
 	/// </summary>
 	public class TitlePresenter {
-
-		private class WindowModel {
-			public ReactiveProperty<string> windowName = new ReactiveProperty<string>( "PleasePushAnyKey" );
-		}
-
-		private WindowModel windowModel = new WindowModel();
 		
+		/// <summary>
+		/// WindowModel
+		/// </summary>
+		private TitleWindowModel titleWindowModel = new TitleWindowModel( TitleWindowModel.WindowNameEnum.PleasePushAnyKey );
+
+		/// <summary>
+		/// OptionModel
+		/// </summary>
+		private OptionModel optionModel;
 
 		/// <summary>
 		/// タイトルView
@@ -56,29 +62,15 @@ namespace Presenters.Title {
 			if( parameter != null ) {
 				Logger.Debug( $"Initial Title Part is {parameter.InitialTitlePart.Value}" );
 			}
+
+			#region Viewの設定
 			
 			// Viewを取得
 			this.TitleView = GameObject.Find( "Canvas" ).GetComponent<TitleView>();
 			this.MainMenuView = GameObject.Find( "MainMenu" ).GetComponent<MainMenuView>();
 			this.OptionView = GameObject.Find( "OptionMenu" ).GetComponent<OptionView>();
 			this.PleasePushAnyKeyView = GameObject.Find( "PleasePushAnyKey" ).GetComponent<PleasePushAnyKeyView>();
-
-			this.windowModel.windowName.Subscribe( ( name ) => {
-				switch( name ) {
-					case "PleasePushAnyKey":
-						this.TitleView.ShowPleasePushAnyKey();
-						break;
-					case "MainMenu":
-						this.TitleView.ShowMainMenu();
-						this.MainMenuView.SetSelectedGameObject( this.MainMenuView.singlePlayGameObject );
-						break;
-					case "Option":
-						this.TitleView.ShowOption();
-						this.OptionView.SetSelectedGameObject( this.OptionView.backGameObject );
-						break;
-				}
-			} );
-
+			
 			// PleasePushAnyKeyViewのEventHandler設定
 			this.PleasePushAnyKeyView.OnClickAnyKeyEventHandler = this.ClickedAnyKeyEvent;
 
@@ -93,12 +85,26 @@ namespace Presenters.Title {
 			// オプションViewのEventHandler設定
 			this.OptionView.OnClickBackButtonEventHandler = this.ClickedOptionBackButtonEvent;
 
-			// オプション設定値をストレージから取得
-			OptionView.OptionValue optionValue = this.ConvertOptionValue( OptionSaveDataSerializer.LoadOptionSaveData() );
+			#endregion
 
-			// オプション設定値の設定
-			this.OptionView.SetOptionValue( optionValue );
+			// Optionの設定
+			{
+				// オプション設定値をストレージから取得
+				OptionSaveDataModel optionSaveDataModel = OptionSaveDataSerializer.LoadOptionSaveData();
+				// Modelに値を入れる
+				this.optionModel = new OptionModel(
+					optionSaveDataModel?.isReverseVerticalCamera ?? false ,
+					optionSaveDataModel?.isReverseHorizontalCamera ?? false
+				);
+				// Viewに渡せる形に変換してから渡す
+				OptionView.OptionValue optionValue = this.ConvertOptionValue( this.optionModel );
+				// オプション設定値の設定
+				this.OptionView.SetOptionValue( optionValue );
+			}
 
+			// Window名変更時イベント
+			this.titleWindowModel.windowName.Subscribe( ( name ) => { this.ChangedWindowName( name ); } );
+			
 			// 遷移前画面の情報がなければShow Please Push Any Keyの表示
 			if( parameter?.InitialTitlePart == null ) {
 				Logger.Debug( "Initial Title Part Enum is Null." );
@@ -108,10 +114,10 @@ namespace Presenters.Title {
 				Logger.Debug( $"Initial Title Part Enum is {parameter.InitialTitlePart.Value}" );
 				switch( parameter.InitialTitlePart.Value ) {
 					case TitleParameter.InitialTitlePartEnum.MainMenu:
-						this.windowModel.windowName.Value = "MainMenu";
+						this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.MainMenu;
 						break;
 					case TitleParameter.InitialTitlePartEnum.PleasePushAnyKey:
-						this.windowModel.windowName.Value = "PleasePushAnyKey";
+						this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.PleasePushAnyKey;
 						break;
 					default:
 						Logger.Warning( "Before Scene Name is Unexpected Name." );
@@ -123,15 +129,42 @@ namespace Presenters.Title {
 		}
 
 		/// <summary>
-		/// オプションのセーブデータから描画用に値を変換する
+		/// Window名変更時イベント
 		/// </summary>
-		/// <param name="model">オプションのセーブデータ</param>
-		/// <returns></returns>
-		private OptionView.OptionValue ConvertOptionValue( OptionSaveDataModel model ) {
+		/// <param name="windowName">Window名</param>
+		private void ChangedWindowName( TitleWindowModel.WindowNameEnum windowName ) {
 			Logger.Debug( "Start" );
-			Logger.Warning( "未実装" );
+			Logger.Debug( $"Changed Window Name is {windowName}" );
+
+			// 表示する画面を切り替えて、選択肢を選択状態にしておく
+			switch( windowName ) {
+				case TitleWindowModel.WindowNameEnum.PleasePushAnyKey:
+					this.TitleView.ShowPleasePushAnyKey();
+					break;
+				case TitleWindowModel.WindowNameEnum.MainMenu:
+					this.TitleView.ShowMainMenu();
+					this.MainMenuView.SetSelectedGameObject( this.MainMenuView.singlePlayGameObject );
+					break;
+				case TitleWindowModel.WindowNameEnum.Option:
+					this.TitleView.ShowOption();
+					this.OptionView.SetSelectedGameObject( this.OptionView.backGameObject );
+					break;
+			}
 			Logger.Debug( "End" );
-			return new OptionView.OptionValue();
+		}
+		
+		/// <summary>
+		/// オプションModelから描画用に値を変換する
+		/// </summary>
+		/// <param name="model">オプションModel</param>
+		/// <returns></returns>
+		private OptionView.OptionValue ConvertOptionValue( OptionModel model ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( "End" );
+			return new OptionView.OptionValue() {
+				IsReverseVerticalCamera = model.IsReverseVerticalCamera.Value ,
+				IsReverseHorizontalCamera = model.IsReverseHorizontalCamera.Value
+			};
 		}
 
 		/// <summary>
@@ -139,7 +172,8 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedAnyKeyEvent() {
 			Logger.Debug( "Start" );
-			this.windowModel.windowName.Value = "MainMenu";
+			// 画面を切り替える
+			this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.MainMenu;
 			Logger.Debug( "End" );
 		}
 
@@ -150,6 +184,7 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedSinglePlayButtonEvent() {
 			Logger.Debug( "Start" );
+			// シーンを切り替える
 			SceneManager.GetInstance().LoadScene( 
 				"SelectSaveData" , 
 				new SelectSaveDataParameter() {
@@ -164,6 +199,7 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedMultiPlayButtonEvent() {
 			Logger.Debug( "Start" );
+			// シーンを切り替える
 			SceneManager.GetInstance().LoadScene(
 				"SelectSaveData" ,
 				new SelectSaveDataParameter() {
@@ -178,6 +214,7 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedGalleryButtonEvent() {
 			Logger.Debug( "Start" );
+			// シーンを切り替える
 			SceneManager.GetInstance().LoadScene( "Gallery" , null );
 			Logger.Debug( "End" );
 		}
@@ -187,6 +224,7 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedRankingButtonEvent() {
 			Logger.Debug( "Start" );
+			// シーンを切り替える
 			SceneManager.GetInstance().LoadScene( "Ranking" , null );
 			Logger.Debug( "End" );
 		}
@@ -196,7 +234,8 @@ namespace Presenters.Title {
 		/// </summary>
 		private void ClickedOptionButtonEvent() {
 			Logger.Debug( "Start" );
-			this.windowModel.windowName.Value = "Option";
+			// 画面を切り替える
+			this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.Option;
 			Logger.Debug( "End" );
 		}
 
@@ -220,14 +259,29 @@ namespace Presenters.Title {
 		#endregion
 
 		/// <summary>
-		/// 画面上の項目をセーブデータ用に変換
+		/// 画面上の項目をOptionModelに変換
 		/// </summary>
 		/// <param name="optionValue">画面上のオプションの項目</param>
-		/// <returns>オプションセーブデータ</returns>
-		private OptionSaveDataModel ConvertOptionSaveDataModel( OptionView.OptionValue optionValue ) {
+		/// <param name="optionModel">オプションModel</param>
+		private void ConvertOptionModel( OptionView.OptionValue optionValue , ref OptionModel optionModel ) {
+			Logger.Debug( "Start" );
+			optionModel.IsReverseVerticalCamera.Value = optionValue.IsReverseVerticalCamera;
+			optionModel.IsReverseHorizontalCamera.Value = optionValue.IsReverseHorizontalCamera;
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// OptionModelをオプションセーブデータモデルに変換
+		/// </summary>
+		/// <param name="optionValue">画面上のオプションの項目</param>
+		/// <param name="optionModel">オプションModel</param>
+		private OptionSaveDataModel ConvertSaveDataModel ( OptionModel optionModel ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( "End" );
-			return new OptionSaveDataModel();
+			return new OptionSaveDataModel() {
+				isReverseVerticalCamera = optionModel.IsReverseVerticalCamera.Value ,
+				isReverseHorizontalCamera = optionModel.IsReverseHorizontalCamera.Value
+			};
 		}
 
 		/// <summary>
@@ -240,14 +294,15 @@ namespace Presenters.Title {
 			OptionView.OptionValue optionValue = this.OptionView.GetOptionValue();
 
 			// 設定値の保存
-			OptionSaveDataSerializer.WriteOptionSaveData( 
-				this.ConvertOptionSaveDataModel( optionValue ) 
+			this.ConvertOptionModel( optionValue , ref this.optionModel );
+			OptionSaveDataSerializer.WriteOptionSaveData(
+				this.ConvertSaveDataModel( this.optionModel )
 			);
 
 			// TODO 設定値の反映
 
 			// GameObjectの表示切り替え
-			this.windowModel.windowName.Value = "MainMenu";
+			this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.MainMenu;
 
 			Logger.Debug( "End" );
 		}

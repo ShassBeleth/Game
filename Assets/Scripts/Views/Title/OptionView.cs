@@ -18,7 +18,17 @@ namespace Views.Title {
 		/// 設定値
 		/// </summary>
 		public class OptionValue {
+			
+			/// <summary>
+			/// 垂直方向のカメラ移動を反転させるかどうか
+			/// </summary>
+			public bool IsReverseVerticalCamera;
 
+			/// <summary>
+			/// 水平方向のカメラ移動を反転させるかどうか
+			/// </summary>
+			public bool IsReverseHorizontalCamera;
+			
 		}
 
 		#region 戻るボタンについて

@@ -63,7 +63,13 @@ namespace Presenters.SelectSaveData {
 
 			// セーブデータリストの描画
 			this.selectSaveDataView.ShowSaveDataList( saveDataList );
-			
+
+			// 最初はパネルを表示しない
+			this.selectSaveDataView.ShowPanel( null );
+
+			// Save1が選ばれている状態にしておく
+			this.selectSaveDataView.SetSelectedSaveData( this.selectSaveDataView.saves[ 1 ] );
+
 			Logger.Debug( "End" );
 		}
 
@@ -88,6 +94,7 @@ namespace Presenters.SelectSaveData {
 				Id = id ,
 				userName = singlePlaySaveDataModel?.userName ,
 				latestUpdateDateTime = singlePlaySaveDataModel?.latestUpdateDateTime ?? new DateTime() ,
+				OnClickedSaveData = () => this.ClickedSaveData( id ) ,
 				OnClickNewButtonEventHandler = () => this.ClickedNewButtonEvent( id ) ,
 				OnClickDecisionButtonEventHandler = () => this.ClickedDecisionButtonEvent( id ) ,
 				OnClickCopyButtonEventHandler = () => this.ClickedCopyButtonEvent( id ) ,
@@ -96,6 +103,20 @@ namespace Presenters.SelectSaveData {
 
 			Logger.Debug( "End" );
 			return saveData;
+		}
+
+		/// <summary>
+		/// セーブデータ選択時イベント
+		/// </summary>
+		/// <param name="id">セーブデータID</param>
+		private void ClickedSaveData( int id ) {
+			Logger.Debug( "Start" );
+			this.selectSaveDataView.ShowPanel( id );
+			this.selectSaveDataView.SetSelectedButtonInPanel(
+				id ,
+				this.ConvertSaveData( id , this.saveDataModels[ id ] ).ExistsAlreadyData 
+			);
+			Logger.Debug( "End" );
 		}
 
 		/// <summary>

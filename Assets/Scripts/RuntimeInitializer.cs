@@ -15,8 +15,9 @@ public class RuntimeInitializer : MonoBehaviour {
 
 		// SceneManager開始
 		SceneManager.GetInstance();
-
+		
 		Logger.Debug( "End" );
+
 	}
 
 }

@@ -63,12 +63,13 @@ namespace Views.ChapterSelect {
 		/// <param name="chapterDataList">チャプターデータ一覧</param>
 		public void ShowChapterDataList( List<ChapterData> chapterDataList ) {
 			Logger.Debug( "Start" );
-			foreach( ChapterData chapter in chapterDataList ) {
+			chapterDataList.ForEach( ( chapter ) => {
 				Logger.Debug( "Chapter-----------------------------" );
 				Logger.Debug( $"Id is {chapter.Id}" );
 				Logger.Debug( $"Name is {chapter.Name}" );
 				Logger.Debug( $"Shown is {chapter.IsShown}" );
-			}
+
+			} );
 
 			this.chaptersGameObject = GameObject.Find( "Canvas" ).transform.Find( "Chapters").gameObject;
 			foreach( int i in Enumerable.Range( 0 , this.chaptersGameObject.transform.childCount ) ) {
