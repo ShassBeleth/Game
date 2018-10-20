@@ -2,8 +2,10 @@
 using System.Linq;
 using SceneManagers;
 using SceneManagers.Parameters;
+using UniRx;
 using UnityEngine;
 using Views.Customize;
+using Views.UserController;
 
 namespace Presenters.Customize {
 
@@ -16,6 +18,16 @@ namespace Presenters.Customize {
 		/// 装備カスタマイズ、パラメータカスタマイズのView
 		/// </summary>
 		private CustomizeView CustomizeView { set; get; }
+
+		/// <summary>
+		/// キャラクターを回転させるView
+		/// </summary>
+		private ShowcaseView ShowcaseView { set; get; }
+
+		/// <summary>
+		/// ユーザ入力View
+		/// </summary>
+		private UserControllerView UserControllerView { set; get; }
 
 		/// <summary>
 		/// 素体一覧
@@ -46,6 +58,8 @@ namespace Presenters.Customize {
 
 			// Viewを取得
 			this.CustomizeView = customizeGameObject.GetComponent<CustomizeView>();
+			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
+			this.ShowcaseView = GameObject.Find( "Showcase" ).GetComponent<ShowcaseView>();
 
 			// CutomizeViewのEventHandler設定
 			this.CustomizeView.OnClickDecisionButtonEventHandler = this.ClickedDecisionButtonEvent;
@@ -55,6 +69,8 @@ namespace Presenters.Customize {
 			this.CustomizeView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
 			this.CustomizeView.OnClickBodyButtonEventHandler = this.ClickedBodyButtonFromMenuEvent;
 			this.CustomizeView.OnClickBodyBackButtonEventHandler = this.ClickedBodyBackButtonEvent;
+			
+			this.UserControllerView.TurnCharacter.Subscribe( value => { this.ChangedTurnCharacter( value ); } );
 
 			// 素体一覧取得
 			// TODO 実際は型が違うから変換が必要
@@ -74,6 +90,22 @@ namespace Presenters.Customize {
 			// 初期表示
 			this.CustomizeView.ShowCustomEquipment();
 
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// キャラクター回転値が変更された時のイベント
+		/// </summary>
+		/// <param name="value"></param>
+		private void ChangedTurnCharacter( int value ) {
+			Logger.Debug( "Start" );
+			if( value < -100 || 100 < value ) {
+				this.ShowcaseView.IsInput = true;
+				this.ShowcaseView.IncreaseAngle = value * -0.01f;
+			}
+			else {
+				this.ShowcaseView.IncreaseAngle = 0f;
+			}
 			Logger.Debug( "End" );
 		}
 

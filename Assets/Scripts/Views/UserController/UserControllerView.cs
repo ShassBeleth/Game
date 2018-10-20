@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 namespace Views.UserController {
@@ -38,7 +39,7 @@ namespace Views.UserController {
 		/// <summary>
 		/// メニューボタン群
 		/// </summary>
-		public Dictionary<string , int> MenuButtons { private set; get; } = new Dictionary<string , int>();
+		public Dictionary<string , ReactiveProperty<int>> MenuButtons { private set; get; } = new Dictionary<string , ReactiveProperty<int>>();
 
 		/// <summary>
 		/// カーソル上下
@@ -50,9 +51,9 @@ namespace Views.UserController {
 		public int CursorHorizontal { private set; get; } = 0;
 
 		/// <summary>
-		/// キャラクター左回転
+		/// キャラクター回転
 		/// </summary>
-		public int TurnCharacter { private set; get; } = 0;
+		public ReactiveProperty<int> TurnCharacter { private set; get; } = new ReactiveProperty<int>( 0 );
 
 		#endregion
 
@@ -125,12 +126,12 @@ namespace Views.UserController {
 
 		private void Awake() {
 			foreach( string menuButtonKeyName in this.MenuButtonKeyNames ) {
-				this.MenuButtons[ menuButtonKeyName ] = 0;
+				this.MenuButtons[ menuButtonKeyName ] = new ReactiveProperty<int>(0);
 			}
-			this.MenuButtons[ "CursorLeft" ] = 0;
-			this.MenuButtons[ "CursorRight" ] = 0;
-			this.MenuButtons[ "CursorUp" ] = 0;
-			this.MenuButtons[ "CursorDown" ] = 0;
+			this.MenuButtons[ "CursorLeft" ] = new ReactiveProperty<int>( 0 );
+			this.MenuButtons[ "CursorRight" ] = new ReactiveProperty<int>( 0 );
+			this.MenuButtons[ "CursorUp" ] = new ReactiveProperty<int>( 0 );
+			this.MenuButtons[ "CursorDown" ] = new ReactiveProperty<int>( 0 );
 			foreach( string buttleButtonKeyName in this.ButtleButtonKeyNames ) {
 				this.ButtleButtons[ buttleButtonKeyName ] = 0;
 			}
@@ -143,45 +144,45 @@ namespace Views.UserController {
 			// ボタンが押されていたら1増加、押されていないときは0
 			foreach( string menuButtonKeyName in this.MenuButtonKeyNames ) {
 				if( Input.GetButton( menuButtonKeyName ) ) {
-					this.MenuButtons[ menuButtonKeyName ]++;
+					this.MenuButtons[ menuButtonKeyName ].Value++;
 					Logger.Debug( $"{menuButtonKeyName} is {this.MenuButtons[ menuButtonKeyName ]}" );
 				}
 				else {
-					this.MenuButtons[ menuButtonKeyName ] = 0;
+					this.MenuButtons[ menuButtonKeyName ].Value = 0;
 				}
 			}
 			
 			// カーソル左
 			if( Input.GetAxis( "Horizontal" ) < 0 ) {
-				this.MenuButtons[ "CursorLeft" ]++;
+				this.MenuButtons[ "CursorLeft" ].Value++;
 				Logger.Debug( $"CursorLeft is {this.MenuButtons[ "CursorLeft" ]}" );
 			}
 			else {
-				this.MenuButtons[ "CursorLeft" ] = 0;
+				this.MenuButtons[ "CursorLeft" ].Value = 0;
 			}
 			// カーソル右
 			if( 0 < Input.GetAxis( "Horizontal" ) ) {
-				this.MenuButtons[ "CursorRight" ]++;
+				this.MenuButtons[ "CursorRight" ].Value++;
 				Logger.Debug( $"CursorRight is {this.MenuButtons[ "CursorRight" ]}" );
 			}
 			else {
-				this.MenuButtons[ "CursorRight" ] = 0;
+				this.MenuButtons[ "CursorRight" ].Value = 0;
 			}
 			// カーソル下
 			if( Input.GetAxis( "Vertical" ) < 0 ) {
-				this.MenuButtons[ "CursorDown" ]++;
+				this.MenuButtons[ "CursorDown" ].Value++;
 				Logger.Debug( $"CursorDown is {this.MenuButtons[ "CursorDown" ]}" );
 			}
 			else {
-				this.MenuButtons[ "CursorDown" ] = 0;
+				this.MenuButtons[ "CursorDown" ].Value = 0;
 			}
 			// カーソル上
 			if( 0 < Input.GetAxis( "Vertical" ) ) {
-				this.MenuButtons[ "CursorUp" ]++;
+				this.MenuButtons[ "CursorUp" ].Value++;
 				Logger.Debug( $"CursorUp is {this.MenuButtons[ "CursorUp" ]}" );
 			}
 			else {
-				this.MenuButtons[ "CursorUp" ] = 0;
+				this.MenuButtons[ "CursorUp" ].Value = 0;
 			}
 			
 			// カーソル上下
@@ -197,8 +198,8 @@ namespace Views.UserController {
 			}
 
 			// キャラクター回転
-			this.TurnCharacter = (int)( Input.GetAxis( "TurnCharacter" ) * 1000 );
-			if( this.TurnCharacter != 0 ) {
+			this.TurnCharacter.Value = (int)( Input.GetAxis( "TurnCharacter" ) * 1000 );
+			if( this.TurnCharacter.Value != 0 ) {
 				Logger.Debug( $"TurnCharacter is {this.TurnCharacter}" );
 			}
 			
