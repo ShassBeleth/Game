@@ -43,15 +43,15 @@ namespace Views.SelectSaveData {
 			public Action OnClickedSaveData { set; get; }
 
 			/// <summary>
-			/// 新規作成ボタン押下時イベントハンドラ
+			/// 続きからボタン押下時イベントハンドラ
 			/// </summary>
-			public Action OnClickNewButtonEventHandler { set; get; }
+			public Action OnClickContinueButtonEventHandler { set; get; }
 
 			/// <summary>
-			/// 決定ボタン押下時イベントハンドラ
+			/// チャプターセレクトボタン押下時イベントハンドラ
 			/// </summary>
-			public Action OnClickDecisionButtonEventHandler { set; get; }
-			
+			public Action OnClickChapterSelectButtonEventHandler { set; get; }
+
 			/// <summary>
 			/// コピーボタン押下時イベントハンドラ
 			/// </summary>
@@ -63,12 +63,68 @@ namespace Views.SelectSaveData {
 			public Action OnClickDeleteButtonEventHandler { set; get; }
 
 		}
+		
+		/// <summary>
+		/// Event System
+		/// </summary>
+		public EventSystem eventSystem;
+
+		#region セーブデータについて
 
 		/// <summary>
 		/// セーブデータ群
 		/// </summary>
 		public GameObject[] saves;
 		
+		/// <summary>
+		/// セーブデータの設定
+		/// </summary>
+		/// <param name="saveDataList">セーブデータのリスト</param>
+		public void SetSaveDataList( List<SaveData> saveDataList ) {
+			Logger.Debug( "Start" );
+			
+			foreach( int i in Enumerable.Range( 0 , this.saves.Length ) ) {
+				int index = i;
+
+				Logger.Debug( $"Save Data List[ {index} ] {( !saveDataList[ index ].ExistsAlreadyData ? "Don't" : "" )} Exists Save Data" );
+				Logger.Debug( $"Id is {( saveDataList[ index ].Id.ToString() )}" );
+				Logger.Debug( $"User Name is {saveDataList[ index ].userName ?? "Null"}" );
+				Logger.Debug( $"Latest Update Date Time is {saveDataList[ index ].latestUpdateDateTime.ToString( "yyyy/MM/dd hh:mm:ss" )}" );
+				
+				GameObject save = this.saves[ index ];
+				// ユーザ名表示
+				save.transform.Find( "UserNameText" ).GetComponent<Text>().text
+					= saveDataList[ index ].ExistsAlreadyData
+						? saveDataList[ index ].userName
+						: "New Save Data";
+				// 最終更新日時表示
+				save.transform.Find( "LatestUpdateDateTimeText" ).GetComponent<Text>().text
+					= saveDataList[ index ].ExistsAlreadyData
+						? saveDataList[ index ].latestUpdateDateTime.ToString( "yyyy/MM/dd hh:mm:ss" )
+						: "----/--/-- --:--:--";
+
+				// 選択時イベント追加
+				save.GetComponent<Button>().onClick.AddListener( () => saveDataList[ i ].OnClickedSaveData() );
+
+			}
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 強制的にセーブデータの選択肢を設定する
+		/// </summary>
+		/// <param name="selectable">選択肢</param>
+		public void SetSelectedSaveData( GameObject selectable ) {
+			Logger.Debug( "Start" );
+			this.eventSystem.SetSelectedGameObject( selectable );
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		#region 戻るボタンについて
+
 		/// <summary>
 		/// 戻るボタン押下時イベントハンドラ
 		/// </summary>
@@ -83,98 +139,55 @@ namespace Views.SelectSaveData {
 			Logger.Debug( "End" );
 		}
 
-		/// <summary>
-		/// Event System
-		/// </summary>
-		public EventSystem eventSystem;
+		#endregion
+		
+		#region パネルについて
 
 		/// <summary>
-		/// 強制的にセーブデータの選択肢を設定する
+		/// パネル
 		/// </summary>
-		/// <param name="selectable">選択肢</param>
-		public void SetSelectedSaveData( GameObject selectable ) {
-			Logger.Debug( "Start" );
-			this.eventSystem.SetSelectedGameObject( selectable );
-			Logger.Debug( "End" );
-		}
-		
+		public GameObject panel;
+
 		/// <summary>
 		/// パネルの表示
 		/// </summary>
-		/// <param name="saveIndex">表示するセーブデータのIndex nullの場合すべて非表示</param>
-		public void ShowPanel( int? saveIndex ) {
+		/// <param name="saveIndex">表示するセーブデータのIndex nullの場合非表示</param>
+		/// <param name="saveData">セーブデータ</param>
+		public void ShowPanel( int? saveIndex , SaveData save ) {
 			Logger.Debug( "Start" );
-			foreach( int i in Enumerable.Range( 0 , this.saves.Length ) ) {
-				this.saves[ i ].transform.Find( "Panel" ).gameObject.SetActive(
-					saveIndex.HasValue && saveIndex.Value == i
-				);
+			if( saveIndex.HasValue ) {
+				this.panel.SetActive( true );
+
+				// パネル内のButton取得
+				Button continueButton = this.panel.transform.Find( "ContinueButton" ).GetComponent<Button>();
+				Button chapterSelectButton = this.panel.transform.Find( "ChapterSelectButton" ).GetComponent<Button>();
+				Button copyButton = this.panel.transform.Find( "CopyButton" ).GetComponent<Button>();
+				Button deleteButton = this.panel.transform.Find( "DeleteButton" ).GetComponent<Button>();
+
+				// ボタン押下時イベント設定
+				continueButton.onClick.AddListener( () => save.OnClickContinueButtonEventHandler() );
+				chapterSelectButton.onClick.AddListener( () => save.OnClickChapterSelectButtonEventHandler() );
+				copyButton.onClick.AddListener( () => save.OnClickCopyButtonEventHandler() );
+				deleteButton.onClick.AddListener( () => save.OnClickDeleteButtonEventHandler() );
 			}
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// セーブデータの表示
-		/// </summary>
-		/// <param name="saveDataList">セーブデータのリスト</param>
-		public void ShowSaveDataList( List<SaveData> saveDataList ) {
-			Logger.Debug( "Start" );
-
-			// セーブデータを見て描画
-			GameObject savesGameObject = this.transform.Find( "Saves" ).gameObject;
-			foreach( int i in Enumerable.Range( 0 , savesGameObject.transform.childCount ) ) {
-				int index = i;
-
-				GameObject save = this.saves[ index ];
-				Transform panelTransform = save.transform.Find( "Panel" );
-				Button newButton = panelTransform.Find( "NewButton" ).gameObject.GetComponent<Button>();
-				Button decisionButton = panelTransform.Find( "DecisionButton" ).gameObject.GetComponent<Button>();
-				Button copyButton = panelTransform.Find( "CopyButton" ).gameObject.GetComponent<Button>();
-				Button deleteButton = panelTransform.Find( "DeleteButton" ).gameObject.GetComponent<Button>();
-
-				// 新規追加の場合
-				if( !saveDataList[ index ].ExistsAlreadyData ) {
-					Logger.Debug( $"Save Data [ {index} ] Don't Exists Save Data" );
-					newButton.enabled = true;
-					decisionButton.enabled = false;
-					copyButton.enabled = false;
-					deleteButton.enabled = false;
-					newButton.onClick.AddListener( () => { saveDataList[ index ].OnClickNewButtonEventHandler.Invoke(); } );
-				}
-				// 新規追加でない場合
-				else {
-					Logger.Debug( $"Save Data List[ {index} ] Exists Save Data" );
-					Logger.Debug( $"Id is {saveDataList[ index ].Id}" );
-					Logger.Debug( $"User Name is {saveDataList[ index ].userName}" );
-					Logger.Debug( $"Latest Update Date Time is {saveDataList[ index ].latestUpdateDateTime.ToString( "yyyy/MM/dd hh:mm:ss" )}" );
-					newButton.enabled = false;
-					decisionButton.enabled = true;
-					copyButton.enabled = true;
-					deleteButton.enabled = true;
-					decisionButton.onClick.AddListener( () => { saveDataList[ index ].OnClickDecisionButtonEventHandler.Invoke(); } );
-					copyButton.onClick.AddListener( () => { saveDataList[ index ].OnClickCopyButtonEventHandler.Invoke(); } );
-					deleteButton.onClick.AddListener( () => { saveDataList[ index ].OnClickDeleteButtonEventHandler.Invoke(); } );
-				}
-				save.GetComponent<Button>().onClick.AddListener( () => saveDataList[ i ].OnClickedSaveData() );
-
+			else {
+				this.panel.SetActive( false );
 			}
-
 			Logger.Debug( "End" );
 		}
 
 		/// <summary>
 		/// パネル内のボタンを強制的に選択させる
 		/// </summary>
-		/// <param name="index">セーブデータIndex</param>
-		/// <param name="existsAlreadyData">既にセーブデータが存在するかどうか</param>
-		public void SetSelectedButtonInPanel( int index , bool existsAlreadyData ) {
+		/// <param name="index">セーブデータのindex</param>
+		public void SetSelectedButtonInPanel( int index ) {
 			Logger.Debug( "Start" );
-			this.eventSystem.SetSelectedGameObject(
-				this.saves[ index ].transform.Find( "Panel" ).Find(
-					!existsAlreadyData ? "NewButton" : "DecisionButton"
-				).gameObject
-			);
+			this.eventSystem.SetSelectedGameObject( this.panel.transform.Find( "ContinueButton" ).gameObject );
 			Logger.Debug( "End" );
 		}
+
+		#endregion
+
 	}
 
 }

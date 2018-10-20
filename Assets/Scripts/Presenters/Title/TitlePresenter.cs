@@ -167,6 +167,8 @@ namespace Presenters.Title {
 			};
 		}
 
+		#region Viewイベント
+
 		/// <summary>
 		/// 何かのボタン押下時イベント
 		/// </summary>
@@ -259,6 +261,31 @@ namespace Presenters.Title {
 		#endregion
 
 		/// <summary>
+		/// オプションの戻るボタン押下時イベント
+		/// </summary>
+		private void ClickedOptionBackButtonEvent() {
+			Logger.Debug( "Start" );
+
+			// 設定値の取得
+			OptionView.OptionValue optionValue = this.OptionView.GetOptionValue();
+
+			// 設定値の保存
+			this.ConvertOptionModel( optionValue , ref this.optionModel );
+			OptionSaveDataSerializer.WriteOptionSaveData(
+				this.ConvertSaveDataModel( this.optionModel )
+			);
+
+			// TODO 設定値の反映
+
+			// GameObjectの表示切り替え
+			this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.MainMenu;
+
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		/// <summary>
 		/// 画面上の項目をOptionModelに変換
 		/// </summary>
 		/// <param name="optionValue">画面上のオプションの項目</param>
@@ -282,29 +309,6 @@ namespace Presenters.Title {
 				isReverseVerticalCamera = optionModel.IsReverseVerticalCamera.Value ,
 				isReverseHorizontalCamera = optionModel.IsReverseHorizontalCamera.Value
 			};
-		}
-
-		/// <summary>
-		/// オプションの戻るボタン押下時イベント
-		/// </summary>
-		private void ClickedOptionBackButtonEvent() {
-			Logger.Debug( "Start" );
-
-			// 設定値の取得
-			OptionView.OptionValue optionValue = this.OptionView.GetOptionValue();
-
-			// 設定値の保存
-			this.ConvertOptionModel( optionValue , ref this.optionModel );
-			OptionSaveDataSerializer.WriteOptionSaveData(
-				this.ConvertSaveDataModel( this.optionModel )
-			);
-
-			// TODO 設定値の反映
-
-			// GameObjectの表示切り替え
-			this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.MainMenu;
-
-			Logger.Debug( "End" );
 		}
 
 	}

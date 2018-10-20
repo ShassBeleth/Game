@@ -34,9 +34,11 @@ namespace Presenters.ChapterSelect {
 			// デバッグ用
 			{
 				string cleardChapterIds = "";
-				foreach( ChapterSelectParameter.Chapter chapter in parameter.ClearedChapters ) {
-					cleardChapterIds += chapter.Id.ToString() + " ";
-				}
+				parameter.ClearedChapters.ForEach(
+					( chapter ) => {
+						cleardChapterIds += chapter.Id.ToString() + " ";
+					}
+				);
 				Logger.Debug( $"Cleared Chapter Id is {cleardChapterIds}" );
 			}
 
@@ -45,9 +47,9 @@ namespace Presenters.ChapterSelect {
 			// hierarchyからViewを取得
 			this.chapterSelectView = GameObject.Find( "Canvas" ).GetComponent<ChapterSelectView>();
 
-			// セーブデータ選択ViewのEventHandler設定
+			// ChapterSelectViewのEventHandler設定
 			this.chapterSelectView.OnClickBackButtonEventHandler = this.OnClickBackButtonEvent;
-
+			
 			// TODO サーバから全チャプターの情報を取得
 			List<ChapterSaveDataModel> chapterSaveDataModel = this.GetChapterData();
 			List<ChapterSelectView.ChapterData> chapterDataList = new List<ChapterSelectView.ChapterData>();
