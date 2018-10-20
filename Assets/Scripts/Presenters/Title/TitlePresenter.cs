@@ -9,6 +9,7 @@ using UniRx;
 using UnityEditor;
 using UnityEngine;
 using Views.Title;
+using Views.UserController;
 
 namespace Presenters.Title {
 
@@ -21,6 +22,11 @@ namespace Presenters.Title {
 		/// WindowModel
 		/// </summary>
 		private TitleWindowModel titleWindowModel = new TitleWindowModel( TitleWindowModel.WindowNameEnum.PleasePushAnyKey );
+
+		/// <summary>
+		/// UserControllerView
+		/// </summary>
+		private UserControllerView UserControllerView { set; get; }
 
 		/// <summary>
 		/// OptionModel
@@ -70,6 +76,7 @@ namespace Presenters.Title {
 			this.MainMenuView = GameObject.Find( "MainMenu" ).GetComponent<MainMenuView>();
 			this.OptionView = GameObject.Find( "OptionMenu" ).GetComponent<OptionView>();
 			this.PleasePushAnyKeyView = GameObject.Find( "PleasePushAnyKey" ).GetComponent<PleasePushAnyKeyView>();
+			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
 			
 			// PleasePushAnyKeyViewのEventHandler設定
 			this.PleasePushAnyKeyView.OnClickAnyKeyEventHandler = this.ClickedAnyKeyEvent;
@@ -104,6 +111,7 @@ namespace Presenters.Title {
 
 			// Window名変更時イベント
 			this.titleWindowModel.windowName.Subscribe( ( name ) => { this.ChangedWindowName( name ); } );
+			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
 			
 			// 遷移前画面の情報がなければShow Please Push Any Keyの表示
 			if( parameter?.InitialTitlePart == null ) {
@@ -149,6 +157,22 @@ namespace Presenters.Title {
 					this.TitleView.ShowOption();
 					this.OptionView.SetSelectedGameObject( this.OptionView.backGameObject );
 					break;
+			}
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// キャンセルボタンが押された時のイベント
+		/// </summary>
+		/// <param name="value"></param>
+		private void ChangedCancelButton( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+			if( value == 1 ) {
+				if( this.titleWindowModel.windowName.Value == TitleWindowModel.WindowNameEnum.Option ) {
+					// GameObjectの表示切り替え
+					this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.MainMenu;
+				}
 			}
 			Logger.Debug( "End" );
 		}

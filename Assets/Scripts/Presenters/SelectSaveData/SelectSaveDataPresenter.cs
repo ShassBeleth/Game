@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Models;
 using Saves.Models;
 using Saves.Serializers;
 using SceneManagers;
@@ -7,6 +8,7 @@ using SceneManagers.Parameters;
 using UniRx;
 using UnityEngine;
 using Views.SelectSaveData;
+using Views.UserController;
 
 namespace Presenters.SelectSaveData {
 
@@ -19,86 +21,16 @@ namespace Presenters.SelectSaveData {
 		/// セーブデータ選択View
 		/// </summary>
 		private SelectSaveDataView selectSaveDataView;
+		
+		/// <summary>
+		/// UserControllerView
+		/// </summary>
+		private UserControllerView UserControllerView { set; get; }
 
 		/// <summary>
 		/// 一人プレイかどうか
 		/// </summary>
 		private bool isSinglePlayMode;
-		
-		/// <summary>
-		/// セーブデータ選択Model
-		/// </summary>
-		public class SelectSaveDataModel {
-
-			/// <summary>
-			/// 選択されたセーブデータのIndex
-			/// </summary>
-			public ReactiveProperty<int?> selectedSaveDataIndex;
-
-			/// <summary>
-			/// セーブデータ
-			/// </summary>
-			public List<SaveDataModel> saveData;
-
-			/// <summary>
-			/// コンストラクタ
-			/// </summary>
-			/// <param name="selectedSaveDataIndex">選択されたセーブデータのIndex</param>
-			/// <param name="saveData">セーブデータ</param>
-			public SelectSaveDataModel( int? selectedSaveDataIndex , List<SaveDataModel> saveData ) {
-				Logger.Debug( "Start" );
-				this.selectedSaveDataIndex = new ReactiveProperty<int?>( selectedSaveDataIndex );
-				this.saveData = saveData;
-				Logger.Debug( "End" );
-			}
-
-		}
-
-		/// <summary>
-		/// セーブデータのモデル
-		/// </summary>
-		public class SaveDataModel {
-
-			public bool exsitsAlreadyData;
-
-			/// <summary>
-			/// ID
-			/// </summary>
-			public int id;
-
-			/// <summary>
-			/// ユーザ名
-			/// </summary>
-			public string userName;
-
-			/// <summary>
-			/// 最終更新日
-			/// </summary>
-			public DateTime latestUpdateDateTime;
-
-			/// <summary>
-			/// クリア済みチャプター一覧
-			/// </summary>
-			public List<ChapterModel> clearedChapters;
-
-		}
-
-		/// <summary>
-		/// チャプターモデル
-		/// </summary>
-		public class ChapterModel {
-			
-			/// <summary>
-			/// ID
-			/// </summary>
-			public int id;
-
-			/// <summary>
-			/// チャプター名
-			/// </summary>
-			public string Name;
-
-		}
 		
 		/// <summary>
 		/// セーブデータ選択Model
@@ -117,6 +49,7 @@ namespace Presenters.SelectSaveData {
 			
 			// hierarchyからViewを取得
 			this.selectSaveDataView = GameObject.Find( "Canvas" ).GetComponent<SelectSaveDataView>();
+			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
 
 			// Model変更時イベント設定
 			this.selectSaveDataModel = new SelectSaveDataModel( null , new List<SaveDataModel>() {
@@ -126,6 +59,7 @@ namespace Presenters.SelectSaveData {
 				this.ConvertSaveDataModel( 3 , SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 3 ) )
 			} );
 			this.selectSaveDataModel.selectedSaveDataIndex.Subscribe( (index) => this.ChangedSelectSaveData(index) );
+			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
 
 			// セーブデータ選択ViewのEventHandler設定
 			this.selectSaveDataView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
@@ -376,6 +310,33 @@ namespace Presenters.SelectSaveData {
 			else {
 				// 値がない場合パネルを非表示にする
 				this.selectSaveDataView.ShowPanel( null , null );
+			}
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// キャンセルボタン押下時イベント
+		/// </summary>
+		/// <param name="value">値</param>
+		private void ChangedCancelButton( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+			if( value == 1 ) {
+				Logger.Warning( $"Selected Save Data Index is {( this.selectSaveDataModel.selectedSaveDataIndex.HasValue ? this.selectSaveDataModel.selectedSaveDataIndex.Value.ToString() : "Null" )}." );
+				// パネルが非表示ならタイトルに戻る
+				if( !this.selectSaveDataModel.selectedSaveDataIndex.Value.HasValue ) {
+					Logger.Debug( "Panel Don't show" );
+					TitleParameter parameter = new TitleParameter() {
+						InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu
+					};
+					SceneManager.GetInstance().LoadScene( "Title" , parameter );
+				}
+				// パネルが表示されているならパネルを非表示にする
+				else {
+					Logger.Debug( "Close Panel" );
+					this.selectSaveDataView.SetSelectedSaveData( this.selectSaveDataView.saves[ this.selectSaveDataModel.selectedSaveDataIndex.Value.Value ] );
+					this.selectSaveDataModel.selectedSaveDataIndex.Value = null;
+				}
 			}
 			Logger.Debug( "End" );
 		}

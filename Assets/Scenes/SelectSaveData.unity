@@ -113,6 +113,48 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &24974163
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4153843322684926, guid: bbca2ffab957fb34a8519c58715458cf, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153843322684926, guid: bbca2ffab957fb34a8519c58715458cf, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153843322684926, guid: bbca2ffab957fb34a8519c58715458cf, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153843322684926, guid: bbca2ffab957fb34a8519c58715458cf, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153843322684926, guid: bbca2ffab957fb34a8519c58715458cf, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153843322684926, guid: bbca2ffab957fb34a8519c58715458cf, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153843322684926, guid: bbca2ffab957fb34a8519c58715458cf, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4153843322684926, guid: bbca2ffab957fb34a8519c58715458cf, type: 2}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: bbca2ffab957fb34a8519c58715458cf, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &108493835
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,12 +1372,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eab02192b2add74e86615a05723c15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eventSystem: {fileID: 1049665981}
   saves:
   - {fileID: 640318827}
   - {fileID: 1685270343}
   - {fileID: 387496226}
   - {fileID: 161273184}
-  eventSystem: {fileID: 1049665981}
   panel: {fileID: 1109452646}
 --- !u!1 &1049665979
 GameObject:

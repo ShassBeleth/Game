@@ -107,6 +107,7 @@ namespace Presenters.ChapterSelect {
 			Logger.Debug( "End" );
 		}
 
+		/// <summary>
 		/// 戻るボタン押下時イベント
 		/// </summary>
 		public void OnClickBackButtonEvent() {
