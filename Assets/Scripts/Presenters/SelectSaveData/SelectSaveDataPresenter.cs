@@ -60,10 +60,7 @@ namespace Presenters.SelectSaveData {
 			} );
 			this.selectSaveDataModel.selectedSaveDataIndex.Subscribe( (index) => this.ChangedSelectSaveData(index) );
 			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
-
-			// セーブデータ選択ViewのEventHandler設定
-			this.selectSaveDataView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
-			
+						
 			// セーブデータをViewに必要な情報に加工
 			List<SelectSaveDataView.SaveData> saveDataList = new List<SelectSaveDataView.SaveData>() {
 				this.ConvertSaveDataOfView( 0 ) ,
@@ -201,20 +198,6 @@ namespace Presenters.SelectSaveData {
 		}
 
 		#region Viewイベント
-
-		/// <summary>
-		/// 戻るボタン押下時イベント
-		/// </summary>
-		private void ClickedBackButtonEvent() {
-			Logger.Debug( "Start" );
-			SceneManager.GetInstance().LoadScene(
-				"Title" ,
-				new TitleParameter() {
-					InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu
-				}
-			);
-			Logger.Debug( "End" );
-		}
 
 		/// <summary>
 		/// セーブデータ選択時イベント

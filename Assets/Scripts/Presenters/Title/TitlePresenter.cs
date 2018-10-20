@@ -88,10 +88,7 @@ namespace Presenters.Title {
 			this.MainMenuView.OnClickRankingButtonEventHandler = this.ClickedRankingButtonEvent;
 			this.MainMenuView.OnClickOptionButtonEventHandler = this.ClickedOptionButtonEvent;
 			this.MainMenuView.OnClickExitButtonEventHandler = this.ClickedExitButtonEvent;
-
-			// オプションViewのEventHandler設定
-			this.OptionView.OnClickBackButtonEventHandler = this.ClickedOptionBackButtonEvent;
-
+			
 			#endregion
 
 			// Optionの設定
@@ -155,7 +152,6 @@ namespace Presenters.Title {
 					break;
 				case TitleWindowModel.WindowNameEnum.Option:
 					this.TitleView.ShowOption();
-					this.OptionView.SetSelectedGameObject( this.OptionView.backGameObject );
 					break;
 			}
 			Logger.Debug( "End" );
@@ -285,11 +281,11 @@ namespace Presenters.Title {
 		#endregion
 
 		/// <summary>
-		/// オプションの戻るボタン押下時イベント
+		/// オプション情報のセーブ
+		/// TODO 設定値の反映
 		/// </summary>
-		private void ClickedOptionBackButtonEvent() {
+		private void SaveOptionData() {
 			Logger.Debug( "Start" );
-
 			// 設定値の取得
 			OptionView.OptionValue optionValue = this.OptionView.GetOptionValue();
 
@@ -298,12 +294,6 @@ namespace Presenters.Title {
 			OptionSaveDataSerializer.WriteOptionSaveData(
 				this.ConvertSaveDataModel( this.optionModel )
 			);
-
-			// TODO 設定値の反映
-
-			// GameObjectの表示切り替え
-			this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.MainMenu;
-
 			Logger.Debug( "End" );
 		}
 

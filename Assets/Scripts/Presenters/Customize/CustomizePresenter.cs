@@ -71,6 +71,9 @@ namespace Presenters.Customize {
 			this.CustomizeView.OnClickBodyBackButtonEventHandler = this.ClickedBodyBackButtonEvent;
 			
 			this.UserControllerView.TurnCharacter.Subscribe( value => { this.ChangedTurnCharacter( value ); } );
+			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
+			this.UserControllerView.MenuButtons[ "CursorLeft" ].Subscribe( ( value ) => { this.ChangedCursorLeftButton( value ); } );
+			this.UserControllerView.MenuButtons[ "CursorRight" ].Subscribe( ( value ) => { this.ChangedCursorRightButton( value ); } );
 
 			// 素体一覧取得
 			// TODO 実際は型が違うから変換が必要
@@ -509,6 +512,39 @@ namespace Presenters.Customize {
 			// 表示切替
 			this.CustomizeView.ShowCustomEquipment();
 
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// キャンセルボタン押下時イベント
+		/// </summary>
+		/// <param name="value">値</param>
+		private void ChangedCancelButton( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+
+			Logger.Debug( "End" );
+		}
+		
+		/// <summary>
+		/// 十字左ボタン押下時イベント
+		/// </summary>
+		/// <param name="value">値</param>
+		private void ChangedCursorLeftButton( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+			this.CustomizeView.ShowCustomParameter();
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 十字右ボタン押下時イベント
+		/// </summary>
+		/// <param name="value">値</param>
+		private void ChangedCursorRightButton( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+			this.CustomizeView.ShowCustomEquipment();
 			Logger.Debug( "End" );
 		}
 

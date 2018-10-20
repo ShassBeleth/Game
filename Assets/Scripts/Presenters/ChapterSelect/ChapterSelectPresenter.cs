@@ -67,7 +67,7 @@ namespace Presenters.ChapterSelect {
 			}
 			
 			// チャプターの情報とクリアしたチャプターの一覧から描画
-			this.chapterSelectView.ShowChapterDataList( chapterDataList  );
+			this.chapterSelectView.ShowChapterDataList( chapterDataList );
 
 			Logger.Debug( "End" );
 

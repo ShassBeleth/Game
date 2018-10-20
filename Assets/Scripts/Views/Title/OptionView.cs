@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Views.Title {
@@ -30,30 +29,7 @@ namespace Views.Title {
 			public bool IsReverseHorizontalCamera;
 			
 		}
-
-		#region 戻るボタンについて
-
-		/// <summary>
-		/// 戻るボタンGameObject
-		/// </summary>
-		public GameObject backGameObject;
-
-		/// <summary>
-		/// 戻るボタン押下時イベントハンドラ
-		/// </summary>
-		public Action OnClickBackButtonEventHandler { set; get; }
-
-		/// <summary>
-		/// 戻るボタン押下時イベント
-		/// </summary>
-		public void OnClickBackButonEvent() {
-			Logger.Debug( "Start" );
-			this.OnClickBackButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
-		}
-
-		#endregion
-
+		
 		/// <summary>
 		/// 強制的に選択肢を設定する
 		/// </summary>
