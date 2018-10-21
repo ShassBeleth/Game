@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Views.Customize {
 
@@ -8,6 +11,11 @@ namespace Views.Customize {
 	/// 装備カスタマイズ、パラメータカスタマイズのView
 	/// </summary>
 	public class CustomizeView : MonoBehaviour {
+
+		/// <summary>
+		/// Event System
+		/// </summary>
+		public EventSystem eventSystem;
 
 		/// <summary>
 		/// 装備可能箇所
@@ -59,65 +67,6 @@ namespace Views.Customize {
 		}
 
 		/// <summary>
-		/// BodyNodeのPrefab
-		/// </summary>
-		public GameObject bodyNodePrefab;
-
-		/// <summary>
-		/// 素体一覧スクロールのContent
-		/// </summary>
-		public GameObject bodyScrollViewContent;
-		
-		/// <summary>
-		/// EquipablePlaceNodeのPrefab
-		/// </summary>
-		public GameObject equipablePlaceNodePrefab;
-
-		/// <summary>
-		/// 装備可能箇所一覧スクロールのContent
-		/// </summary>
-		public GameObject equipablePlaceScrollViewContent;
-		
-		/// <summary>
-		/// EquipmentNodeのPrefab
-		/// </summary>
-		public GameObject equipmentNodePrefab;
-
-		/// <summary>
-		/// 装備一覧スクロールのContent
-		/// </summary>
-		public GameObject equipmentScrollViewContent;
-
-		#region 表示切替に使用するGameObject群
-
-		/// <summary>
-		/// パラメータカスタマイズGameObject
-		/// </summary>
-		public GameObject customParameterGameObject;
-
-		/// <summary>
-		/// 装備カスタマイズGameObject
-		/// </summary>
-		public GameObject customEquipmentGameObject;
-
-		/// <summary>
-		/// 装備メニューGameObject
-		/// </summary>
-		public GameObject equipmentMenuGameObject;
-
-		/// <summary>
-		/// 装備素体一覧GameObject
-		/// </summary>
-		public GameObject bodiesGameObject;
-
-		/// <summary>
-		/// 装備一覧GameObject
-		/// </summary>
-		public GameObject equipmentsGameObject;
-
-		#endregion
-		
-		/// <summary>
 		/// 装備
 		/// </summary>
 		public class Equipment {
@@ -156,80 +105,29 @@ namespace Views.Customize {
 
 		}
 
-		#region 画面切り替えボタン
+		#region 素体関係
 		/// <summary>
-		/// パラメータ画面に切り替えるボタン押下時イベントハンドラ
+		/// BodyNodeのPrefab
 		/// </summary>
-		public Action OnClickSwitchParameterButtonEventHandler { set; get; }
+		public GameObject bodyNodePrefab;
 
 		/// <summary>
-		/// パラメータ画面に切り替えるボタン押下時イベント
+		/// 素体一覧スクロールのContent
 		/// </summary>
-		public void OnClickSwitchParameterButtonEvent() {
+		public GameObject bodyScrollViewContent;
+		
+		#region 素体ボタン
+		/// <summary>
+		/// 素体ボタン押下時イベントハンドラ
+		/// </summary>
+		public Action OnClickBodyButtonEventHandler { set; get; }
+
+		/// <summary>
+		/// 素体ボタン押下時イベント
+		/// </summary>
+		public void OnClickBodyEvent() {
 			Logger.Debug( "Start" );
-			this.OnClickSwitchParameterButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// 装備画面に切り替えるボタン押下時イベントハンドラ
-		/// </summary>
-		public Action OnClickSwitchEquipmentButtonEventHandler { set; get; }
-
-		/// <summary>
-		/// 装備画面に切り替えるボタン押下時イベント
-		/// </summary>
-		public void OnClickSwitchEquipmentButtonEvent() {
-			Logger.Debug( "Start" );
-			this.OnClickSwitchEquipmentButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
-		}
-		#endregion
-
-		#region 戻るボタン
-		/// <summary>
-		/// 戻るボタン押下時イベントハンドラ
-		/// </summary>
-		public Action OnClickBackButtonEventHandler { set; get; }
-
-		/// <summary>
-		/// 戻るボタン押下時イベント
-		/// </summary>
-		public void OnClickBackButtonEvent() {
-			Logger.Debug( "Start" );
-			this.OnClickBackButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
-		}
-		#endregion
-
-		#region 決定ボタン
-		/// <summary>
-		/// 決定ボタン押下時イベントハンドラ
-		/// </summary>
-		public Action OnClickDecisionButtonEventHandler { set; get; }
-
-		/// <summary>
-		/// 決定ボタン押下時イベント
-		/// </summary>
-		public void OnClickDecisionButtonEvent() {
-			Logger.Debug( "Start" );
-			this.OnClickDecisionButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
-		}
-		#endregion
-
-		#region 更新ボタン
-		/// <summary>
-		/// 更新ボタン押下時イベントハンドラ
-		/// </summary>
-		public Action OnClickUpdateButtonEventHandler { set; get; }
-
-		/// <summary>
-		/// 更新ボタン押下時イベント
-		/// </summary>
-		public void OnClickUpdateButtonEvent() {
-			Logger.Debug( "Start" );
-			this.OnClickUpdateButtonEventHandler?.Invoke();
+			this.OnClickBodyButtonEventHandler?.Invoke();
 			Logger.Debug( "End" );
 		}
 		#endregion
@@ -240,14 +138,66 @@ namespace Views.Customize {
 		/// <param name="bodies">素体一覧</param>
 		public void SetBodies( List<Body> bodies ) {
 			Logger.Debug( "Start" );
-			bodies.ForEach( ( body ) => {
+
+			List<GameObject> bodyGameObjects = new List<GameObject>();
+
+			// リスト内のGameObject生成
+			foreach( int i in Enumerable.Range( 0 , bodies.Count ) ) {
 				GameObject node = GameObject.Instantiate( this.bodyNodePrefab );
 				node.transform.SetParent( this.bodyScrollViewContent.transform , false );
+				bodyGameObjects.Add( node );
 				BodyNodeView view = node.GetComponent<BodyNodeView>();
-				view.SetOnClickDecisionButtonEventHandler( body.DecisionEventHandler );
-			} );
+				view.SetText( bodies[ i ].Name );
+				view.SetOnClickDecisionButtonEventHandler( bodies[ i ].DecisionEventHandler );
+			}
+
+			foreach( int i in Enumerable.Range( 0 , bodyGameObjects.Count ) ) {
+				Button button = bodyGameObjects[i].GetComponent<Button>();
+				Navigation nav = new Navigation {
+					mode = Navigation.Mode.Explicit ,
+					selectOnDown = bodyGameObjects[ ( i + 1 ) % bodyGameObjects.Count ].GetComponent<Button>() ,
+					selectOnUp = bodyGameObjects[ ( i - 1 + bodyGameObjects.Count ) % bodyGameObjects.Count ].GetComponent<Button>()
+				};
+				button.navigation = nav;
+			}
 			Logger.Debug( "End" );
 		}
+
+		/// <summary>
+		/// 素体を選択状態にする
+		/// </summary>
+		/// <param name="index">選択状態となる素体のIndex nullなら先頭を選択</param>
+		public void SetSelectedBody( int? index ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"(Index is {(index.HasValue ? index.Value.ToString() : "Null")}." );
+			GameObject selectedGameObject = null;
+			foreach( int i in Enumerable.Range( 0 , this.bodyScrollViewContent.transform.childCount ) ) {
+				selectedGameObject
+					= index.HasValue
+						? this.bodyScrollViewContent.transform.GetChild( index.Value ).gameObject
+						: this.bodyScrollViewContent.transform.GetChild( 0 ).gameObject;
+			}
+			if( selectedGameObject != null ) {
+				this.eventSystem.SetSelectedGameObject( selectedGameObject );
+			}
+			else {
+				Logger.Warning( "Selected Game Obejct is Null." );
+			}
+			Logger.Debug( "End" );
+		}
+		
+		#endregion
+
+		#region 装備可能箇所関係
+		/// <summary>
+		/// EquipablePlaceNodeのPrefab
+		/// </summary>
+		public GameObject equipablePlaceNodePrefab;
+
+		/// <summary>
+		/// 装備可能箇所一覧スクロールのContent
+		/// </summary>
+		public GameObject equipablePlaceScrollViewContent;
 
 		/// <summary>
 		/// 装備可能箇所一覧の設定
@@ -264,6 +214,19 @@ namespace Views.Customize {
 			Logger.Debug( "End" );
 		}
 
+		#endregion
+
+		#region 装備関係
+		/// <summary>
+		/// EquipmentNodeのPrefab
+		/// </summary>
+		public GameObject equipmentNodePrefab;
+
+		/// <summary>
+		/// 装備一覧スクロールのContent
+		/// </summary>
+		public GameObject equipmentScrollViewContent;
+
 		/// <summary>
 		/// 装備一覧の設定
 		/// </summary>
@@ -278,46 +241,34 @@ namespace Views.Customize {
 			} );
 			Logger.Debug( "End" );
 		}
+		#endregion
+
+		#region 表示切替
 
 		/// <summary>
-		/// パラメータチップ一覧の設定
+		/// パラメータカスタマイズGameObject
 		/// </summary>
-		/// <param name="parameterChips">パラメータチップ一覧</param>
-		public void SetParameterChips( List<ParameterChip> parameterChips ) {
-			Logger.Debug( "Start" );
-			parameterChips.ForEach( ( parameterChip ) => {
-				// TODO ここ何もしてない
-			} );
-			Logger.Debug( "End" );
-		}
+		public GameObject customParameterGameObject;
 
 		/// <summary>
-		/// 素体ボタン押下時イベントハンドラ
+		/// 装備カスタマイズGameObject
 		/// </summary>
-		public Action OnClickBodyButtonEventHandler { set; get; }
+		public GameObject customEquipmentGameObject;
 
 		/// <summary>
-		/// 素体ボタン押下時イベント
+		/// 装備メニューGameObject
 		/// </summary>
-		public void OnClickBodyEvent() {
-			Logger.Debug( "Start" );
-			this.OnClickBodyButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
-		}
+		public GameObject equipmentMenuGameObject;
 
 		/// <summary>
-		/// 素体選択時の戻るボタン押下時イベントハンドラ
+		/// 装備素体一覧GameObject
 		/// </summary>
-		public Action OnClickBodyBackButtonEventHandler { set; get; }
+		public GameObject bodiesGameObject;
 
 		/// <summary>
-		/// 素体選択時の戻るボタン押下時イベント
+		/// 装備一覧GameObject
 		/// </summary>
-		public void OnClickBodyBackButtonEvent() {
-			Logger.Debug( "Start" );
-			this.OnClickBackButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
-		}
+		public GameObject equipmentsGameObject;
 
 		#region 画面切り替え用Showメソッド群
 
@@ -333,7 +284,7 @@ namespace Views.Customize {
 			this.equipmentMenuGameObject.SetActive( true );
 			this.bodiesGameObject.SetActive( false );
 			this.equipmentsGameObject.SetActive( false );
-			
+
 			Logger.Debug( "End" );
 		}
 
@@ -357,7 +308,7 @@ namespace Views.Customize {
 
 			this.customEquipmentGameObject.SetActive( true );
 			this.customParameterGameObject.SetActive( false );
-			
+
 			this.bodiesGameObject.SetActive( true );
 			this.equipmentMenuGameObject.SetActive( false );
 			this.equipmentsGameObject.SetActive( false );
@@ -398,7 +349,37 @@ namespace Views.Customize {
 		}
 
 		#endregion
+		
+		#endregion
 
+		#region 決定ボタン
+		/// <summary>
+		/// 決定ボタン押下時イベントハンドラ
+		/// </summary>
+		public Action OnClickDecisionButtonEventHandler { set; get; }
+
+		/// <summary>
+		/// 決定ボタン押下時イベント
+		/// </summary>
+		public void OnClickDecisionButtonEvent() {
+			Logger.Debug( "Start" );
+			this.OnClickDecisionButtonEventHandler?.Invoke();
+			Logger.Debug( "End" );
+		}
+		#endregion
+		
+		/// <summary>
+		/// パラメータチップ一覧の設定
+		/// </summary>
+		/// <param name="parameterChips">パラメータチップ一覧</param>
+		public void SetParameterChips( List<ParameterChip> parameterChips ) {
+			Logger.Debug( "Start" );
+			parameterChips.ForEach( ( parameterChip ) => {
+				// TODO ここ何もしてない
+			} );
+			Logger.Debug( "End" );
+		}
+		
 	}
 
 }

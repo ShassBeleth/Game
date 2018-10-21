@@ -153,6 +153,9 @@ namespace Presenters.Title {
 				case TitleWindowModel.WindowNameEnum.Option:
 					this.TitleView.ShowOption();
 					break;
+				default:
+					Logger.Warning( "Unexpected Window Name" );
+					break;
 			}
 			Logger.Debug( "End" );
 		}

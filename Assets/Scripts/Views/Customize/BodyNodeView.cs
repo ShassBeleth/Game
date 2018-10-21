@@ -15,9 +15,20 @@ namespace Views.Customize {
 		private int id;
 
 		/// <summary>
+		/// テキスト
+		/// </summary>
+		public Text Text;
+
+		/// <summary>
 		/// 決定ボタン
 		/// </summary>
 		public Button DecisionButton;
+
+		public void SetText( string text ) {
+			Logger.Debug( "Start" );
+			this.Text.text = text;
+			Logger.Debug( "End" );
+		}
 
 		/// <summary>
 		/// 決定ボタン押下時イベントを設定する
