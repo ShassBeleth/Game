@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Models;
+﻿using Models;
+using Models.Title;
 using Saves.Models;
 using Saves.Serializers;
 using SceneManagers;
@@ -17,22 +16,28 @@ namespace Presenters.Title {
 	/// タイトルPresenter
 	/// </summary>
 	public class TitlePresenter {
-		
+
+		#region Model
+
 		/// <summary>
 		/// WindowModel
 		/// </summary>
-		private TitleWindowModel titleWindowModel = new TitleWindowModel( TitleWindowModel.WindowNameEnum.PleasePushAnyKey );
-
-		/// <summary>
-		/// UserControllerView
-		/// </summary>
-		private UserControllerView UserControllerView { set; get; }
-
+		private TitleWindowModel titleWindowModel = new TitleWindowModel( WindowNameEnum.PleasePushAnyKey );
+		
 		/// <summary>
 		/// OptionModel
 		/// </summary>
 		private OptionModel optionModel;
 
+		#endregion
+
+		#region View
+
+		/// <summary>
+		/// UserControllerView
+		/// </summary>
+		private UserControllerView UserControllerView { set; get; }
+		
 		/// <summary>
 		/// タイトルView
 		/// </summary>
@@ -53,6 +58,8 @@ namespace Presenters.Title {
 		/// </summary>
 		private PleasePushAnyKeyView PleasePushAnyKeyView { set; get; }
 
+		#endregion
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -64,33 +71,14 @@ namespace Presenters.Title {
 		/// <param name="parameter">前画面から受け取るパラメータ</param>
 		public TitlePresenter( TitleParameter parameter ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( $"Parameter Exists...{( parameter == null ? "NG" : "OK." )}" );
+			Logger.Debug( $"Parameter {( parameter == null ? "is Null" : "Exists" )}." );
 			if( parameter != null ) {
 				Logger.Debug( $"Initial Title Part is {parameter.InitialTitlePart.Value}" );
 			}
 
-			#region Viewの設定
+			// Viewの初期設定
+			this.InitialViewSetting();
 			
-			// Viewを取得
-			this.TitleView = GameObject.Find( "Canvas" ).GetComponent<TitleView>();
-			this.MainMenuView = GameObject.Find( "MainMenu" ).GetComponent<MainMenuView>();
-			this.OptionView = GameObject.Find( "OptionMenu" ).GetComponent<OptionView>();
-			this.PleasePushAnyKeyView = GameObject.Find( "PleasePushAnyKey" ).GetComponent<PleasePushAnyKeyView>();
-			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
-			
-			// PleasePushAnyKeyViewのEventHandler設定
-			this.PleasePushAnyKeyView.OnClickAnyKeyEventHandler = this.ClickedAnyKeyEvent;
-
-			// メインメニューViewのEventHandler設定
-			this.MainMenuView.OnClickSinglePlayButtonEventHandler = this.ClickedSinglePlayButtonEvent;
-			this.MainMenuView.OnClickMultiPlayButtonEventHandler = this.ClickedMultiPlayButtonEvent;
-			this.MainMenuView.OnClickGalleryButtonEventHandler = this.ClickedGalleryButtonEvent;
-			this.MainMenuView.OnClickRankingButtonEventHandler = this.ClickedRankingButtonEvent;
-			this.MainMenuView.OnClickOptionButtonEventHandler = this.ClickedOptionButtonEvent;
-			this.MainMenuView.OnClickExitButtonEventHandler = this.ClickedExitButtonEvent;
-			
-			#endregion
-
 			// Optionの設定
 			{
 				// オプション設定値をストレージから取得
@@ -106,10 +94,12 @@ namespace Presenters.Title {
 				this.OptionView.SetOptionValue( optionValue );
 			}
 
+			#region Model
 			// Window名変更時イベント
 			this.titleWindowModel.windowName.Subscribe( ( name ) => { this.ChangedWindowName( name ); } );
 			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
-			
+			#endregion
+
 			// 遷移前画面の情報がなければShow Please Push Any Keyの表示
 			if( parameter?.InitialTitlePart == null ) {
 				Logger.Debug( "Initial Title Part Enum is Null." );
@@ -119,10 +109,10 @@ namespace Presenters.Title {
 				Logger.Debug( $"Initial Title Part Enum is {parameter.InitialTitlePart.Value}" );
 				switch( parameter.InitialTitlePart.Value ) {
 					case TitleParameter.InitialTitlePartEnum.MainMenu:
-						this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.MainMenu;
+						this.titleWindowModel.windowName.Value = WindowNameEnum.MainMenu;
 						break;
 					case TitleParameter.InitialTitlePartEnum.PleasePushAnyKey:
-						this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.PleasePushAnyKey;
+						this.titleWindowModel.windowName.Value = WindowNameEnum.PleasePushAnyKey;
 						break;
 					default:
 						Logger.Warning( "Before Scene Name is Unexpected Name." );
@@ -134,23 +124,50 @@ namespace Presenters.Title {
 		}
 
 		/// <summary>
+		/// Viewの設定
+		/// </summary>
+		private void InitialViewSetting() {
+			Logger.Debug( "Start" );
+
+			// Viewを取得
+			this.TitleView = GameObject.Find( "Canvas" ).GetComponent<TitleView>();
+			this.MainMenuView = GameObject.Find( "MainMenu" ).GetComponent<MainMenuView>();
+			this.OptionView = GameObject.Find( "OptionMenu" ).GetComponent<OptionView>();
+			this.PleasePushAnyKeyView = GameObject.Find( "PleasePushAnyKey" ).GetComponent<PleasePushAnyKeyView>();
+			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
+
+			// PleasePushAnyKeyViewのEventHandler設定
+			this.PleasePushAnyKeyView.OnClickAnyKeyEventHandler = this.ClickedAnyKeyEvent;
+
+			// メインメニューViewのEventHandler設定
+			this.MainMenuView.OnClickSinglePlayButtonEventHandler = this.ClickedSinglePlayButtonEvent;
+			this.MainMenuView.OnClickMultiPlayButtonEventHandler = this.ClickedMultiPlayButtonEvent;
+			this.MainMenuView.OnClickGalleryButtonEventHandler = this.ClickedGalleryButtonEvent;
+			this.MainMenuView.OnClickRankingButtonEventHandler = this.ClickedRankingButtonEvent;
+			this.MainMenuView.OnClickOptionButtonEventHandler = this.ClickedOptionButtonEvent;
+			this.MainMenuView.OnClickExitButtonEventHandler = this.ClickedExitButtonEvent;
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
 		/// Window名変更時イベント
 		/// </summary>
 		/// <param name="windowName">Window名</param>
-		private void ChangedWindowName( TitleWindowModel.WindowNameEnum windowName ) {
+		private void ChangedWindowName( WindowNameEnum windowName ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Changed Window Name is {windowName}" );
 
 			// 表示する画面を切り替えて、選択肢を選択状態にしておく
 			switch( windowName ) {
-				case TitleWindowModel.WindowNameEnum.PleasePushAnyKey:
+				case WindowNameEnum.PleasePushAnyKey:
 					this.TitleView.ShowPleasePushAnyKey();
 					break;
-				case TitleWindowModel.WindowNameEnum.MainMenu:
+				case WindowNameEnum.MainMenu:
 					this.TitleView.ShowMainMenu();
 					this.MainMenuView.SetSelectedGameObject( this.MainMenuView.singlePlayGameObject );
 					break;
-				case TitleWindowModel.WindowNameEnum.Option:
+				case WindowNameEnum.Option:
 					this.TitleView.ShowOption();
 					break;
 				default:
@@ -168,9 +185,9 @@ namespace Presenters.Title {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Value is {value}." );
 			if( value == 1 ) {
-				if( this.titleWindowModel.windowName.Value == TitleWindowModel.WindowNameEnum.Option ) {
+				if( this.titleWindowModel.windowName.Value == WindowNameEnum.Option ) {
 					// GameObjectの表示切り替え
-					this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.MainMenu;
+					this.titleWindowModel.windowName.Value = WindowNameEnum.MainMenu;
 				}
 			}
 			Logger.Debug( "End" );
@@ -198,7 +215,7 @@ namespace Presenters.Title {
 		private void ClickedAnyKeyEvent() {
 			Logger.Debug( "Start" );
 			// 画面を切り替える
-			this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.MainMenu;
+			this.titleWindowModel.windowName.Value = WindowNameEnum.MainMenu;
 			Logger.Debug( "End" );
 		}
 
@@ -260,7 +277,7 @@ namespace Presenters.Title {
 		private void ClickedOptionButtonEvent() {
 			Logger.Debug( "Start" );
 			// 画面を切り替える
-			this.titleWindowModel.windowName.Value = TitleWindowModel.WindowNameEnum.Option;
+			this.titleWindowModel.windowName.Value = WindowNameEnum.Option;
 			Logger.Debug( "End" );
 		}
 

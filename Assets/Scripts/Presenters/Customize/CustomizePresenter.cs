@@ -16,25 +16,12 @@ namespace Presenters.Customize {
 	/// </summary>
 	public class CustomizePresenter {
 
+		#region Model
+
 		/// <summary>
 		/// WindowModel
 		/// </summary>
 		private CustomizeWindowModel CustomizeWindowModel { set; get; } = new CustomizeWindowModel( CustomizeWindowModel.WindowNameEnum.None );
-
-		/// <summary>
-		/// 装備カスタマイズ、パラメータカスタマイズのView
-		/// </summary>
-		private CustomizeView CustomizeView { set; get; }
-
-		/// <summary>
-		/// キャラクターを回転させるView
-		/// </summary>
-		private ShowcaseView ShowcaseView { set; get; }
-
-		/// <summary>
-		/// ユーザ入力View
-		/// </summary>
-		private UserControllerView UserControllerView { set; get; }
 
 		/// <summary>
 		/// 素体一覧
@@ -52,8 +39,28 @@ namespace Presenters.Customize {
 		/// パラメータチップ一覧
 		/// </summary>
 		/// TODO Viewの形で持つのは嫌だ
-		private List<CustomizeView.ParameterChip> parameterChips { set;get; }
-		
+		private List<CustomizeView.ParameterChip> parameterChips { set; get; }
+
+		#endregion
+
+		#region View
+
+		/// <summary>
+		/// 装備カスタマイズ、パラメータカスタマイズのView
+		/// </summary>
+		private CustomizeView CustomizeView { set; get; }
+
+		/// <summary>
+		/// キャラクターを回転させるView
+		/// </summary>
+		private ShowcaseView ShowcaseView { set; get; }
+
+		/// <summary>
+		/// ユーザ入力View
+		/// </summary>
+		private UserControllerView UserControllerView { set; get; }
+
+		#endregion
 
 		/// <summary>
 		/// コンストラクタ

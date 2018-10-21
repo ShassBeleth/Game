@@ -10,10 +10,18 @@ namespace Presenters.Ranking {
 	/// </summary>
 	public class RankingPresenter {
 
+		#region Model
+
+		#endregion
+
+		#region View
+
 		/// <summary>
 		/// ランキングView
 		/// </summary>
 		private RankingView rankingView { set; get; }
+
+		#endregion
 
 		/// <summary>
 		/// コンストラクタ

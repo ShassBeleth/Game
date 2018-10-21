@@ -17,6 +17,17 @@ namespace Presenters.SelectSaveData {
 	/// </summary>
 	public class SelectSaveDataPresenter {
 
+		#region Model
+
+		/// <summary>
+		/// セーブデータ選択Model
+		/// </summary>
+		private SelectSaveDataModel selectSaveDataModel;
+		
+		#endregion
+
+		#region View
+
 		/// <summary>
 		/// セーブデータ選択View
 		/// </summary>
@@ -27,16 +38,13 @@ namespace Presenters.SelectSaveData {
 		/// </summary>
 		private UserControllerView UserControllerView { set; get; }
 
+		#endregion
+
 		/// <summary>
 		/// 一人プレイかどうか
 		/// </summary>
 		private bool isSinglePlayMode;
 		
-		/// <summary>
-		/// セーブデータ選択Model
-		/// </summary>
-		private SelectSaveDataModel selectSaveDataModel;
-
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -46,10 +54,16 @@ namespace Presenters.SelectSaveData {
 			Logger.Debug( $"Single Play Mode is {parameter.IsSinglePlayMode}" );
 
 			this.isSinglePlayMode = parameter.IsSinglePlayMode;
+
+			#region View
 			
-			// hierarchyからViewを取得
+			// Viewを取得
 			this.selectSaveDataView = GameObject.Find( "Canvas" ).GetComponent<SelectSaveDataView>();
 			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
+
+			#endregion
+
+			#region Model
 
 			// Model変更時イベント設定
 			this.selectSaveDataModel = new SelectSaveDataModel( null , new List<SaveDataModel>() {
@@ -60,7 +74,9 @@ namespace Presenters.SelectSaveData {
 			} );
 			this.selectSaveDataModel.selectedSaveDataIndex.Subscribe( (index) => this.ChangedSelectSaveData(index) );
 			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
-						
+
+			#endregion
+
 			// セーブデータをViewに必要な情報に加工
 			List<SelectSaveDataView.SaveData> saveDataList = new List<SelectSaveDataView.SaveData>() {
 				this.ConvertSaveDataOfView( 0 ) ,

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Views.Title {
@@ -15,7 +14,7 @@ namespace Views.Title {
 		/// </summary>
 		public EventSystem eventSystem;
 		
-		#region 画面切り替え時に必要なGameObject
+		#region 画面切り替えGameObject群
 
 		/// <summary>
 		/// Please Push Any KeyのGameObject
@@ -33,13 +32,15 @@ namespace Views.Title {
 		public GameObject optionGameObject;
 
 		#endregion
-				
+
+		#region 画面遷移メソッド
+
 		/// <summary>
 		/// Please Push Any Keyの表示
 		/// </summary>
 		public void ShowPleasePushAnyKey() {
 			Logger.Debug( "Start" );
-			
+
 			this.pleasePushAnyKeyGameObject.SetActive( true );
 			this.mainMenuGameObject.SetActive( false );
 			this.optionGameObject.SetActive( false );
@@ -56,7 +57,7 @@ namespace Views.Title {
 			this.mainMenuGameObject.SetActive( true );
 			this.pleasePushAnyKeyGameObject.SetActive( false );
 			this.optionGameObject.SetActive( false );
-			
+
 			Logger.Debug( "End" );
 		}
 
@@ -72,6 +73,8 @@ namespace Views.Title {
 
 			Logger.Debug( "End" );
 		}
+
+		#endregion
 
 	}
 

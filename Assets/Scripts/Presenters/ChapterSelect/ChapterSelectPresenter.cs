@@ -13,10 +13,18 @@ namespace Presenters.ChapterSelect {
 	/// </summary>
 	public class ChapterSelectPresenter {
 
+		#region Model
+
+		#endregion
+
+		#region View
+
 		/// <summary>
 		/// チャプター選択View
 		/// </summary>
 		private ChapterSelectView chapterSelectView;
+
+		#endregion
 
 		/// <summary>
 		/// 一人プレイかどうか

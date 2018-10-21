@@ -1,21 +1,12 @@
 ﻿using UniRx;
 
-namespace Models {
+namespace Models.Title {
 
 	/// <summary>
 	/// タイトルのWindowの切り替え状態を保持するModel
 	/// </summary>
 	public class TitleWindowModel {
-
-		/// <summary>
-		/// Window名列挙
-		/// </summary>
-		public enum WindowNameEnum {
-			PleasePushAnyKey,
-			MainMenu,
-			Option
-		}
-
+		
 		/// <summary>
 		/// Window名
 		/// </summary>

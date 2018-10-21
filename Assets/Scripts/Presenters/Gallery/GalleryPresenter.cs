@@ -9,11 +9,19 @@ namespace Presenters.Gallery {
 	/// ギャラリーPresenter
 	/// </summary>
 	public class GalleryPresenter{
-		
+
+		#region Model
+
+		#endregion
+
+		#region View
+
 		/// <summary>
 		/// ギャラリーView
 		/// </summary>
 		private GalleryView GalleryView { set; get; }
+
+		#endregion
 
 		/// <summary>
 		/// コンストラクタ
