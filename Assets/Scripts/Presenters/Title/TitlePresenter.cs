@@ -221,17 +221,22 @@ namespace Presenters.Title {
 			Logger.Debug( $"Scene Name is {sceneName}." );
 
 			// パラメータ設定
-			object parameter = null;
 			switch( nextSceneName ) {
+				case NextSceneNameEnum.None:
+					Logger.Debug( "Next Scene Name is None." );
+					break;
 				case NextSceneNameEnum.SelectSaveData:
-					parameter = new SelectSaveDataParameter() {
+					SelectSaveDataParameter parameter = new SelectSaveDataParameter() {
 						IsSinglePlayMode = this.nextSceneModel.IsSingleMode
 					};
+					SceneManager.GetInstance().LoadScene( sceneName , parameter );
+					break;
+				default:
+					SceneManager.GetInstance().LoadScene( sceneName , null );
 					break;
 			}
 
 			// シーンを切り替える
-			SceneManager.GetInstance().LoadScene( sceneName , parameter );
 
 			Logger.Debug( "End" );
 		}
@@ -253,21 +258,7 @@ namespace Presenters.Title {
 		}
 
 		#endregion
-
-		/// <summary>
-		/// オプションModelから描画用に値を変換する
-		/// </summary>
-		/// <param name="model">オプションModel</param>
-		/// <returns></returns>
-		private OptionView.OptionValue ConvertOptionValue( OptionModel model ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( "End" );
-			return new OptionView.OptionValue() {
-				IsReverseVerticalCamera = model.IsReverseVerticalCamera.Value ,
-				IsReverseHorizontalCamera = model.IsReverseHorizontalCamera.Value
-			};
-		}
-
+		
 		#region Viewイベント
 
 		/// <summary>
@@ -347,6 +338,8 @@ namespace Presenters.Title {
 
 		#endregion
 
+		#endregion
+
 		/// <summary>
 		/// オプション情報のセーブ
 		/// TODO 設定値の反映
@@ -364,7 +357,19 @@ namespace Presenters.Title {
 			Logger.Debug( "End" );
 		}
 
-		#endregion
+		/// <summary>
+		/// オプションModelから描画用に値を変換する
+		/// </summary>
+		/// <param name="model">オプションModel</param>
+		/// <returns></returns>
+		private OptionView.OptionValue ConvertOptionValue( OptionModel model ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( "End" );
+			return new OptionView.OptionValue() {
+				IsReverseVerticalCamera = model.IsReverseVerticalCamera.Value ,
+				IsReverseHorizontalCamera = model.IsReverseHorizontalCamera.Value
+			};
+		}
 
 		/// <summary>
 		/// 画面上の項目をOptionModelに変換

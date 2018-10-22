@@ -22,7 +22,7 @@ namespace Models.Title {
 		/// </summary>
 		public NextSceneModel() {
 			Logger.Debug( "Start" );
-			this.nextSceneName = new ReactiveProperty<NextSceneNameEnum>();
+			this.nextSceneName = new ReactiveProperty<NextSceneNameEnum>( NextSceneNameEnum.None );
 			Logger.Debug( "End" );
 		}
 
