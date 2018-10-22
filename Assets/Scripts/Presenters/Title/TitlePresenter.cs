@@ -156,7 +156,7 @@ namespace Presenters.Title {
 			Logger.Debug( "Start" );
 
 			// 遷移前画面の情報がなければShow Please Push Any Keyの表示
-			if( initialTitlePart.HasValue ) {
+			if( !initialTitlePart.HasValue ) {
 				Logger.Debug( "Initial Title Part Enum is Null." );
 				this.titleWindowModel.windowName.Value = WindowNameEnum.PleasePushAnyKey;
 			}

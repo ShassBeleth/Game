@@ -6,8 +6,7 @@
 	public enum NextSceneNameEnum {
 		SelectSaveData ,
 		Gallery ,
-		Ranking ,
-		None
+		Ranking
 	}
 
 }
