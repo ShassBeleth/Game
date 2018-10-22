@@ -29,6 +29,21 @@ namespace Presenters.Ranking {
 		public RankingPresenter() {
 			Logger.Debug( "Start" );
 
+			// Viewの設定
+			this.InitialViewSetting();
+
+
+			Logger.Debug( "End" );
+		}
+
+		#region 初期設定
+
+		/// <summary>
+		/// Viewの設定
+		/// </summary>
+		private void InitialViewSetting() {
+			Logger.Debug( "Start" );
+
 			// hierarchyからViewを取得
 			this.rankingView = GameObject.Find( "Canvas" ).GetComponent<RankingView>();
 
@@ -37,6 +52,10 @@ namespace Presenters.Ranking {
 
 			Logger.Debug( "End" );
 		}
+
+		#endregion
+
+		#region Viewイベント
 
 		/// <summary>
 		/// 戻るボタン押下時イベント
@@ -51,6 +70,8 @@ namespace Presenters.Ranking {
 			);
 			Logger.Debug( "End" );
 		}
+
+		#endregion
 
 	}
 

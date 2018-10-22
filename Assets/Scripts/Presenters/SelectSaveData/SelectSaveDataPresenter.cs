@@ -55,15 +55,8 @@ namespace Presenters.SelectSaveData {
 
 			this.isSinglePlayMode = parameter.IsSinglePlayMode;
 
-			#region View
-			
-			// Viewを取得
-			this.selectSaveDataView = GameObject.Find( "Canvas" ).GetComponent<SelectSaveDataView>();
-			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
-
-			#endregion
-
-			#region Model
+			// Viewの設定
+			this.InitialViewSetting();
 
 			// Model変更時イベント設定
 			this.selectSaveDataModel = new SelectSaveDataModel( null , new List<SaveDataModel>() {
@@ -72,10 +65,9 @@ namespace Presenters.SelectSaveData {
 				this.ConvertSaveDataModel( 2 , SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 2 ) ) ,
 				this.ConvertSaveDataModel( 3 , SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 3 ) )
 			} );
-			this.selectSaveDataModel.selectedSaveDataIndex.Subscribe( (index) => this.ChangedSelectSaveData(index) );
-			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
 
-			#endregion
+			// ModelのSubscribeを設定
+			this.InitialModelSubscribeSetting();
 
 			// セーブデータをViewに必要な情報に加工
 			List<SelectSaveDataView.SaveData> saveDataList = new List<SelectSaveDataView.SaveData>() {
@@ -93,6 +85,162 @@ namespace Presenters.SelectSaveData {
 
 			Logger.Debug( "End" );
 		}
+
+		#region 初期設定
+
+		/// <summary>
+		/// Viewの設定
+		/// </summary>
+		private void InitialViewSetting() {
+			Logger.Debug( "Start" );
+
+			// Viewを取得
+			this.selectSaveDataView = GameObject.Find( "Canvas" ).GetComponent<SelectSaveDataView>();
+			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
+
+			Logger.Debug( "End" );
+		}
+		
+		/// <summary>
+		/// ModelのSubscribeを設定
+		/// </summary>
+		private void InitialModelSubscribeSetting() {
+			Logger.Debug( "Start" );
+			this.selectSaveDataModel.selectedSaveDataIndex.Subscribe( ( index ) => this.ChangedSelectSaveData( index ) ).AddTo( this.selectSaveDataView );
+			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } ).AddTo( this.selectSaveDataView );
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		#region ModelのSubscribeによるイベント
+
+		/// <summary>
+		/// 選択されたセーブデータ変更時イベント
+		/// </summary>
+		/// <param name="index">選択されたセーブデータのIndex</param>
+		private void ChangedSelectSaveData( int? index ) {
+			Logger.Debug( "Start" );
+
+			if( index.HasValue ) {
+				if( !this.selectSaveDataModel.saveData[ index.Value ].exsitsAlreadyData ) {
+
+					// 値がある場合でセーブデータがない場合はセーブデータを作成し遷移
+					this.selectSaveDataModel.saveData[ index.Value ] = this.ConvertSaveDataModel( index.Value , this.CreateSinglePlaySaveData( index.Value ) );
+					Logger.Warning( "未実装" );
+
+				}
+				else {
+
+					// 値がある場合でセーブデータがある場合はパネルを表示
+					this.selectSaveDataView.ShowPanel( index , this.ConvertSaveDataOfView( index.Value ) );
+					this.selectSaveDataView.SetSelectedButtonInPanel( index.Value );
+
+				}
+			}
+			else {
+				// 値がない場合パネルを非表示にする
+				this.selectSaveDataView.ShowPanel( null , null );
+			}
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// キャンセルボタン押下時イベント
+		/// </summary>
+		/// <param name="value">値</param>
+		private void ChangedCancelButton( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+			if( value == 1 ) {
+				Logger.Warning( $"Selected Save Data Index is {( this.selectSaveDataModel.selectedSaveDataIndex.HasValue ? this.selectSaveDataModel.selectedSaveDataIndex.Value.ToString() : "Null" )}." );
+				// パネルが非表示ならタイトルに戻る
+				if( !this.selectSaveDataModel.selectedSaveDataIndex.Value.HasValue ) {
+					Logger.Debug( "Panel Don't show" );
+					TitleParameter parameter = new TitleParameter() {
+						InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu
+					};
+					SceneManager.GetInstance().LoadScene( "Title" , parameter );
+				}
+				// パネルが表示されているならパネルを非表示にする
+				else {
+					Logger.Debug( "Close Panel" );
+					this.selectSaveDataView.SetSelectedSaveData( this.selectSaveDataView.saves[ this.selectSaveDataModel.selectedSaveDataIndex.Value.Value ] );
+					this.selectSaveDataModel.selectedSaveDataIndex.Value = null;
+				}
+			}
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		#region Viewイベント
+
+		/// <summary>
+		/// セーブデータ選択時イベント
+		/// </summary>
+		/// <param name="index">index</param>
+		private void ClickedSaveData( int index ) {
+			Logger.Debug( "Start" );
+			this.selectSaveDataModel.selectedSaveDataIndex.Value = index;
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 続きからボタン押下時イベント
+		/// </summary>
+		/// <param name="index">index</param>
+		private void ClickedContinueButtonEvent( int index ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Index is {index}" );
+
+			Logger.Warning( "未実装" );
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// チャプターセレクトボタン押下時イベント
+		/// </summary>
+		/// <param name="index">Index</param>
+		private void ClickedChapterSelectButtonEvent( int index ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Index is {index}" );
+
+			// チャプターセレクトに遷移
+			this.TransitionToChapterSelect( this.selectSaveDataModel.saveData[ index ] );
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// コピーボタン押下時イベント
+		/// </summary>
+		/// <param name="index">index</param>
+		private void ClickedCopyButtonEvent( int index ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Index is {index}" );
+
+			Logger.Warning( "未実装" );
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 削除ボタン押下時イベント
+		/// </summary>
+		/// <param name="index">index</param>
+		private void ClickedDeleteButtonEvent( int index ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Index is {index}" );
+
+			SinglePlaySaveDataSerializer.DeleteSinglePlaySaveData( index );
+
+			// TODO レイアウトの更新
+
+			Logger.Debug( "End" );
+		}
+
+		#endregion
 
 		/// <summary>
 		/// 読み込んだセーブデータをModelに変換する
@@ -212,135 +360,6 @@ namespace Presenters.SelectSaveData {
 			SceneManager.GetInstance().LoadScene( "ChapterSelect" , parameter );
 			Logger.Debug( "End" );
 		}
-
-		#region Viewイベント
-
-		/// <summary>
-		/// セーブデータ選択時イベント
-		/// </summary>
-		/// <param name="index">index</param>
-		private void ClickedSaveData( int index ) {
-			Logger.Debug( "Start" );
-			this.selectSaveDataModel.selectedSaveDataIndex.Value = index;
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// 続きからボタン押下時イベント
-		/// </summary>
-		/// <param name="index">index</param>
-		private void ClickedContinueButtonEvent( int index ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Index is {index}" );
-
-			Logger.Warning( "未実装" );
-
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// チャプターセレクトボタン押下時イベント
-		/// </summary>
-		/// <param name="index">Index</param>
-		private void ClickedChapterSelectButtonEvent( int index ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Index is {index}" );
-
-			// チャプターセレクトに遷移
-			this.TransitionToChapterSelect( this.selectSaveDataModel.saveData[ index ] );
-
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// コピーボタン押下時イベント
-		/// </summary>
-		/// <param name="index">index</param>
-		private void ClickedCopyButtonEvent( int index ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Index is {index}" );
-
-			Logger.Warning( "未実装" );
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// 削除ボタン押下時イベント
-		/// </summary>
-		/// <param name="index">index</param>
-		private void ClickedDeleteButtonEvent( int index ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Index is {index}" );
-
-			SinglePlaySaveDataSerializer.DeleteSinglePlaySaveData( index );
-
-			// TODO レイアウトの更新
-
-			Logger.Debug( "End" );
-		}
-
-		#endregion
-
-		#region Modelイベント
-
-		/// <summary>
-		/// 選択されたセーブデータ変更時イベント
-		/// </summary>
-		/// <param name="index">選択されたセーブデータのIndex</param>
-		private void ChangedSelectSaveData( int? index ) {
-			Logger.Debug( "Start" );
-
-			if( index.HasValue ) {
-				if( !this.selectSaveDataModel.saveData[ index.Value ].exsitsAlreadyData ) {
-
-					// 値がある場合でセーブデータがない場合はセーブデータを作成し遷移
-					this.selectSaveDataModel.saveData[ index.Value ] = this.ConvertSaveDataModel( index.Value , this.CreateSinglePlaySaveData( index.Value ) );
-					Logger.Warning( "未実装" );
-
-				}
-				else {
-
-					// 値がある場合でセーブデータがある場合はパネルを表示
-					this.selectSaveDataView.ShowPanel( index , this.ConvertSaveDataOfView( index.Value ) );
-					this.selectSaveDataView.SetSelectedButtonInPanel( index.Value );
-
-				}
-			}
-			else {
-				// 値がない場合パネルを非表示にする
-				this.selectSaveDataView.ShowPanel( null , null );
-			}
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// キャンセルボタン押下時イベント
-		/// </summary>
-		/// <param name="value">値</param>
-		private void ChangedCancelButton( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
-			if( value == 1 ) {
-				Logger.Warning( $"Selected Save Data Index is {( this.selectSaveDataModel.selectedSaveDataIndex.HasValue ? this.selectSaveDataModel.selectedSaveDataIndex.Value.ToString() : "Null" )}." );
-				// パネルが非表示ならタイトルに戻る
-				if( !this.selectSaveDataModel.selectedSaveDataIndex.Value.HasValue ) {
-					Logger.Debug( "Panel Don't show" );
-					TitleParameter parameter = new TitleParameter() {
-						InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu
-					};
-					SceneManager.GetInstance().LoadScene( "Title" , parameter );
-				}
-				// パネルが表示されているならパネルを非表示にする
-				else {
-					Logger.Debug( "Close Panel" );
-					this.selectSaveDataView.SetSelectedSaveData( this.selectSaveDataView.saves[ this.selectSaveDataModel.selectedSaveDataIndex.Value.Value ] );
-					this.selectSaveDataModel.selectedSaveDataIndex.Value = null;
-				}
-			}
-			Logger.Debug( "End" );
-		}
-
-		#endregion
 		
 	}
 

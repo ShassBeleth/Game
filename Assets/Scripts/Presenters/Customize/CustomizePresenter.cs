@@ -5,7 +5,6 @@ using SceneManagers;
 using SceneManagers.Parameters;
 using UniRx;
 using UnityEngine;
-using UnityEngine.UI;
 using Views.Customize;
 using Views.UserController;
 
@@ -68,25 +67,11 @@ namespace Presenters.Customize {
 		public CustomizePresenter( CustomizeParameter parameter ) {
 			Logger.Debug( "Start" );
 
-			// hierarchyからViewを持つGameObject取得
-			GameObject customizeGameObject = GameObject.Find( "Canvas" );
+			// Viewの設定
+			this.InitialViewSetting();
 
-			// Viewを取得
-			this.CustomizeView = customizeGameObject.GetComponent<CustomizeView>();
-			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
-			this.ShowcaseView = GameObject.Find( "Showcase" ).GetComponent<ShowcaseView>();
-
-			// CutomizeViewのEventHandler設定
-			this.CustomizeView.OnClickDecisionButtonEventHandler = this.ClickedDecisionButtonEvent;
-			this.CustomizeView.OnClickBodyButtonEventHandler = this.ClickedBodyButtonFromMenuEvent;
-			
-			this.UserControllerView.TurnCharacter.Subscribe( value => { this.ChangedTurnCharacter( value ); } );
-			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
-			this.UserControllerView.MenuButtons[ "CursorLeft" ].Subscribe( ( value ) => { this.ChangedCursorLeftButton( value ); } );
-			this.UserControllerView.MenuButtons[ "CursorRight" ].Subscribe( ( value ) => { this.ChangedCursorRightButton( value ); } );
-			
-			// Model
-			this.CustomizeWindowModel.windowName.Subscribe( (windowName) => this.ChangedWindowName(windowName) );
+			// ModelのSubscribeを設定
+			this.InitialModelSubscribeSetting();
 
 			// 素体一覧取得
 			// TODO 実際は型が違うから変換が必要
@@ -108,6 +93,46 @@ namespace Presenters.Customize {
 
 			Logger.Debug( "End" );
 		}
+
+		#region 初期設定
+
+		/// <summary>
+		/// Viewの設定
+		/// </summary>
+		private void InitialViewSetting() {
+			Logger.Debug( "Start" );
+
+			// hierarchyからViewを持つGameObject取得
+			GameObject customizeGameObject = GameObject.Find( "Canvas" );
+
+			// Viewを取得
+			this.CustomizeView = customizeGameObject.GetComponent<CustomizeView>();
+			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
+			this.ShowcaseView = GameObject.Find( "Showcase" ).GetComponent<ShowcaseView>();
+
+			// CutomizeViewのEventHandler設定
+			this.CustomizeView.OnClickDecisionButtonEventHandler = this.ClickedDecisionButtonEvent;
+			this.CustomizeView.OnClickBodyButtonEventHandler = this.ClickedBodyButtonFromMenuEvent;
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// ModelのSubscribeを設定
+		/// </summary>
+		private void InitialModelSubscribeSetting() {
+			Logger.Debug( "Start" );
+			this.UserControllerView.TurnCharacter.Subscribe( value => { this.ChangedTurnCharacter( value ); } );
+			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
+			this.UserControllerView.MenuButtons[ "CursorLeft" ].Subscribe( ( value ) => { this.ChangedCursorLeftButton( value ); } );
+			this.UserControllerView.MenuButtons[ "CursorRight" ].Subscribe( ( value ) => { this.ChangedCursorRightButton( value ); } );
+			this.CustomizeWindowModel.windowName.Subscribe( ( windowName ) => this.ChangedWindowName( windowName ) );
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		#region ModelのSubscribeによるイベント
 
 		/// <summary>
 		/// Window名変更時イベント
@@ -151,7 +176,118 @@ namespace Presenters.Customize {
 			}
 			Logger.Debug( "End" );
 		}
-		
+
+		/// <summary>
+		/// キャンセルボタン押下時イベント
+		/// </summary>
+		/// <param name="value">値</param>
+		private void ChangedCancelButton( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 十字左ボタン押下時イベント
+		/// </summary>
+		/// <param name="value">値</param>
+		private void ChangedCursorLeftButton( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.ParameterMenu;
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 十字右ボタン押下時イベント
+		/// </summary>
+		/// <param name="value">値</param>
+		private void ChangedCursorRightButton( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.EquipmentMenu;
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		#region Viewイベント
+
+		/// <summary>
+		/// 決定ボタン押下時イベント
+		/// </summary>
+		public void ClickedDecisionButtonEvent() {
+			Logger.Debug( "Start" );
+			SceneManager.GetInstance().LoadScene( "MainGame" , null );
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// メニューより素体ボタン押下時イベント
+		/// </summary>
+		public void ClickedBodyButtonFromMenuEvent() {
+			Logger.Debug( "Start" );
+			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.Body;
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 素体選択時イベント
+		/// </summary>
+		/// <param name="bodyId">素体ID</param>
+		public void ClickedBodyNodeDecisionButtonEvent( int bodyId ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Body Id is {bodyId}" );
+
+			// 素体IDからどの素体が選ばれたか調べる
+			CustomizeView.Body selectedBody = this.bodies.FirstOrDefault( body => bodyId == body.Id );
+			if( selectedBody == null ) {
+				Logger.Warning( "Selected Body is Null" );
+			}
+
+			// 選ばれた素体に装備できる一覧を設定する
+			this.CustomizeView.SetEquipablePlaces( selectedBody.EqupablePlaces );
+
+			// 表示切替
+			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.EquipmentMenu;
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 装備可能箇所選択時イベント
+		/// </summary>
+		/// <param name="equipablePlaceId">装備可能箇所ID</param>
+		public void ClickedEquipablePlaceNodeDecisionButtonEvent( int equipablePlaceId ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Equipable Place Id is {equipablePlaceId}" );
+
+			// TODO 装備可能箇所IDから所持装備のうち、装備できるものだけリストにする
+			this.CustomizeView.SetEqupments( this.equipments );
+
+			// 表示切替
+			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.Equipments;
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 装備選択時イベント
+		/// </summary>
+		/// <param name="equipmentId">装備ID</param>
+		public void ClickedEquipmentNodeDecisionButtonEvent( int equipmentId ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Equipment Id is {equipmentId}" );
+
+			// 表示切替
+			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.EquipmentMenu;
+
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
 		/// <summary>
 		/// 取得済み素体一覧取得
 		/// </summary>
@@ -868,7 +1004,7 @@ namespace Presenters.Customize {
 			Logger.Debug( "End" );
 			return list;
 		}
-		
+
 		/// <summary>
 		/// 取得済み装備一覧取得
 		/// </summary>
@@ -922,111 +1058,6 @@ namespace Presenters.Customize {
 			return list;
 		}
 
-		/// <summary>
-		/// 決定ボタン押下時イベント
-		/// </summary>
-		public void ClickedDecisionButtonEvent() {
-			Logger.Debug( "Start" );
-			SceneManager.GetInstance().LoadScene( "MainGame" , null );
-			Logger.Debug( "End" );
-		}
-		
-		/// <summary>
-		/// メニューより素体ボタン押下時イベント
-		/// </summary>
-		public void ClickedBodyButtonFromMenuEvent() {
-			Logger.Debug( "Start" );
-			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.Body;
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// 素体選択時イベント
-		/// </summary>
-		/// <param name="bodyId">素体ID</param>
-		public void ClickedBodyNodeDecisionButtonEvent( int bodyId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Body Id is {bodyId}" );
-
-			// 素体IDからどの素体が選ばれたか調べる
-			CustomizeView.Body selectedBody = this.bodies.FirstOrDefault( body => bodyId == body.Id );
-			if( selectedBody == null ) {
-				Logger.Warning( "Selected Body is Null" );
-			}
-
-			// 選ばれた素体に装備できる一覧を設定する
-			this.CustomizeView.SetEquipablePlaces( selectedBody.EqupablePlaces );
-
-			// 表示切替
-			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.EquipmentMenu;
-
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// 装備可能箇所選択時イベント
-		/// </summary>
-		/// <param name="equipablePlaceId">装備可能箇所ID</param>
-		public void ClickedEquipablePlaceNodeDecisionButtonEvent( int equipablePlaceId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Equipable Place Id is {equipablePlaceId}" );
-
-			// TODO 装備可能箇所IDから所持装備のうち、装備できるものだけリストにする
-			this.CustomizeView.SetEqupments( this.equipments );
-
-			// 表示切替
-			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.Equipments;
-
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// 装備選択時イベント
-		/// </summary>
-		/// <param name="equipmentId">装備ID</param>
-		public void ClickedEquipmentNodeDecisionButtonEvent( int equipmentId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Equipment Id is {equipmentId}" );
-
-			// 表示切替
-			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.EquipmentMenu;
-
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// キャンセルボタン押下時イベント
-		/// </summary>
-		/// <param name="value">値</param>
-		private void ChangedCancelButton( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
-
-			Logger.Debug( "End" );
-		}
-		
-		/// <summary>
-		/// 十字左ボタン押下時イベント
-		/// </summary>
-		/// <param name="value">値</param>
-		private void ChangedCursorLeftButton( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
-			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.ParameterMenu;
-			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// 十字右ボタン押下時イベント
-		/// </summary>
-		/// <param name="value">値</param>
-		private void ChangedCursorRightButton( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
-			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.EquipmentMenu;
-			Logger.Debug( "End" );
-		}
-		
 	}
 
 }

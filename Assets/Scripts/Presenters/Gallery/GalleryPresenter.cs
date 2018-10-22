@@ -28,7 +28,22 @@ namespace Presenters.Gallery {
 		/// </summary>
 		public GalleryPresenter() {
 			Logger.Debug( "Start" );
-			
+
+			// Viewの設定
+			this.InitialViewSetting();
+
+			Logger.Debug( "End" );
+		}
+
+
+		#region 初期設定
+
+		/// <summary>
+		/// Viewの設定
+		/// </summary>
+		private void InitialViewSetting() {
+			Logger.Debug( "Start" );
+
 			// Viewを取得
 			this.GalleryView = GameObject.Find( "Canvas" ).GetComponent<GalleryView>();
 
@@ -38,19 +53,25 @@ namespace Presenters.Gallery {
 			Logger.Debug( "End" );
 		}
 
+		#endregion
+
+		#region Viewイベント
+
 		/// <summary>
 		/// 戻るボタン押下時イベント
 		/// </summary>
 		private void ClickedBackButtonEvent() {
 			Logger.Debug( "Start" );
-			SceneManager.GetInstance().LoadScene( 
-				"Title" , 
+			SceneManager.GetInstance().LoadScene(
+				"Title" ,
 				new TitleParameter() {
 					InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu
 				}
 			);
 			Logger.Debug( "End" );
 		}
+
+		#endregion
 
 	}
 
