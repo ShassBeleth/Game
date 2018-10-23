@@ -113,6 +113,7 @@ namespace Presenters.Customize {
 			// CutomizeViewのEventHandler設定
 			this.CustomizeView.OnClickDecisionButtonEventHandler = this.ClickedDecisionButtonEvent;
 			this.CustomizeView.OnClickBodyButtonEventHandler = this.ClickedBodyButtonFromMenuEvent;
+			this.CustomizeView.OnClickEquipablePlaceScrollViewEventHandler = this.ClickedEquipablePlaceScrollViewEvent;
 
 			Logger.Debug( "End" );
 		}
@@ -242,15 +243,35 @@ namespace Presenters.Customize {
 
 			// 素体IDからどの素体が選ばれたか調べる
 			CustomizeView.Body selectedBody = this.bodies.FirstOrDefault( body => bodyId == body.Id );
+			string bodyName = "None";
 			if( selectedBody == null ) {
 				Logger.Warning( "Selected Body is Null" );
 			}
+			bodyName = selectedBody.Name;
 
 			// 選ばれた素体に装備できる一覧を設定する
 			this.CustomizeView.SetEquipablePlaces( selectedBody.EqupablePlaces );
 
+			// 素体ボタンの名前変更
+			this.CustomizeView.SetBodyButtonText( bodyName );
+
 			// 表示切替
 			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.EquipmentMenu;
+
+			// 素体ボタンを選択状態にする
+			this.CustomizeView.SetSelectedGameObject( this.CustomizeView.BodyButton );
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 装備可能箇所一覧ScrollView選択時イベント
+		/// </summary>
+		public void ClickedEquipablePlaceScrollViewEvent() {
+			Logger.Debug( "Start" );
+
+			// 一覧の項目を強制的に選択状態にする
+			this.CustomizeView.SetSelectedEquipablePlaceGameObject();
 
 			Logger.Debug( "End" );
 		}
@@ -313,6 +334,66 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "右肘" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "左肘" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "右肩" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "左肩" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "胸部" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "腹" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "背中" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "腰" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "右足" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "左足" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "右膝" ,
+							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+						} ,
+						new CustomizeView.EquipablePlace() {
+							Id = 0 ,
+							Name = "左膝" ,
 							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,

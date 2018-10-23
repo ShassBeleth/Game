@@ -104,7 +104,7 @@ namespace Views.Customize {
 			public string Name { set; get; }
 
 		}
-
+		
 		#region 素体関係
 		/// <summary>
 		/// BodyNodeのPrefab
@@ -115,8 +115,14 @@ namespace Views.Customize {
 		/// 素体一覧スクロールのContent
 		/// </summary>
 		public GameObject bodyScrollViewContent;
-		
+
 		#region 素体ボタン
+
+		/// <summary>
+		/// 素体ボタン
+		/// </summary>
+		public GameObject BodyButton;
+
 		/// <summary>
 		/// 素体ボタン押下時イベントハンドラ
 		/// </summary>
@@ -130,6 +136,18 @@ namespace Views.Customize {
 			this.OnClickBodyButtonEventHandler?.Invoke();
 			Logger.Debug( "End" );
 		}
+
+		/// <summary>
+		/// 素体ボタンの表示変更
+		/// </summary>
+		/// <param name="bodyName">素体名</param>
+		public void SetBodyButtonText( string bodyName ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Body Name is {bodyName}." );
+			this.BodyButton.transform.GetChild( 0 ).GetComponent<Text>().text = $"Base：{bodyName}";
+			Logger.Debug( "End" );
+		}
+
 		#endregion
 
 		/// <summary>
@@ -185,10 +203,16 @@ namespace Views.Customize {
 			}
 			Logger.Debug( "End" );
 		}
-		
+
 		#endregion
 
 		#region 装備可能箇所関係
+
+		/// <summary>
+		/// 装備可能箇所GameObject
+		/// </summary>
+		public GameObject EquipablePlaceGameObject;
+
 		/// <summary>
 		/// EquipablePlaceNodeのPrefab
 		/// </summary>
@@ -200,17 +224,63 @@ namespace Views.Customize {
 		public GameObject equipablePlaceScrollViewContent;
 
 		/// <summary>
+		/// 装備可能箇所一覧Scroll View選択時イベントハンドラ
+		/// </summary>
+		public Action OnClickEquipablePlaceScrollViewEventHandler { set; get; }
+
+		/// <summary>
+		/// 装備可能箇所一覧Scroll View選択時イベント
+		/// </summary>
+		public void OnClickEquipmentScrollViewEvent() {
+			Logger.Debug( "Start" );
+			this.OnClickEquipablePlaceScrollViewEventHandler?.Invoke();
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
 		/// 装備可能箇所一覧の設定
 		/// </summary>
 		/// <param name="equipablePlaces">装備可能箇所一覧</param>
 		public void SetEquipablePlaces( List<EquipablePlace> equipablePlaces ) {
 			Logger.Debug( "Start" );
+
+			// 既に子要素として含まれる一覧項目を削除
+			foreach( Transform child in this.equipablePlaceScrollViewContent.transform ) {
+				GameObject.Destroy( child.gameObject );
+			}
+
+			List<GameObject> equipablePlaceGameObjects = new List<GameObject>();
+
+			// 一覧から子要素生成
 			equipablePlaces.ForEach( ( equipablePlace ) => {
 				GameObject node = GameObject.Instantiate( this.equipablePlaceNodePrefab );
 				node.transform.SetParent( this.equipablePlaceScrollViewContent.transform , false );
+				equipablePlaceGameObjects.Add( node );
 				EquipablePlaceNodeView view = node.GetComponent<EquipablePlaceNodeView>();
 				view.SetOnClickDecisionButtonEventHandler( equipablePlace.DecisionEventHandler );
+				view.SetText( equipablePlace.Name + "：None" );
 			} );
+
+			foreach( int i in Enumerable.Range( 0 , equipablePlaceGameObjects.Count ) ) {
+				Button button = equipablePlaceGameObjects[ i ].GetComponent<Button>();
+				Navigation nav = new Navigation {
+					mode = Navigation.Mode.Explicit ,
+					selectOnDown = equipablePlaceGameObjects[ ( i + 1 ) % equipablePlaceGameObjects.Count ].GetComponent<Button>() ,
+					selectOnUp = equipablePlaceGameObjects[ ( i - 1 + equipablePlaceGameObjects.Count ) % equipablePlaceGameObjects.Count ].GetComponent<Button>()
+				};
+				button.navigation = nav;
+			}
+			
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 強制的に装備可能箇所一覧内の項目を選択状態にする
+		/// </summary>
+		public void SetSelectedEquipablePlaceGameObject() {
+			Logger.Debug( "Start" );
+			GameObject gameObject = this.equipablePlaceScrollViewContent.transform.GetChild( 0 ).gameObject;
+			this.eventSystem.SetSelectedGameObject( gameObject );
 			Logger.Debug( "End" );
 		}
 
@@ -287,7 +357,7 @@ namespace Views.Customize {
 
 			Logger.Debug( "End" );
 		}
-
+		
 		/// <summary>
 		/// パラメータカスタマイズ表示
 		/// </summary>
@@ -367,7 +437,17 @@ namespace Views.Customize {
 			Logger.Debug( "End" );
 		}
 		#endregion
-		
+
+		/// <summary>
+		/// 強制的にボタンを選択状態にする
+		/// </summary>
+		/// <param name="gameObject">GameObject</param>
+		public void SetSelectedGameObject( GameObject gameObject ) {
+			Logger.Debug( "Start" );
+			this.eventSystem.SetSelectedGameObject( gameObject );
+			Logger.Debug( "End" );
+		}
+
 		/// <summary>
 		/// パラメータチップ一覧の設定
 		/// </summary>

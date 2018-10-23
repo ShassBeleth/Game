@@ -1491,9 +1491,9 @@ MonoBehaviour:
   m_Content: {fileID: 246614686}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
-  m_Inertia: 1
+  m_Inertia: 0
   m_DecelerationRate: 0.135
   m_ScrollSensitivity: 1
   m_Viewport: {fileID: 175024426}
@@ -1546,7 +1546,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 606820925}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1164619392}
+        m_MethodName: OnClickEquipmentScrollViewEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &641809316
@@ -1879,7 +1890,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u7D20\u4F53"
+  m_Text: "Base\uFF1ANone"
 --- !u!222 &795957536
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2300,7 +2311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 136168905}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 2
   m_Elasticity: 0.1
@@ -2583,8 +2594,9 @@ MonoBehaviour:
   bodyNodePrefab: {fileID: 1001145358600244, guid: f1858ad47ca49a24c9dd4ddcca801ff7,
     type: 2}
   bodyScrollViewContent: {fileID: 136168904}
-  bodyScrollRect: {fileID: 0}
-  equipablePlaceNodePrefab: {fileID: 1378866945200182, guid: 193a02c2f3465fd4d909e2dbec57320e,
+  BodyButton: {fileID: 1726070224}
+  EquipablePlaceGameObject: {fileID: 606820923}
+  equipablePlaceNodePrefab: {fileID: 1601960673874428, guid: 193a02c2f3465fd4d909e2dbec57320e,
     type: 2}
   equipablePlaceScrollViewContent: {fileID: 246614683}
   equipmentNodePrefab: {fileID: 1378866945200182, guid: 2b5a3a9e3ce0ce344b490b8f17fbc97c,
