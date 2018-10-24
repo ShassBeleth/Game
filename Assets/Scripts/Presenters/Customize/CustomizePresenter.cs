@@ -152,6 +152,7 @@ namespace Presenters.Customize {
 					break;
 				case CustomizeWindowModel.WindowNameEnum.Equipments:
 					this.CustomizeView.ShowEquipments();
+					this.CustomizeView.SetSelectedEquipmentGameObject();
 					break;
 				case CustomizeWindowModel.WindowNameEnum.ParameterMenu:
 					this.CustomizeView.ShowCustomParameter();
@@ -1098,17 +1099,182 @@ namespace Presenters.Customize {
 				new CustomizeView.Equipment(){
 					Id = 0 ,
 					Name = "スシコラ",
-					DecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
 				} ,
 				new CustomizeView.Equipment() {
 					Id = 1 ,
 					Name = "リッター",
-					DecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
 				} ,
 				new CustomizeView.Equipment() {
 					Id = 2 ,
 					Name = "スパッタリー",
-					DecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
+				} ,
+				new CustomizeView.Equipment() {
+					Id = 2 ,
+					Name = "スパッタリー",
+					OnClickDecisionEventHandler = () => ClickedEquipmentNodeDecisionButtonEvent(0)
 				}
 			};
 			Logger.Debug( "End" );

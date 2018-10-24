@@ -84,7 +84,7 @@ namespace Views.Customize {
 			/// <summary>
 			/// 決定ボタン押下時イベントハンドラ
 			/// </summary>
-			public Action DecisionEventHandler { set; get; }
+			public Action OnClickDecisionEventHandler { set; get; }
 
 		}
 
@@ -303,14 +303,47 @@ namespace Views.Customize {
 		/// <param name="equipments">装備一覧</param>
 		public void SetEqupments( List<Equipment> equipments ) {
 			Logger.Debug( "Start" );
+
+			// 既に子要素として含まれる一覧項目を削除
+			foreach( Transform child in this.equipmentScrollViewContent.transform ) {
+				GameObject.Destroy( child.gameObject );
+			}
+
+			List<GameObject> equipmentGameObjects = new List<GameObject>();
+
+			// 一覧から子要素生成
 			equipments.ForEach( ( equipment ) => {
 				GameObject node = GameObject.Instantiate( this.equipmentNodePrefab );
 				node.transform.SetParent( this.equipmentScrollViewContent.transform , false );
+				equipmentGameObjects.Add( node );
 				EquipmentNodeView view = node.GetComponent<EquipmentNodeView>();
-				view.SetOnClickDecisionButtonEventHandler( equipment.DecisionEventHandler );
+				view.SetOnClickDecisionButtonEventHandler( equipment.OnClickDecisionEventHandler );
+				view.SetText( equipment.Name );
 			} );
+
+			foreach( int i in Enumerable.Range( 0 , equipmentGameObjects.Count ) ) {
+				Button button = equipmentGameObjects[ i ].GetComponent<Button>();
+				Navigation nav = new Navigation {
+					mode = Navigation.Mode.Explicit ,
+					selectOnDown = equipmentGameObjects[ ( i + 1 ) % equipmentGameObjects.Count ].GetComponent<Button>() ,
+					selectOnUp = equipmentGameObjects[ ( i - 1 + equipmentGameObjects.Count ) % equipmentGameObjects.Count ].GetComponent<Button>()
+				};
+				button.navigation = nav;
+			}
+
 			Logger.Debug( "End" );
 		}
+
+		/// <summary>
+		/// 強制的に装備一覧内の項目を選択状態にする
+		/// </summary>
+		public void SetSelectedEquipmentGameObject() {
+			Logger.Debug( "Start" );
+			GameObject gameObject = this.equipmentScrollViewContent.transform.GetChild( 0 ).gameObject;
+			this.eventSystem.SetSelectedGameObject( gameObject );
+			Logger.Debug( "End" );
+		}
+		
 		#endregion
 
 		#region 表示切替

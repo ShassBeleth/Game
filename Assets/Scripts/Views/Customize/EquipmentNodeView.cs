@@ -29,6 +29,16 @@ namespace Views.Customize {
 			Logger.Debug( "End" );
 		}
 
+		/// <summary>
+		/// テキストの設定
+		/// </summary>
+		/// <param name="text">テキスト</param>
+		public void SetText( string text ) {
+			Logger.Debug( "Start" );
+			this.transform.GetChild( 0 ).GetComponent<Text>().text = text ?? "None Name";
+			Logger.Debug( "End" );
+		}
+
 	}
 
 }
