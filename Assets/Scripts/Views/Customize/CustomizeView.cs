@@ -35,7 +35,7 @@ namespace Views.Customize {
 			/// <summary>
 			/// 決定ボタン押下時イベントハンドラ
 			/// </summary>
-			public Action DecisionEventHandler { set; get; }
+			public Action OnClickDecisionEventHandler { set; get; }
 
 		}
 
@@ -257,7 +257,7 @@ namespace Views.Customize {
 				node.transform.SetParent( this.equipablePlaceScrollViewContent.transform , false );
 				equipablePlaceGameObjects.Add( node );
 				EquipablePlaceNodeView view = node.GetComponent<EquipablePlaceNodeView>();
-				view.SetOnClickDecisionButtonEventHandler( equipablePlace.DecisionEventHandler );
+				view.SetOnClickDecisionButtonEventHandler( equipablePlace.OnClickDecisionEventHandler );
 				view.SetText( equipablePlace.Name + "：None" );
 			} );
 
@@ -341,23 +341,7 @@ namespace Views.Customize {
 		public GameObject equipmentsGameObject;
 
 		#region 画面切り替え用Showメソッド群
-
-		/// <summary>
-		/// 装備カスタマイズ表示
-		/// </summary>
-		public void ShowCustomEquipment() {
-			Logger.Debug( "Start" );
-
-			this.customEquipmentGameObject.SetActive( true );
-			this.customParameterGameObject.SetActive( false );
-
-			this.equipmentMenuGameObject.SetActive( true );
-			this.bodiesGameObject.SetActive( false );
-			this.equipmentsGameObject.SetActive( false );
-
-			Logger.Debug( "End" );
-		}
-		
+				
 		/// <summary>
 		/// パラメータカスタマイズ表示
 		/// </summary>

@@ -141,16 +141,17 @@ namespace Presenters.Customize {
 		/// <param name="windowName">Window名</param>
 		private void ChangedWindowName( CustomizeWindowModel.WindowNameEnum windowName ) {
 			Logger.Debug( "Start" );
+			Logger.Debug( $"Window Name is {windowName}." );
 			switch( windowName ) {
-				case CustomizeWindowModel.WindowNameEnum.Equipments:
-					this.CustomizeView.ShowCustomEquipment();
-					break;
 				case CustomizeWindowModel.WindowNameEnum.EquipmentMenu:
 					this.CustomizeView.ShowEquipmentMenu();
 					break;
 				case CustomizeWindowModel.WindowNameEnum.Body:
 					this.CustomizeView.ShowEquipmentBodies();
 					this.CustomizeView.SetSelectedBody( null );
+					break;
+				case CustomizeWindowModel.WindowNameEnum.Equipments:
+					this.CustomizeView.ShowEquipments();
 					break;
 				case CustomizeWindowModel.WindowNameEnum.ParameterMenu:
 					this.CustomizeView.ShowCustomParameter();
@@ -324,77 +325,77 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "右肘" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "左肘" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "右肩" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "左肩" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "胸部" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "腹" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "背中" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "腰" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "右足" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "左足" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "右膝" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "左膝" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -406,17 +407,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(1)
@@ -428,17 +429,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(1)
@@ -450,17 +451,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(2)
@@ -472,17 +473,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(2)
@@ -494,17 +495,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(3)
@@ -516,17 +517,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(4)
@@ -538,17 +539,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -560,17 +561,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -582,17 +583,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -604,17 +605,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -626,17 +627,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -648,17 +649,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -670,17 +671,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -692,17 +693,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -714,17 +715,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -736,17 +737,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -758,17 +759,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -780,17 +781,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -802,17 +803,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -824,17 +825,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -846,17 +847,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -868,17 +869,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -890,17 +891,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -912,17 +913,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -934,17 +935,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -956,17 +957,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -978,17 +979,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -1000,17 +1001,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -1022,17 +1023,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -1044,17 +1045,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)
@@ -1066,17 +1067,17 @@ namespace Presenters.Customize {
 						new CustomizeView.EquipablePlace() {
 							Id = 0 ,
 							Name = "頭" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 1 ,
 							Name = "右腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						} ,
 						new CustomizeView.EquipablePlace() {
 							Id = 2 ,
 							Name = "左腕" ,
-							DecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
+							OnClickDecisionEventHandler = () => ClickedEquipablePlaceNodeDecisionButtonEvent(0)
 						}
 					} ,
 					DecisionEventHandler = () => ClickedBodyNodeDecisionButtonEvent(0)

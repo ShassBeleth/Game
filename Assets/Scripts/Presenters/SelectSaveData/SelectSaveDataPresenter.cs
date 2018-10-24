@@ -31,7 +31,7 @@ namespace Presenters.SelectSaveData {
 		/// <summary>
 		/// セーブデータ選択View
 		/// </summary>
-		private SelectSaveDataView selectSaveDataView;
+		private SelectSaveDataView SelectSaveDataView { set; get; }
 		
 		/// <summary>
 		/// UserControllerView
@@ -78,10 +78,10 @@ namespace Presenters.SelectSaveData {
 			};
 
 			// セーブデータリストの描画
-			this.selectSaveDataView.SetSaveDataList( saveDataList );
+			this.SelectSaveDataView.SetSaveDataList( saveDataList );
 			
 			// Save1が選ばれている状態にしておく
-			this.selectSaveDataView.SetSelectedSaveData( this.selectSaveDataView.saves[ 0 ] );
+			this.SelectSaveDataView.SetSelectedSaveData( this.SelectSaveDataView.saves[ 0 ] );
 
 			Logger.Debug( "End" );
 		}
@@ -95,7 +95,7 @@ namespace Presenters.SelectSaveData {
 			Logger.Debug( "Start" );
 
 			// Viewを取得
-			this.selectSaveDataView = GameObject.Find( "Canvas" ).GetComponent<SelectSaveDataView>();
+			this.SelectSaveDataView = GameObject.Find( "Canvas" ).GetComponent<SelectSaveDataView>();
 			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
 
 			Logger.Debug( "End" );
@@ -106,8 +106,8 @@ namespace Presenters.SelectSaveData {
 		/// </summary>
 		private void InitialModelSubscribeSetting() {
 			Logger.Debug( "Start" );
-			this.selectSaveDataModel.selectedSaveDataIndex.Subscribe( ( index ) => this.ChangedSelectSaveData( index ) ).AddTo( this.selectSaveDataView );
-			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } ).AddTo( this.selectSaveDataView );
+			this.selectSaveDataModel.selectedSaveDataIndex.Subscribe( ( index ) => this.ChangedSelectSaveData( index ) ).AddTo( this.SelectSaveDataView );
+			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } ).AddTo( this.SelectSaveDataView );
 			Logger.Debug( "End" );
 		}
 
@@ -133,14 +133,14 @@ namespace Presenters.SelectSaveData {
 				else {
 
 					// 値がある場合でセーブデータがある場合はパネルを表示
-					this.selectSaveDataView.ShowPanel( index , this.ConvertSaveDataOfView( index.Value ) );
-					this.selectSaveDataView.SetSelectedButtonInPanel( index.Value );
+					this.SelectSaveDataView.ShowPanel( index , this.ConvertSaveDataOfView( index.Value ) );
+					this.SelectSaveDataView.SetSelectedButtonInPanel( index.Value );
 
 				}
 			}
 			else {
 				// 値がない場合パネルを非表示にする
-				this.selectSaveDataView.ShowPanel( null , null );
+				this.SelectSaveDataView.ShowPanel( null , null );
 			}
 			Logger.Debug( "End" );
 		}
@@ -165,7 +165,7 @@ namespace Presenters.SelectSaveData {
 				// パネルが表示されているならパネルを非表示にする
 				else {
 					Logger.Debug( "Close Panel" );
-					this.selectSaveDataView.SetSelectedSaveData( this.selectSaveDataView.saves[ this.selectSaveDataModel.selectedSaveDataIndex.Value.Value ] );
+					this.SelectSaveDataView.SetSelectedSaveData( this.SelectSaveDataView.saves[ this.selectSaveDataModel.selectedSaveDataIndex.Value.Value ] );
 					this.selectSaveDataModel.selectedSaveDataIndex.Value = null;
 				}
 			}
