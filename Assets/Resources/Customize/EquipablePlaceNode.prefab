@@ -59,7 +59,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83fec2dfa12c8e34a96e0f4bf3f358d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionButton: {fileID: 114517846423547384}
 --- !u!114 &114322840495608834
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -158,7 +157,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114330369054163872}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114213411370784070}
+        m_MethodName: OnClickDecisionButtonEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114819421976855662

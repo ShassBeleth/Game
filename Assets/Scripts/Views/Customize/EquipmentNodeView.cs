@@ -10,32 +10,26 @@ namespace Views.Customize {
 	public class EquipmentNodeView : MonoBehaviour {
 
 		/// <summary>
-		/// Id
+		/// 決定ボタン押下時イベントハンドラ
 		/// </summary>
-		private int id;
+		public Action OnClickDecisionEventHandler { set; get; }
 
 		/// <summary>
-		/// 決定ボタン
+		/// 決定ボタン押下時イベント
 		/// </summary>
-		public Button DecisionButton;
-
-		/// <summary>
-		/// 決定ボタン押下時イベントを設定する
-		/// </summary>
-		/// <param name="action">決定ボタン押下時イベント</param>
-		public void SetOnClickDecisionButtonEventHandler( Action action ) {
+		public void OnClickDecisionEvent() {
 			Logger.Debug( "Start" );
-			this.DecisionButton.onClick.AddListener( () => action?.Invoke() );
+			this.OnClickDecisionEventHandler?.Invoke();
 			Logger.Debug( "End" );
 		}
 
 		/// <summary>
-		/// テキストの設定
+		/// 装備名の設定
 		/// </summary>
-		/// <param name="text">テキスト</param>
-		public void SetText( string text ) {
+		/// <param name="equipmentName">装備名</param>
+		public void SetEquipmentName( string equipmentName ) {
 			Logger.Debug( "Start" );
-			this.transform.GetChild( 0 ).GetComponent<Text>().text = text ?? "None Name";
+			this.transform.GetChild( 0 ).GetComponent<Text>().text = equipmentName ?? "None Name";
 			Logger.Debug( "End" );
 		}
 

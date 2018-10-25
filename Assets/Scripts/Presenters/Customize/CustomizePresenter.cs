@@ -81,7 +81,7 @@ namespace Presenters.Customize {
 			// 装備一覧取得
 			// TODO 実際は型が違うから変換が必要
 			this.equipments = this.GetAcquiredEquipments();
-			this.CustomizeView.SetEqupments( this.equipments );
+			this.CustomizeView.SetEquipments( this.equipments );
 
 			// パラメータチップ一覧取得
 			// TODO 実際は型が違うから変換が必要
@@ -287,7 +287,7 @@ namespace Presenters.Customize {
 			Logger.Debug( $"Equipable Place Id is {equipablePlaceId}" );
 
 			// TODO 装備可能箇所IDから所持装備のうち、装備できるものだけリストにする
-			this.CustomizeView.SetEqupments( this.equipments );
+			this.CustomizeView.SetEquipments( this.equipments );
 
 			// 表示切替
 			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.Equipments;
@@ -302,6 +302,8 @@ namespace Presenters.Customize {
 		public void ClickedEquipmentNodeDecisionButtonEvent( int equipmentId ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Equipment Id is {equipmentId}" );
+
+
 
 			// 表示切替
 			this.CustomizeWindowModel.windowName.Value = CustomizeWindowModel.WindowNameEnum.EquipmentMenu;

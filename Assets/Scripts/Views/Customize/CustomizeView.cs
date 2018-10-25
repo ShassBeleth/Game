@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -165,8 +166,8 @@ namespace Views.Customize {
 				node.transform.SetParent( this.bodyScrollViewContent.transform , false );
 				bodyGameObjects.Add( node );
 				BodyNodeView view = node.GetComponent<BodyNodeView>();
-				view.SetText( bodies[ i ].Name );
-				view.SetOnClickDecisionButtonEventHandler( bodies[ i ].DecisionEventHandler );
+				view.SetBodyName( bodies[ i ].Name );
+				view.OnClickDecisionEventHandler = bodies[ i ].DecisionEventHandler;
 			}
 
 			foreach( int i in Enumerable.Range( 0 , bodyGameObjects.Count ) ) {
@@ -257,8 +258,8 @@ namespace Views.Customize {
 				node.transform.SetParent( this.equipablePlaceScrollViewContent.transform , false );
 				equipablePlaceGameObjects.Add( node );
 				EquipablePlaceNodeView view = node.GetComponent<EquipablePlaceNodeView>();
-				view.SetOnClickDecisionButtonEventHandler( equipablePlace.OnClickDecisionEventHandler );
-				view.SetText( equipablePlace.Name + "：None" );
+				view.OnClickDecisionButtonEventHandler = equipablePlace.OnClickDecisionEventHandler;
+				view.SetText( equipablePlace.Name , null );
 			} );
 
 			foreach( int i in Enumerable.Range( 0 , equipablePlaceGameObjects.Count ) ) {
@@ -298,10 +299,15 @@ namespace Views.Customize {
 		public GameObject equipmentScrollViewContent;
 
 		/// <summary>
+		/// 最初の装備項目
+		/// </summary>
+		private GameObject firstEquipmentNode = null;
+
+		/// <summary>
 		/// 装備一覧の設定
 		/// </summary>
 		/// <param name="equipments">装備一覧</param>
-		public void SetEqupments( List<Equipment> equipments ) {
+		public void SetEquipments( List<Equipment> equipments ) {
 			Logger.Debug( "Start" );
 
 			// 既に子要素として含まれる一覧項目を削除
@@ -317,9 +323,11 @@ namespace Views.Customize {
 				node.transform.SetParent( this.equipmentScrollViewContent.transform , false );
 				equipmentGameObjects.Add( node );
 				EquipmentNodeView view = node.GetComponent<EquipmentNodeView>();
-				view.SetOnClickDecisionButtonEventHandler( equipment.OnClickDecisionEventHandler );
-				view.SetText( equipment.Name );
+				view.OnClickDecisionEventHandler = equipment.OnClickDecisionEventHandler;
+				view.SetEquipmentName( equipment.Name );
 			} );
+
+			this.firstEquipmentNode = equipmentGameObjects.Count != 0 ? equipmentGameObjects[ 0 ] : null;
 
 			foreach( int i in Enumerable.Range( 0 , equipmentGameObjects.Count ) ) {
 				Button button = equipmentGameObjects[ i ].GetComponent<Button>();
@@ -333,14 +341,18 @@ namespace Views.Customize {
 
 			Logger.Debug( "End" );
 		}
-
+		
 		/// <summary>
 		/// 強制的に装備一覧内の項目を選択状態にする
 		/// </summary>
 		public void SetSelectedEquipmentGameObject() {
 			Logger.Debug( "Start" );
-			GameObject gameObject = this.equipmentScrollViewContent.transform.GetChild( 0 ).gameObject;
-			this.eventSystem.SetSelectedGameObject( gameObject );
+			if( this.firstEquipmentNode != null ) {
+				this.eventSystem.SetSelectedGameObject( this.firstEquipmentNode );
+			}
+			else {
+				Logger.Debug( "First Equipment Node is Null." );
+			}
 			Logger.Debug( "End" );
 		}
 		

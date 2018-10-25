@@ -8,38 +8,37 @@ namespace Views.Customize {
 	/// 素体一覧のNodeにつくView
 	/// </summary>
 	public class BodyNodeView : MonoBehaviour {
-
-		/// <summary>
-		/// Id
-		/// </summary>
-		private int id;
-
+		
 		/// <summary>
 		/// テキスト
 		/// </summary>
 		public Text Text;
+		
+		/// <summary>
+		/// 決定ボタン押下時イベントハンドラ
+		/// </summary>
+		public Action OnClickDecisionEventHandler { set; get; }
 
 		/// <summary>
-		/// 決定ボタン
+		/// 決定ボタン押下時イベント
 		/// </summary>
-		public Button DecisionButton;
-
-		public void SetText( string text ) {
+		public void OnClickDecisionEvent() {
 			Logger.Debug( "Start" );
-			this.Text.text = text;
+			this.OnClickDecisionEventHandler?.Invoke();
 			Logger.Debug( "End" );
 		}
 
 		/// <summary>
-		/// 決定ボタン押下時イベントを設定する
+		/// 素体名設定
 		/// </summary>
-		/// <param name="action">決定ボタン押下時イベント</param>
-		public void SetOnClickDecisionButtonEventHandler( Action action ) {
+		/// <param name="bodyName">素体名</param>
+		public void SetBodyName( string bodyName ) {
 			Logger.Debug( "Start" );
-			this.DecisionButton.onClick.AddListener( () => action?.Invoke() );
+			Logger.Debug( $"Body Name is {bodyName}." );
+			this.Text.text = bodyName;
 			Logger.Debug( "End" );
 		}
-
+		
 	}
 
 }
