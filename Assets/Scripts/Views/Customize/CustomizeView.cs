@@ -58,12 +58,12 @@ namespace Views.Customize {
 			/// <summary>
 			/// 装備可能箇所一覧
 			/// </summary>
-			public List<EquipablePlace> EqupablePlaces { set; get; }
+			public List<EquipablePlace> EquipablePlaces { set; get; }
 
 			/// <summary>
 			/// 決定ボタン押下時イベントハンドラ
 			/// </summary>
-			public Action DecisionEventHandler { set; get; }
+			public Action OnClickDecisionEventHandler { set; get; }
 
 		}
 
@@ -166,8 +166,9 @@ namespace Views.Customize {
 				node.transform.SetParent( this.bodyScrollViewContent.transform , false );
 				bodyGameObjects.Add( node );
 				BodyNodeView view = node.GetComponent<BodyNodeView>();
+				view.Id = bodies[ i ].Id;
 				view.SetBodyName( bodies[ i ].Name );
-				view.OnClickDecisionEventHandler = bodies[ i ].DecisionEventHandler;
+				view.OnClickDecisionEventHandler = bodies[ i ].OnClickDecisionEventHandler;
 			}
 
 			foreach( int i in Enumerable.Range( 0 , bodyGameObjects.Count ) ) {
@@ -185,23 +186,33 @@ namespace Views.Customize {
 		/// <summary>
 		/// 素体を選択状態にする
 		/// </summary>
-		/// <param name="index">選択状態となる素体のIndex nullなら先頭を選択</param>
-		public void SetSelectedBody( int? index ) {
+		/// <param name="id">選択状態となる素体のId nullなら先頭を選択</param>
+		public void SetSelectedBody( int? id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( $"(Index is {(index.HasValue ? index.Value.ToString() : "Null")}." );
+			Logger.Debug( $"(Id is {(id.HasValue ? id.Value.ToString() : "Null")}." );
+
 			GameObject selectedGameObject = null;
-			foreach( int i in Enumerable.Range( 0 , this.bodyScrollViewContent.transform.childCount ) ) {
-				selectedGameObject
-					= index.HasValue
-						? this.bodyScrollViewContent.transform.GetChild( index.Value ).gameObject
-						: this.bodyScrollViewContent.transform.GetChild( 0 ).gameObject;
+			// IDがあれば一覧からGameObjectを取得
+			if( id.HasValue ) {
+				foreach( int i in Enumerable.Range( 0 , this.bodyScrollViewContent.transform.childCount ) ) {
+					BodyNodeView view = this.bodyScrollViewContent.transform.GetChild( i ).GetComponent<BodyNodeView>();
+					if( view.Id == id.Value ) {
+						selectedGameObject = view.gameObject;
+						break;
+					}
+				}
+				// 不正なIDだった場合は0番目を取得
+				if( selectedGameObject == null ) {
+					Logger.Debug( "Unexpected Id" );
+					selectedGameObject = this.bodyScrollViewContent.transform.GetChild( 0 ).gameObject;
+				}
 			}
-			if( selectedGameObject != null ) {
-				this.eventSystem.SetSelectedGameObject( selectedGameObject );
-			}
+			// IDがなければ0番目を取得
 			else {
-				Logger.Warning( "Selected Game Obejct is Null." );
+				selectedGameObject = this.bodyScrollViewContent.transform.GetChild( 0 ).gameObject;
 			}
+
+			this.eventSystem.SetSelectedGameObject( selectedGameObject );
 			Logger.Debug( "End" );
 		}
 

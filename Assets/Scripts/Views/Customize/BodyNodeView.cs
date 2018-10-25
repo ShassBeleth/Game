@@ -8,6 +8,11 @@ namespace Views.Customize {
 	/// 素体一覧のNodeにつくView
 	/// </summary>
 	public class BodyNodeView : MonoBehaviour {
+
+		/// <summary>
+		/// 素体Id
+		/// </summary>
+		public int Id { set; get; }
 		
 		/// <summary>
 		/// テキスト

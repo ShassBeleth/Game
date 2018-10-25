@@ -1,22 +1,11 @@
 ﻿using UniRx;
 
-namespace Models {
+namespace Models.Customize {
 
 	/// <summary>
 	/// カスタマイズのWindowの切り替え状態を保持するModel
 	/// </summary>
 	public class CustomizeWindowModel {
-
-		/// <summary>
-		/// Window名列挙
-		/// </summary>
-		public enum WindowNameEnum {
-			EquipmentMenu ,
-			Body ,
-			Equipments ,
-			ParameterMenu ,
-			None
-		}
 
 		/// <summary>
 		/// Window名
