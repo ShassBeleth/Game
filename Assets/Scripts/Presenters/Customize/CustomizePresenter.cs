@@ -36,7 +36,12 @@ namespace Presenters.Customize {
 		/// <summary>
 		/// 作成したキャラクター
 		/// </summary>
-		private BodyModel CreatedCharacter = new BodyModel();
+		private ReactiveProperty<BodyModel> CreatedCharacterModel = new ReactiveProperty<BodyModel>( new BodyModel() );
+
+		/// <summary>
+		/// 選択された装備可能箇所ID
+		/// </summary>
+		private ReactiveProperty<int?> SelectedEquipablePlace = new ReactiveProperty<int?>( null );
 
 		/// <summary>
 		/// パラメータチップ一覧
@@ -64,7 +69,7 @@ namespace Presenters.Customize {
 		private UserControllerView UserControllerView { set; get; }
 
 		#endregion
-		
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -161,6 +166,7 @@ namespace Presenters.Customize {
 				.Select( ( element ) => new CustomizeView.EquipablePlace() {
 					Id = element.Content.Id.Value ,
 					Name = element.Content.Name ,
+					EquipmanetName = element.Content.EquipmentModel?.Name ,
 					OnClickDecisionEventHandler = () => {
 						this.ClickedEquipablePlaceNodeDecisionButtonEvent( element.Content.Id.Value );
 					}
@@ -206,6 +212,8 @@ namespace Presenters.Customize {
 			this.UserControllerView.MenuButtons[ "CursorLeft" ].Subscribe( ( value ) => { this.ChangedCursorLeftButton( value ); } );
 			this.UserControllerView.MenuButtons[ "CursorRight" ].Subscribe( ( value ) => { this.ChangedCursorRightButton( value ); } );
 			this.CustomizeWindowModel.windowName.Subscribe( ( windowName ) => this.ChangedWindowName( windowName ) );
+			this.CreatedCharacterModel.Subscribe( ( bodyModel ) => this.ChangedBodyModel( bodyModel ) );
+			this.SelectedEquipablePlace.Subscribe( id => this.ChangedSelectedEquipablePlace( id ) );
 			Logger.Debug( "End" );
 		}
 
@@ -222,11 +230,12 @@ namespace Presenters.Customize {
 			Logger.Debug( $"Window Name is {windowName}." );
 			switch( windowName ) {
 				case WindowNameEnum.EquipmentMenu:
+					this.SelectedEquipablePlace.Value = null;
 					this.CustomizeView.ShowEquipmentMenu();
 					break;
 				case WindowNameEnum.Body:
 					this.CustomizeView.ShowEquipmentBodies();
-					this.CustomizeView.SetSelectedBody( this.CreatedCharacter.Id.Value );
+					this.CustomizeView.SetSelectedBody( this.CreatedCharacterModel.Value.Id.Value );
 					break;
 				case WindowNameEnum.Equipments:
 					this.CustomizeView.ShowEquipments();
@@ -291,6 +300,55 @@ namespace Presenters.Customize {
 			Logger.Debug( "End" );
 		}
 
+		/// <summary>
+		/// 素体変更時イベント
+		/// </summary>
+		/// <param name="body">素体</param>
+		private void ChangedBodyModel( BodyModel body ) {
+			Logger.Debug( "Start" );
+			string bodyName = "None";
+			if( body != null && body.Id.Value.HasValue ) {
+				bodyName = body.Name;
+			}
+			Logger.Debug( $"Body Name is {bodyName}." );
+
+			// 選ばれた素体に装備できる一覧を設定する
+			this.CustomizeView.SetEquipablePlaces( this.ConvertEquipablePlaces( this.CreatedCharacterModel.Value.EquipablePlaces ) );
+
+			// 素体ボタンの名前変更
+			this.CustomizeView.SetBodyButtonText( bodyName );
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 装備可能箇所選択時イベント
+		/// </summary>
+		/// <param name="id">装備可能箇所ID</param>
+		private void ChangedSelectedEquipablePlace( int? id ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Id is {(id.HasValue ? id.Value.ToString() : "Null")}" );
+
+			if( id.HasValue ) {
+
+				// 装備可能箇所IDから所持装備のうち、装備できるものだけリストにする
+				this.CustomizeView.SetEquipments(
+					this.ConvertEquipments(
+						this.HaveEquipments
+							.Where( ( equipment ) => equipment.EquipablePlaceIds
+								.Any( equipablePlaceId => equipablePlaceId == id )
+							).ToList()
+					)
+				);
+
+				// 表示切替
+				this.CustomizeWindowModel.windowName.Value = WindowNameEnum.Equipments;
+
+			}
+
+			Logger.Debug( "End" );
+		}
+
 		#endregion
 
 		#region Viewイベント
@@ -322,18 +380,7 @@ namespace Presenters.Customize {
 			Logger.Debug( $"Body Id is {bodyId}" );
 
 			// 素体IDからどの素体が選ばれたか調べる
-			this.CreatedCharacter = this.HaveBodies.FirstOrDefault( body => bodyId == body.Id.Value );
-			string bodyName = "None";
-			if( this.CreatedCharacter == null ) {
-				Logger.Warning( "Created Character is Null" );
-			}
-			bodyName = this.CreatedCharacter.Name;
-
-			// 選ばれた素体に装備できる一覧を設定する
-			this.CustomizeView.SetEquipablePlaces( this.ConvertEquipablePlaces( this.CreatedCharacter.EquipablePlaces ) );
-
-			// 素体ボタンの名前変更
-			this.CustomizeView.SetBodyButtonText( bodyName );
+			this.CreatedCharacterModel.Value = this.HaveBodies.FirstOrDefault( body => body.Id.HasValue && bodyId == body.Id.Value );
 
 			// 表示切替
 			this.CustomizeWindowModel.windowName.Value = WindowNameEnum.EquipmentMenu;
@@ -363,20 +410,7 @@ namespace Presenters.Customize {
 		public void ClickedEquipablePlaceNodeDecisionButtonEvent( int equipablePlaceId ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Equipable Place Id is {equipablePlaceId}" );
-
-			// 装備可能箇所IDから所持装備のうち、装備できるものだけリストにする
-			this.CustomizeView.SetEquipments( 
-				this.ConvertEquipments( 
-					this.HaveEquipments
-						.Where( ( equipment ) => equipment.EquipablePlaceIds
-							.Any( id => equipablePlaceId == id ) 
-						).ToList()
-				) 
-			);
-
-			// 表示切替
-			this.CustomizeWindowModel.windowName.Value = WindowNameEnum.Equipments;
-
+			this.SelectedEquipablePlace.Value = equipablePlaceId;
 			Logger.Debug( "End" );
 		}
 
@@ -387,10 +421,30 @@ namespace Presenters.Customize {
 		public void ClickedEquipmentNodeDecisionButtonEvent( int equipmentId ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Equipment Id is {equipmentId}" );
-			
+
+			int selectedEquipablePlaceId = this.SelectedEquipablePlace.Value.Value;
+			Logger.Debug( $"Selected Equipable Place Id is {selectedEquipablePlaceId}." );
+
+			// CreatedCharacterに装備させる
+			this.CreatedCharacterModel.Value.EquipablePlaces
+				.FirstOrDefault(
+					equipablePlace => equipablePlace.Id.Value == selectedEquipablePlaceId
+				)
+				.EquipmentModel = this.HaveEquipments.FirstOrDefault( equipment => equipment.Id.Value.Value == equipmentId );
+
+			// 一覧更新
+			this.CustomizeView.UpdateEquipablePlaceText( 
+				selectedEquipablePlaceId , 
+				this.HaveEquipments.FirstOrDefault( equipment => equipment.Id.Value.Value == equipmentId ).Name 
+			);
+						
 			// 表示切替
 			this.CustomizeWindowModel.windowName.Value = WindowNameEnum.EquipmentMenu;
 
+			// 装備を選択しておく
+			this.CustomizeView.SetSelectedEquipablePlaceGameObject();
+
+			
 			Logger.Debug( "End" );
 		}
 
@@ -493,17 +547,17 @@ namespace Presenters.Customize {
 			List<EquipmentModel> list = new List<EquipmentModel>() {
 				new EquipmentModel() {
 					Id = new ReactiveProperty<int?>(0) ,
-					Name = "ビームサーベル" ,
+					Name = "鉛筆" ,
 					EquipablePlaceIds = { 0 , 1 , 3 }
 				} ,
 				new EquipmentModel() {
 					Id = new ReactiveProperty<int?>(1) ,
-					Name = "バズーカ" ,
+					Name = "シャーペン" ,
 					EquipablePlaceIds = { 0 , 1 , 2 }
 				} ,
 				new EquipmentModel() {
 					Id = new ReactiveProperty<int?>(2) ,
-					Name = "ニードルガン" ,
+					Name = "消しゴム" ,
 					EquipablePlaceIds = { 3 , 4 , 5 , 6 }
 				}
 			};

@@ -34,6 +34,11 @@ namespace Views.Customize {
 			public string Name { set; get; }
 
 			/// <summary>
+			/// 装備名
+			/// </summary>
+			public string EquipmanetName { set; get; }
+
+			/// <summary>
 			/// 決定ボタン押下時イベントハンドラ
 			/// </summary>
 			public Action OnClickDecisionEventHandler { set; get; }
@@ -269,8 +274,11 @@ namespace Views.Customize {
 				node.transform.SetParent( this.equipablePlaceScrollViewContent.transform , false );
 				equipablePlaceGameObjects.Add( node );
 				EquipablePlaceNodeView view = node.GetComponent<EquipablePlaceNodeView>();
+				view.Id = equipablePlace.Id;
+				view.PartName = equipablePlace.Name;
+
 				view.OnClickDecisionButtonEventHandler = equipablePlace.OnClickDecisionEventHandler;
-				view.SetText( equipablePlace.Name , null );
+				view.SetText( equipablePlace.EquipmanetName );
 			} );
 
 			foreach( int i in Enumerable.Range( 0 , equipablePlaceGameObjects.Count ) ) {
@@ -283,6 +291,27 @@ namespace Views.Customize {
 				button.navigation = nav;
 			}
 			
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 装備可能箇所のテキスト更新
+		/// </summary>
+		/// <param name="name">装備可能箇所ID</param>
+		/// <param name="EquipmentName">装備名</param>
+		public void UpdateEquipablePlaceText( int id , string equipmentName ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Id is {id}." );
+			Logger.Debug( $"Equipment Name is {equipmentName}." );
+
+			foreach( Transform childTransform in this.equipablePlaceScrollViewContent.transform ) {
+				EquipablePlaceNodeView view = childTransform.GetComponent<EquipablePlaceNodeView>();
+				if( id == view.Id ) {
+					view.SetText( equipmentName );
+					break;
+				}
+			}
+
 			Logger.Debug( "End" );
 		}
 

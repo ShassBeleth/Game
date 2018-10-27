@@ -8,6 +8,16 @@ namespace Views.Customize {
 	/// 装備可能箇所一覧のNodeにつくView
 	/// </summary>
 	public class EquipablePlaceNodeView : MonoBehaviour {
+
+		/// <summary>
+		/// ID
+		/// </summary>
+		public int Id { set; get; }
+
+		/// <summary>
+		/// 装備可能箇所名
+		/// </summary>
+		public string PartName { set; get; }
 		
 		/// <summary>
 		/// 決定ボタン押下時イベントハンドラ
@@ -26,13 +36,11 @@ namespace Views.Customize {
 		/// <summary>
 		/// テキストの変更
 		/// </summary>
-		/// <param name="partName">装備可能箇所名</param>
 		/// <param name="equipmentName">装備名</param>
-		public void SetText( string partName , string equipmentName ) {
+		public void SetText( string equipmentName ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( $"Part Name is {partName}." );
 			Logger.Debug( $"Equipment Name is {equipmentName}." );
-			this.transform.GetChild( 0 ).GetComponent<Text>().text = $"{partName}:{(equipmentName ?? "None")}";
+			this.transform.GetChild( 0 ).GetComponent<Text>().text = $"{this.PartName}:{(equipmentName ?? "None")}";
 			Logger.Debug( "End" );
 		}
 

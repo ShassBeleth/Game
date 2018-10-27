@@ -11,7 +11,7 @@ namespace Models.Charactor {
 		/// <summary>
 		/// ID
 		/// </summary>
-		public ReactiveProperty<int?> Id { set; get; } = new ReactiveProperty<int?>();
+		public ReactiveProperty<int?> Id { set; get; } = new ReactiveProperty<int?>(null);
 
 		/// <summary>
 		/// 素体名

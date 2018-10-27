@@ -1,4 +1,5 @@
 ﻿using System;
+using UniRx;
 using UnityEngine;
 
 namespace Views.Title {
@@ -25,9 +26,11 @@ namespace Views.Title {
 
 			// 何かキーが押された時、初回のみ
 			if( !this.IsClickAnyKey && Input.anyKey ) {
-				Logger.Debug( "Start : Click Any Key is false." );
 				this.IsClickAnyKey = true;
-				this.OnClickAnyKeyEventHandler?.Invoke();
+				Observable.NextFrame().Subscribe( _ => {
+					Logger.Debug( "Start : Click Any Key is false." );
+					this.OnClickAnyKeyEventHandler?.Invoke();
+				} );
 				Logger.Debug( "End" );
 			}
 
