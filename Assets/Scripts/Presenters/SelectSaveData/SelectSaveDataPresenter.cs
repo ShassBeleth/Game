@@ -16,6 +16,7 @@ namespace Presenters.SelectSaveData {
 	/// <summary>
 	/// セーブデータ選択Presenter
 	/// </summary>
+	/// <remarks>カーソルを動かしただけではイベントが発火しないので、Navigationを使わずにカーソル移動させている</remarks>
 	public class SelectSaveDataPresenter {
 
 		#region Model
