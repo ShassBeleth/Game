@@ -20,6 +20,11 @@ namespace Views.ChapterSelect {
 		public Text text;
 
 		/// <summary>
+		/// ラインの座標
+		/// </summary>
+		public Transform lineTransform;
+
+		/// <summary>
 		/// 決定ボタン押下時イベントハンドラ
 		/// </summary>
 		public Action OnClickDecisionButtonEventHandler { set; get; }
@@ -42,7 +47,7 @@ namespace Views.ChapterSelect {
 			this.text.text = text;
 			Logger.Debug( "End" );
 		}
-
+		
 	}
 
 }

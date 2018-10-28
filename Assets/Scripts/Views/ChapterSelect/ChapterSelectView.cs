@@ -57,6 +57,16 @@ namespace Views.ChapterSelect {
 			/// </summary>
 			public bool IsShownScrollView { set; get; }
 
+			/// <summary>
+			/// ライン上の座標
+			/// </summary>
+			public int CoodinateOnLine { set; get; }
+
+			/// <summary>
+			/// ノードの座標
+			/// </summary>
+			public int NodeCoodinate { set; get; }
+
 		}
 
 		/// <summary>
@@ -89,8 +99,20 @@ namespace Views.ChapterSelect {
 		/// タイムラインを設定する
 		/// </summary>
 		/// <param name="chapterList">Chapter List</param>
-		public void SetTimelineContent( List<int> chapterList ) {
+		public void SetTimelineContent( List<Chapter> chapterList ) {
 			Logger.Debug( "Start" );
+			chapterList.ForEach( ( chapter ) => {
+
+				GameObject node = GameObject.Instantiate( this.TimelineNodePrefab );
+				node.transform.SetParent( this.TimelineContent.transform , false );
+
+				TimelineChapterNodeView view = node.GetComponent<TimelineChapterNodeView>();
+				view.Id = chapter.Id;
+				view.IsSelected = false;
+				view.SetNodeCoodinate( chapter.NodeCoodinate );
+				view.SetCoodinateOnLine( chapter.CoodinateOnLine );
+				
+			} );
 
 			Logger.Debug( "End" );
 		}
@@ -101,7 +123,14 @@ namespace Views.ChapterSelect {
 		/// <param name="id">Chapter Id</param>
 		public void SetSelectedTimelineNode( int id ) {
 			Logger.Debug( "Start" );
-
+			foreach( Transform childTransform in this.TimelineContent.transform ) {
+				TimelineChapterNodeView view = childTransform.GetComponent<TimelineChapterNodeView>();
+				if( view == null ) {
+					Logger.Debug( "Continue" );
+					continue;
+				}
+				view.IsSelected = view.Id == id;
+			}
 			Logger.Debug( "End" );
 		}
 		

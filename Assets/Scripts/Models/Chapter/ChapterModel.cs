@@ -35,6 +35,16 @@
 		/// </summary>
 		public bool IsCleared { set; get; }
 
+		/// <summary>
+		/// ノードの座標
+		/// </summary>
+		public int NodeCoodinate { set; get; }
+
+		/// <summary>
+		/// タイムライン上の座標
+		/// </summary>
+		public int CoodinateOnLine { set; get; }
+
 	}
 
 }

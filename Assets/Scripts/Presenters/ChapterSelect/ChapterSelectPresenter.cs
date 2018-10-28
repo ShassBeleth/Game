@@ -75,12 +75,16 @@ namespace Presenters.ChapterSelect {
 			// 全チャプターの情報をリストで保持
 			this.chapters = this.GetChapterData( parameter.SaveDataId );
 			this.chapterSelectView.SetScrollViewContent( this.ConvertChapterModel( this.chapters ) );
-			this.chapterSelectView.SetTimelineContent( this.chapters.Select( chapter => chapter.Id ).ToList() );
+			// タイムラインにはクリアした項目のみ渡す
+			this.chapterSelectView.SetTimelineContent( 
+				this.ConvertChapterModel( 
+					this.chapters.Where( chapter => chapter.IsCleared ).ToList() 
+				) 
+			);
 			
 			// ModelのSubscribeを設定
 			this.InitialModelSubscribeSetting();
-
-
+			
 			Logger.Debug( "End" );
 
 		}
@@ -105,7 +109,9 @@ namespace Presenters.ChapterSelect {
 					TimelineOrder = models[ index ].TimelineOrder ,
 					OnClickDecisionButtonEventHandler = () => this.ClickedDecisionButtonEvent( models[ index ].Id ) ,
 					IsShownScrollView = models[ index ].IsCleared ,
-					IsShownTimeline = models[ index ].IsCleared
+					IsShownTimeline = models[ index ].IsCleared ,
+					NodeCoodinate = models[ index ].NodeCoodinate ,
+					CoodinateOnLine = models[ index ].CoodinateOnLine
 				} );
 			}
 			Logger.Debug( "End" );
@@ -139,6 +145,7 @@ namespace Presenters.ChapterSelect {
 			this.userControllerView.MenuButtons[ "CursorDown" ].Subscribe( value => this.ChangedCursorDown( value ) );
 			this.userControllerView.MenuButtons[ "CursorLeft" ].Subscribe( value => this.ChangedCursorLeft( value ) );
 			this.userControllerView.MenuButtons[ "CursorRight" ].Subscribe( value => this.ChangedCursorRight( value ) );
+			this.userControllerView.MenuButtons[ "Cancel" ].Subscribe( value => this.ChangedCancel( value ) );
 			Logger.Debug( "End" );
 		}
 
@@ -249,11 +256,13 @@ namespace Presenters.ChapterSelect {
 
 			Logger.Debug( "End" );
 		}
-		
+
 		/// <summary>
 		/// 十字左変更時イベント
 		/// </summary>
 		/// <param name="value">値</param>
+		/// TODO 未クリアの項目を選択中に左右ボタン押下で先頭か末尾が選ばれてしまう
+		/// 一番近いものを選択するようにする
 		private void ChangedCursorLeft( int value ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Value is {value}." );
@@ -265,8 +274,35 @@ namespace Presenters.ChapterSelect {
 				return;
 			}
 
+			int selectedChapterId = this.chapterSelectView.GetSelectedChapterId();
+			Logger.Debug( $"Selected Chapter Id is {selectedChapterId}." );
 
+			IOrderedEnumerable<ChapterModel> sortedAndClearedOnlyChapters = this.chapters
+				// クリア済みに絞り込む
+				.Where( chapter => chapter.IsCleared )
+				// 時系列順にソート
+				.OrderByDescending( chapter => chapter.TimelineOrder );
 
+			// 選択中のチャプターの次のチャプターを取得
+			ChapterModel nextObject = sortedAndClearedOnlyChapters
+				// 選択中のチャプターまでスキップ
+				.SkipWhile( chapter => chapter.Id != selectedChapterId )
+				// 選択中のチャプターをスキップ
+				.Skip( 1 )
+				// 先頭を取得
+				.FirstOrDefault();
+
+			// 選択中のチャプターが一覧の末尾だった場合は先頭を選択
+			if( nextObject == null ) {
+				Logger.Debug( "Next Object is Null." );
+				nextObject = sortedAndClearedOnlyChapters.FirstOrDefault();
+			}
+			else {
+				Logger.Debug( $"Next Object Id is {nextObject.Id}." );
+			}
+
+			this.selectedChapterId.Value = nextObject.Id;
+			
 			Logger.Debug( "End" );
 		}
 		
@@ -274,6 +310,8 @@ namespace Presenters.ChapterSelect {
 		/// 十字右変更時イベント
 		/// </summary>
 		/// <param name="value">値</param>
+		/// TODO 未クリアの項目を選択中に左右ボタン押下で先頭か末尾が選ばれてしまう
+		/// 一番近いものを選択するようにする
 		private void ChangedCursorRight( int value ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Value is {value}." );
@@ -284,7 +322,54 @@ namespace Presenters.ChapterSelect {
 			if( !( value == 1 || ( 30 < value && value % 10 == 0 ) ) ) {
 				return;
 			}
+			
+			int selectedChapterId = this.chapterSelectView.GetSelectedChapterId();
+			Logger.Debug( $"Selected Chapter Id is {selectedChapterId}." );
 
+			IOrderedEnumerable<ChapterModel> sortedAndClearedOnlyChapters = this.chapters
+				// クリア済みに絞り込む
+				.Where( chapter => chapter.IsCleared )
+				// 時系列順にソート
+				.OrderBy( chapter => chapter.TimelineOrder );
+
+			// 選択中のチャプターの次のチャプターを取得
+			ChapterModel nextObject = sortedAndClearedOnlyChapters
+				// 選択中のチャプターまでスキップ
+				.SkipWhile( chapter => chapter.Id != selectedChapterId )
+				// 選択中のチャプターをスキップ
+				.Skip( 1 )
+				// 先頭を取得
+				.FirstOrDefault();
+
+			// 選択中のチャプターが一覧の末尾だった場合は先頭を選択
+			if( nextObject == null ) {
+				Logger.Debug( "Next Object is Null." );
+				nextObject = sortedAndClearedOnlyChapters.FirstOrDefault();
+			}
+			else {
+				Logger.Debug( $"Next Object Id is {nextObject.Id}." );
+			}
+
+			this.selectedChapterId.Value = nextObject.Id;
+			
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// キャンセルボタン押下時イベント
+		/// </summary>
+		/// <param name="value">値</param>
+		private void ChangedCancel( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+
+			if( value != 1 ) {
+				return;
+			}
+
+			SceneManager.GetInstance().LoadScene( "SelectSaveData" , new SelectSaveDataParameter() {
+				IsSinglePlayMode = this.isSinglePlayMode
+			} );
 
 			Logger.Debug( "End" );
 		}
@@ -326,11 +411,13 @@ namespace Presenters.ChapterSelect {
 					Name = "Chapter1-" + i ,
 					Detail = "おなかすいた" + i ,
 					NumberOrder = i ,
-					TimelineOrder = i ,
-					IsCleared = i % 2 == 0
+					TimelineOrder = i,
+					IsCleared = i % 2 == 0 ,
+					NodeCoodinate = -600 + i * 130 ,
+					CoodinateOnLine = -630 + ( i % 5 ) * 30
 				} );
 			}
-
+			
 			Logger.Debug( "End" );
 			return list;
 		}

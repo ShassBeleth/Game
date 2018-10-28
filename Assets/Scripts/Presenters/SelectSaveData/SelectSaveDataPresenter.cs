@@ -99,7 +99,7 @@ namespace Presenters.SelectSaveData {
 			// Viewを取得
 			this.SelectSaveDataView = GameObject.Find( "Canvas" ).GetComponent<SelectSaveDataView>();
 			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
-
+			
 			Logger.Debug( "End" );
 		}
 		
