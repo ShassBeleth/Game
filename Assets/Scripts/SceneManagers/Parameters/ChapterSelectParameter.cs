@@ -22,7 +22,7 @@ namespace SceneManagers.Parameters {
 		/// <summary>
 		/// セーブデータID
 		/// </summary>
-		public int Id { set; get; }
+		public int SaveDataId { set; get; }
 		
 		/// <summary>
 		/// 一人プレイかどうか

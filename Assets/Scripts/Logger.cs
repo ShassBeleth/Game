@@ -1,5 +1,4 @@
-﻿
-using System.Diagnostics;
+﻿using System.Diagnostics;
 /// <summary>
 /// Logger設定クラス
 /// </summary>

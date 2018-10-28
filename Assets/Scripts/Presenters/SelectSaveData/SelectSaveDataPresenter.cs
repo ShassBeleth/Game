@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Models;
+using Models.Chapter;
 using Saves.Models;
 using Saves.Serializers;
 using SceneManagers;
@@ -260,7 +261,7 @@ namespace Presenters.SelectSaveData {
 			if( singlePlaySaveDataModel?.clearedChapters != null ) {
 				foreach( ChapterSaveDataModel chapter in singlePlaySaveDataModel.clearedChapters ) {
 					model.clearedChapters.Add( new ChapterModel() {
-						id = chapter.id ,
+						Id = chapter.id ,
 						Name = chapter.Name
 					} );
 				}
@@ -342,7 +343,7 @@ namespace Presenters.SelectSaveData {
 			Logger.Debug( "Start" );
 
 			ChapterSelectParameter parameter = new ChapterSelectParameter() {
-				Id = saveDataModel.id ,
+				SaveDataId = saveDataModel.id ,
 				IsSinglePlayMode = this.isSinglePlayMode
 			};
 			parameter.ClearedChapters = new List<ChapterSelectParameter.Chapter>();
@@ -351,7 +352,7 @@ namespace Presenters.SelectSaveData {
 				foreach( ChapterModel chapter in saveDataModel.clearedChapters ) {
 					parameter.ClearedChapters.Add(
 						new ChapterSelectParameter.Chapter {
-							Id = chapter.id
+							Id = chapter.Id
 						}
 					);
 				}
