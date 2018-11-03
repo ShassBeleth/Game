@@ -128,7 +128,12 @@ namespace Views.SelectSaveData {
 		/// <summary>
 		/// パネル
 		/// </summary>
-		public GameObject panel;
+		public GameObject Panel;
+
+		/// <summary>
+		/// パネル内のコンテント
+		/// </summary>
+		public GameObject ContentInPanel;
 
 		/// <summary>
 		/// パネルの表示
@@ -138,13 +143,13 @@ namespace Views.SelectSaveData {
 		public void ShowPanel( int? saveIndex , SaveData save ) {
 			Logger.Debug( "Start" );
 			if( saveIndex.HasValue ) {
-				this.panel.SetActive( true );
+				this.Panel.SetActive( true );
 
 				// パネル内のButton取得
-				Button continueButton = this.panel.transform.Find( "ContinueButton" ).GetComponent<Button>();
-				Button chapterSelectButton = this.panel.transform.Find( "ChapterSelectButton" ).GetComponent<Button>();
-				Button copyButton = this.panel.transform.Find( "CopyButton" ).GetComponent<Button>();
-				Button deleteButton = this.panel.transform.Find( "DeleteButton" ).GetComponent<Button>();
+				Button continueButton = this.ContentInPanel.transform.Find( "ContinueButton" ).GetComponent<Button>();
+				Button chapterSelectButton = this.ContentInPanel.transform.Find( "ChapterSelectButton" ).GetComponent<Button>();
+				Button copyButton = this.ContentInPanel.transform.Find( "CopyButton" ).GetComponent<Button>();
+				Button deleteButton = this.ContentInPanel.transform.Find( "DeleteButton" ).GetComponent<Button>();
 
 				// ボタン押下時イベント設定
 				continueButton.onClick.AddListener( () => save.OnClickContinueButtonEventHandler() );
@@ -153,7 +158,7 @@ namespace Views.SelectSaveData {
 				deleteButton.onClick.AddListener( () => save.OnClickDeleteButtonEventHandler() );
 			}
 			else {
-				this.panel.SetActive( false );
+				this.Panel.SetActive( false );
 			}
 			Logger.Debug( "End" );
 		}
@@ -164,7 +169,7 @@ namespace Views.SelectSaveData {
 		/// <param name="index">セーブデータのindex</param>
 		public void SetSelectedButtonInPanel( int index ) {
 			Logger.Debug( "Start" );
-			this.eventSystem.SetSelectedGameObject( this.panel.transform.Find( "ContinueButton" ).gameObject );
+			this.eventSystem.SetSelectedGameObject( this.ContentInPanel.transform.Find( "ContinueButton" ).gameObject );
 			Logger.Debug( "End" );
 		}
 
