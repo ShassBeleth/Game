@@ -1,14 +1,15 @@
 ﻿namespace Models.Customize {
 	
 	/// <summary>
-	/// Window名列挙
+	/// 選択状態列挙
 	/// </summary>
-	public enum WindowNameEnum {
+	public enum SelectableNameEnum {
+		None ,
 		EquipmentMenu ,
+		EquipablePlaceScrollView ,
 		Body ,
 		Equipments ,
 		ParameterMenu ,
-		None
 	}
 	
 }

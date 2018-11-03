@@ -8,17 +8,20 @@ namespace Models.Customize {
 	public class CustomizeWindowModel {
 
 		/// <summary>
-		/// Window名
+		/// 選択状態
 		/// </summary>
-		public ReactiveProperty<WindowNameEnum> windowName;
+		public ReactiveProperty<SelectableNameEnum> SelectableName { set; get; }
+
+		public SelectableNameEnum BeforeSelectableName { set; get; }
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="windowName">Window名</param>
-		public CustomizeWindowModel( WindowNameEnum windowName ) {
+		/// <param name="selectableName">選択状態</param>
+		public CustomizeWindowModel( SelectableNameEnum selectableName ) {
 			Logger.Debug( "Start" );
-			this.windowName = new ReactiveProperty<WindowNameEnum>( windowName );
+			this.SelectableName = new ReactiveProperty<SelectableNameEnum>( selectableName );
+			this.BeforeSelectableName = SelectableNameEnum.None;
 			Logger.Debug( "End" );
 		}
 

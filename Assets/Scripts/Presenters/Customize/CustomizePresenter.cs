@@ -21,7 +21,7 @@ namespace Presenters.Customize {
 		/// <summary>
 		/// WindowModel
 		/// </summary>
-		private CustomizeWindowModel CustomizeWindowModel { set; get; } = new CustomizeWindowModel( WindowNameEnum.None );
+		private CustomizeWindowModel CustomizeWindowModel { set; get; } = new CustomizeWindowModel( SelectableNameEnum.None );
 
 		/// <summary>
 		/// 持っている素体一覧
@@ -96,7 +96,7 @@ namespace Presenters.Customize {
 			this.CustomizeView.SetParameterChips( this.parameterChips );
 
 			// 初期表示
-			this.CustomizeWindowModel.windowName.Value = WindowNameEnum.EquipmentMenu;
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipmentMenu;
 
 			Logger.Debug( "End" );
 		}
@@ -209,9 +209,7 @@ namespace Presenters.Customize {
 			Logger.Debug( "Start" );
 			this.UserControllerView.TurnCharacter.Subscribe( value => { this.ChangedTurnCharacter( value ); } );
 			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
-			this.UserControllerView.MenuButtons[ "CursorLeft" ].Subscribe( ( value ) => { this.ChangedCursorLeftButton( value ); } );
-			this.UserControllerView.MenuButtons[ "CursorRight" ].Subscribe( ( value ) => { this.ChangedCursorRightButton( value ); } );
-			this.CustomizeWindowModel.windowName.Subscribe( ( windowName ) => this.ChangedWindowName( windowName ) );
+			this.CustomizeWindowModel.SelectableName.Subscribe( ( selectableName ) => this.ChangedSelectableName( selectableName ) );
 			this.CreatedCharacterModel.Subscribe( ( bodyModel ) => this.ChangedBodyModel( bodyModel ) );
 			this.SelectedEquipablePlace.Subscribe( id => this.ChangedSelectedEquipablePlace( id ) );
 			Logger.Debug( "End" );
@@ -222,32 +220,80 @@ namespace Presenters.Customize {
 		#region ModelのSubscribeによるイベント
 
 		/// <summary>
-		/// Window名変更時イベント
+		/// 選択状態変更時イベント
 		/// </summary>
-		/// <param name="windowName">Window名</param>
-		private void ChangedWindowName( WindowNameEnum windowName ) {
+		/// <param name="selectableName">選択状態</param>
+		private void ChangedSelectableName( SelectableNameEnum selectableName ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( $"Window Name is {windowName}." );
-			switch( windowName ) {
-				case WindowNameEnum.EquipmentMenu:
-					this.SelectedEquipablePlace.Value = null;
-					this.CustomizeView.ShowEquipmentMenu();
+			Logger.Debug( $"Selectable Name is {selectableName}." );
+			Logger.Debug( $"Before Selectable Name is {this.CustomizeWindowModel.BeforeSelectableName}." );
+			switch( selectableName ) {
+				case SelectableNameEnum.None:
 					break;
-				case WindowNameEnum.Body:
+
+				case SelectableNameEnum.EquipmentMenu:
+					// 遷移元の選択状態を調べる
+					switch( this.CustomizeWindowModel.BeforeSelectableName ) {
+						case SelectableNameEnum.None:
+							this.CustomizeView.ShowEquipmentMenu();
+							this.CustomizeView.SetSelectedGameObject( this.CustomizeView.BodyButton );
+							break;
+						case SelectableNameEnum.Body:
+							this.CustomizeView.ShowEquipmentMenu();
+							this.CustomizeView.SetSelectedGameObject( this.CustomizeView.BodyButton );
+							break;
+						case SelectableNameEnum.EquipablePlaceScrollView:
+							this.CustomizeView.SetSelectedGameObject( this.CustomizeView.EquipablePlaceGameObject );
+							break;
+						case SelectableNameEnum.ParameterMenu:
+							this.CustomizeView.ShowEquipmentMenu();
+							this.CustomizeView.SetSelectedGameObject( this.CustomizeView.BodyButton );
+							break;
+					}
+					break;
+
+				case SelectableNameEnum.EquipablePlaceScrollView:
+
+					this.SelectedEquipablePlace.Value = null;
+
+					// 遷移元の選択状態を調べる
+					switch( this.CustomizeWindowModel.BeforeSelectableName ) {
+						case SelectableNameEnum.EquipmentMenu:
+							this.CustomizeView.SetSelectedEquipablePlaceGameObject();
+							break;
+						case SelectableNameEnum.Equipments:
+							this.CustomizeView.ShowEquipmentMenu();
+							this.CustomizeView.SetSelectedEquipablePlaceGameObject();
+							break;
+						default:
+							Logger.Warning( "Unexpected Window Name" );
+							break;
+					}
+					break;
+
+				case SelectableNameEnum.Body:
 					this.CustomizeView.ShowEquipmentBodies();
 					this.CustomizeView.SetSelectedBody( this.CreatedCharacterModel.Value.Id.Value );
 					break;
-				case WindowNameEnum.Equipments:
+
+				case SelectableNameEnum.Equipments:
 					this.CustomizeView.ShowEquipments();
 					this.CustomizeView.SetSelectedEquipmentGameObject();
 					break;
-				case WindowNameEnum.ParameterMenu:
+
+				case SelectableNameEnum.ParameterMenu:
 					this.CustomizeView.ShowCustomParameter();
 					break;
+
 				default:
 					Logger.Warning( "Unexpected Window Name" );
 					break;
+
 			}
+
+			// 遷移元状態として保持
+			this.CustomizeWindowModel.BeforeSelectableName = selectableName;
+
 			Logger.Debug( "End" );
 		}
 
@@ -275,28 +321,29 @@ namespace Presenters.Customize {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Value is {value}." );
 
-			Logger.Debug( "End" );
-		}
+			if( value != 1 ) {
+				return;
+			}
 
-		/// <summary>
-		/// 十字左ボタン押下時イベント
-		/// </summary>
-		/// <param name="value">値</param>
-		private void ChangedCursorLeftButton( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
-			this.CustomizeWindowModel.windowName.Value = WindowNameEnum.ParameterMenu;
-			Logger.Debug( "End" );
-		}
+			switch( this.CustomizeWindowModel.SelectableName.Value ) {
+				case SelectableNameEnum.None:
+					break;
+				case SelectableNameEnum.Body:
+					this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipmentMenu;
+					break;
+				case SelectableNameEnum.EquipmentMenu:
+					break;
+				case SelectableNameEnum.EquipablePlaceScrollView:
+					this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipmentMenu;
+					break;
+				case SelectableNameEnum.Equipments:
+					this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipablePlaceScrollView;
+					break;
+				case SelectableNameEnum.ParameterMenu:
+					this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipmentMenu;
+					break;
+			}
 
-		/// <summary>
-		/// 十字右ボタン押下時イベント
-		/// </summary>
-		/// <param name="value">値</param>
-		private void ChangedCursorRightButton( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
-			this.CustomizeWindowModel.windowName.Value = WindowNameEnum.EquipmentMenu;
 			Logger.Debug( "End" );
 		}
 
@@ -340,10 +387,7 @@ namespace Presenters.Customize {
 							).ToList()
 					)
 				);
-
-				// 表示切替
-				this.CustomizeWindowModel.windowName.Value = WindowNameEnum.Equipments;
-
+				
 			}
 
 			Logger.Debug( "End" );
@@ -358,7 +402,7 @@ namespace Presenters.Customize {
 		/// </summary>
 		public void ClickedDecisionButtonEvent() {
 			Logger.Debug( "Start" );
-			SceneManager.GetInstance().LoadScene( "MainGame" , null );
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.ParameterMenu;
 			Logger.Debug( "End" );
 		}
 
@@ -367,7 +411,8 @@ namespace Presenters.Customize {
 		/// </summary>
 		public void ClickedBodyButtonFromMenuEvent() {
 			Logger.Debug( "Start" );
-			this.CustomizeWindowModel.windowName.Value = WindowNameEnum.Body;
+			// ウィンドウ表示切替
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.Body;
 			Logger.Debug( "End" );
 		}
 
@@ -382,12 +427,9 @@ namespace Presenters.Customize {
 			// 素体IDからどの素体が選ばれたか調べる
 			this.CreatedCharacterModel.Value = this.HaveBodies.FirstOrDefault( body => body.Id.HasValue && bodyId == body.Id.Value );
 
-			// 表示切替
-			this.CustomizeWindowModel.windowName.Value = WindowNameEnum.EquipmentMenu;
-
-			// 素体ボタンを選択状態にする
-			this.CustomizeView.SetSelectedGameObject( this.CustomizeView.BodyButton );
-
+			// ウィンドウ表示切替
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipmentMenu;
+			
 			Logger.Debug( "End" );
 		}
 
@@ -397,8 +439,8 @@ namespace Presenters.Customize {
 		public void ClickedEquipablePlaceScrollViewEvent() {
 			Logger.Debug( "Start" );
 
-			// 一覧の項目を強制的に選択状態にする
-			this.CustomizeView.SetSelectedEquipablePlaceGameObject();
+			// 一覧選択状態変更
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipablePlaceScrollView;
 
 			Logger.Debug( "End" );
 		}
@@ -410,7 +452,13 @@ namespace Presenters.Customize {
 		public void ClickedEquipablePlaceNodeDecisionButtonEvent( int equipablePlaceId ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Equipable Place Id is {equipablePlaceId}" );
+
+			// 選択中の装備可能箇所IDを保持
 			this.SelectedEquipablePlace.Value = equipablePlaceId;
+
+			// 表示切替
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.Equipments;
+
 			Logger.Debug( "End" );
 		}
 
@@ -439,11 +487,7 @@ namespace Presenters.Customize {
 			);
 						
 			// 表示切替
-			this.CustomizeWindowModel.windowName.Value = WindowNameEnum.EquipmentMenu;
-
-			// 装備を選択しておく
-			this.CustomizeView.SetSelectedEquipablePlaceGameObject();
-
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipablePlaceScrollView;
 			
 			Logger.Debug( "End" );
 		}
@@ -460,7 +504,7 @@ namespace Presenters.Customize {
 			List<BodyModel> list = new List<BodyModel>() {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(0) ,
-					Name = "A" ,
+					Name = "Alice" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(0) ,
@@ -487,7 +531,7 @@ namespace Presenters.Customize {
 				} ,
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(1) ,
-					Name = "B" ,
+					Name = "Agatha" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(0) ,
@@ -514,7 +558,1107 @@ namespace Presenters.Customize {
 				} ,
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(2) ,
-					Name = "C" ,
+					Name = "Amanda" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(3) ,
+					Name = "Beatrice" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(4) ,
+					Name = "Cassie" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(5) ,
+					Name = "Claire" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(6) ,
+					Name = "Claris" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(7) ,
+					Name = "Diana" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(8) ,
+					Name = "Eve" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(9) ,
+					Name = "Fiona" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(10) ,
+					Name = "Gillian" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(11) ,
+					Name = "Grace" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(12) ,
+					Name = "Hazel" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(13) ,
+					Name = "Iris" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(14) ,
+					Name = "Isabel" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(15) ,
+					Name = "Jane" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(16) ,
+					Name = "Jennifer" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(17) ,
+					Name = "Jessica" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(18) ,
+					Name = "Jessie" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(19) ,
+					Name = "Joanna" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(20) ,
+					Name = "Julia" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(21) ,
+					Name = "Julianne" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(22) ,
+					Name = "Kate" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(23) ,
+					Name = "Katherine" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(24) ,
+					Name = "Laura" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(25) ,
+					Name = "Layla" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(26) ,
+					Name = "Lily" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(27) ,
+					Name = "Lydia" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(28) ,
+					Name = "Mary" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(29) ,
+					Name = "Melinda" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(30) ,
+					Name = "Mia" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(30) ,
+					Name = "Nadia" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(31) ,
+					Name = "Natalie" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(32) ,
+					Name = "Nina" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(33) ,
+					Name = "Olivia" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(34) ,
+					Name = "Patricia" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(35) ,
+					Name = "Paula" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(36) ,
+					Name = "Phyllis" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(37) ,
+					Name = "Rachel" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(38) ,
+					Name = "Rebecca" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(39) ,
+					Name = "Rosa" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(40) ,
+					Name = "Sarah" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(41) ,
+					Name = "Sharon" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(42) ,
+					Name = "Sherry" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(43) ,
+					Name = "Shirley" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(44) ,
+					Name = "Sonia" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(45) ,
+					Name = "Sophia" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(46) ,
+					Name = "Sophie" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(47) ,
+					Name = "Stacy" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(48) ,
+					Name = "Stella" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(49) ,
+					Name = "Stephanie" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(50) ,
+					Name = "Sylvia" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(51) ,
+					Name = "Tina" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(52) ,
+					Name = "Tracy" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(53) ,
+					Name = "Viola" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(54) ,
+					Name = "Vivian" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(55) ,
+					Name = "Wendy" ,
+					EquipablePlaces = new List<EquipablePlaceModel>() {
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(5) ,
+							Name = "左足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						},
+						new EquipablePlaceModel() {
+							Id = new ReactiveProperty<int>(6) ,
+							Name = "右足" ,
+							EquipmentModel = new EquipmentModel() {
+								Id = null
+							}
+						}
+					}
+				} ,
+				new BodyModel(){
+					Id = new ReactiveProperty<int?>(56) ,
+					Name = "Wilhelmina" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
