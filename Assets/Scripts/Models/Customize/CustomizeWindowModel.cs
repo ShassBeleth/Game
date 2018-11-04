@@ -12,7 +12,15 @@ namespace Models.Customize {
 		/// </summary>
 		public ReactiveProperty<SelectableNameEnum> SelectableName { set; get; }
 
+		/// <summary>
+		/// 遷移元状態
+		/// </summary>
 		public SelectableNameEnum BeforeSelectableName { set; get; }
+
+		/// <summary>
+		/// 詳細窓表示
+		/// </summary>
+		public ReactiveProperty<bool> IsShownDetail { set; get; }
 
 		/// <summary>
 		/// コンストラクタ
@@ -22,6 +30,7 @@ namespace Models.Customize {
 			Logger.Debug( "Start" );
 			this.SelectableName = new ReactiveProperty<SelectableNameEnum>( selectableName );
 			this.BeforeSelectableName = SelectableNameEnum.None;
+			this.IsShownDetail = new ReactiveProperty<bool>( false );
 			Logger.Debug( "End" );
 		}
 

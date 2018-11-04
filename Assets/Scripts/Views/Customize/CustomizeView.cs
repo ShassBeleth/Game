@@ -319,6 +319,10 @@ namespace Views.Customize {
 		/// </summary>
 		public void SetSelectedEquipablePlaceGameObject() {
 			Logger.Debug( "Start" );
+			if( this.equipablePlaceScrollViewContent.transform.childCount == 0 ) {
+				Logger.Debug( "Equipable Place Scroll View Content Child Count is 0." );
+				return;
+			}
 			GameObject gameObject = this.equipablePlaceScrollViewContent.transform.GetChild( 0 ).gameObject;
 			this.eventSystem.SetSelectedGameObject( gameObject );
 			Logger.Debug( "End" );
@@ -504,6 +508,26 @@ namespace Views.Customize {
 			this.OnClickDecisionButtonEventHandler?.Invoke();
 			Logger.Debug( "End" );
 		}
+		#endregion
+
+		#region 詳細
+
+		/// <summary>
+		/// 詳細画面GameObject
+		/// </summary>
+		public GameObject DetailGameObject;
+
+		/// <summary>
+		/// 詳細画面のアクティブ設定
+		/// </summary>
+		/// <param name="isActive">アクティブかどうか</param>
+		public void SetDetailActive( bool isActive ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Active is {isActive}." );
+			this.DetailGameObject.SetActive( isActive );
+			Logger.Debug( "End" );
+		}
+
 		#endregion
 
 		/// <summary>

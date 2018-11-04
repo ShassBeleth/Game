@@ -209,9 +209,11 @@ namespace Presenters.Customize {
 			Logger.Debug( "Start" );
 			this.UserControllerView.TurnCharacter.Subscribe( value => { this.ChangedTurnCharacter( value ); } );
 			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
+			this.UserControllerView.MenuButtons[ "Detail" ].Subscribe( ( value ) => this.ChangedDetailButton( value ) );
 			this.CustomizeWindowModel.SelectableName.Subscribe( ( selectableName ) => this.ChangedSelectableName( selectableName ) );
 			this.CreatedCharacterModel.Subscribe( ( bodyModel ) => this.ChangedBodyModel( bodyModel ) );
 			this.SelectedEquipablePlace.Subscribe( id => this.ChangedSelectedEquipablePlace( id ) );
+			this.CustomizeWindowModel.IsShownDetail.Subscribe( ( isShownDetail ) => this.ChangedShownDetail( isShownDetail ) );
 			Logger.Debug( "End" );
 		}
 
@@ -393,6 +395,34 @@ namespace Presenters.Customize {
 			Logger.Debug( "End" );
 		}
 
+		/// <summary>
+		/// 詳細ボタン押下時イベント
+		/// </summary>
+		/// <param name="value">値</param>
+		private void ChangedDetailButton( int value ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Value is {value}." );
+			
+			if( value != 1 ) {
+				return;
+			}
+			
+			this.CustomizeWindowModel.IsShownDetail.Value = !this.CustomizeWindowModel.IsShownDetail.Value;
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 詳細窓の表示非表示
+		/// </summary>
+		/// <param name="isShownDetail"></param>
+		private void ChangedShownDetail( bool isShownDetail ) {
+			Logger.Debug( "Start" );
+			Logger.Debug( $"Shown Detail is {isShownDetail}." );
+			this.CustomizeView.SetDetailActive( isShownDetail );
+			Logger.Debug( "End" );
+		}
+		
 		#endregion
 
 		#region Viewイベント

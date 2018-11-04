@@ -225,6 +225,16 @@ Prefab:
       propertyPath: m_Text
       value: Main Menu
       objectReference: {fileID: 0}
+    - target: {fileID: 224884178755593362, guid: 61877455e3a88ef438082fc258f22f01,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 260
+      objectReference: {fileID: 0}
+    - target: {fileID: 224884178755593362, guid: 61877455e3a88ef438082fc258f22f01,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: -77
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61877455e3a88ef438082fc258f22f01, type: 2}
   m_IsPrefabAsset: 0
@@ -1394,6 +1404,16 @@ Prefab:
         type: 2}
       propertyPath: m_Text
       value: Option
+      objectReference: {fileID: 0}
+    - target: {fileID: 224884178755593362, guid: 61877455e3a88ef438082fc258f22f01,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 260
+      objectReference: {fileID: 0}
+    - target: {fileID: 224884178755593362, guid: 61877455e3a88ef438082fc258f22f01,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: -73
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61877455e3a88ef438082fc258f22f01, type: 2}
