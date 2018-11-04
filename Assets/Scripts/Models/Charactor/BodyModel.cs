@@ -19,6 +19,16 @@ namespace Models.Charactor {
 		public string Name { set; get; }
 
 		/// <summary>
+		/// 素体名ルビ
+		/// </summary>
+		public string Ruby { set; get; }
+
+		/// <summary>
+		/// フレーバーテキスト
+		/// </summary>
+		public string Flavor { set; get; }
+
+		/// <summary>
 		/// 装備可能箇所一覧
 		/// </summary>
 		public List<EquipablePlaceModel> EquipablePlaces { set; get; } = new List<EquipablePlaceModel>();

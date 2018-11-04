@@ -419,6 +419,19 @@ namespace Presenters.Customize {
 		private void ChangedShownDetail( bool isShownDetail ) {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Shown Detail is {isShownDetail}." );
+
+			// 詳細窓を表示する場合は選択状態を見て表示する内容を決める
+			if( isShownDetail ) {
+				if( this.CustomizeWindowModel.SelectableName.Value == SelectableNameEnum.EquipmentMenu ) {
+					CustomizeView.BodyDetail detail = new CustomizeView.BodyDetail() {
+						Name = this.CreatedCharacterModel.Value.Name ,
+						Ruby = this.CreatedCharacterModel.Value.Ruby ,
+						Flavor = this.CreatedCharacterModel.Value.Flavor
+					};
+					this.CustomizeView.SetBodyDetail( detail );
+				}
+			}
+
 			this.CustomizeView.SetDetailActive( isShownDetail );
 			Logger.Debug( "End" );
 		}
@@ -535,6 +548,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(0) ,
 					Name = "Alice" ,
+					Ruby = "アリス" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(0) ,
@@ -562,6 +577,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(1) ,
 					Name = "Agatha" ,
+					Ruby = "アガサ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(0) ,
@@ -589,6 +606,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(2) ,
 					Name = "Amanda" ,
+					Ruby = "アマンダ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -609,6 +628,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(3) ,
 					Name = "Beatrice" ,
+					Ruby = "ベアトリス" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -629,6 +650,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(4) ,
 					Name = "Cassie" ,
+					Ruby = "キャシー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -649,6 +672,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(5) ,
 					Name = "Claire" ,
+					Ruby = "クレア" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -669,6 +694,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(6) ,
 					Name = "Claris" ,
+					Ruby = "クラリス" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -689,6 +716,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(7) ,
 					Name = "Diana" ,
+					Ruby = "ダイアナ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -709,6 +738,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(8) ,
 					Name = "Eve" ,
+					Ruby = "イヴ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -729,6 +760,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(9) ,
 					Name = "Fiona" ,
+					Ruby = "フィオナ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -749,6 +782,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(10) ,
 					Name = "Gillian" ,
+					Ruby = "ジリアン" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -769,6 +804,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(11) ,
 					Name = "Grace" ,
+					Ruby = "グレイス" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -789,6 +826,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(12) ,
 					Name = "Hazel" ,
+					Ruby = "ヘーゼル" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -809,6 +848,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(13) ,
 					Name = "Iris" ,
+					Ruby = "アイリス" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -829,6 +870,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(14) ,
 					Name = "Isabel" ,
+					Ruby = "イザベル" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -849,6 +892,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(15) ,
 					Name = "Jane" ,
+					Ruby = "ジェーン" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -869,6 +914,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(16) ,
 					Name = "Jennifer" ,
+					Ruby = "ジェニファー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -889,6 +936,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(17) ,
 					Name = "Jessica" ,
+					Ruby = "ジェシカ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -909,6 +958,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(18) ,
 					Name = "Jessie" ,
+					Ruby = "ジェシー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -929,6 +980,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(19) ,
 					Name = "Joanna" ,
+					Ruby = "ジョアンナ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -949,6 +1002,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(20) ,
 					Name = "Julia" ,
+					Ruby = "ジュリア" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -969,6 +1024,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(21) ,
 					Name = "Julianne" ,
+					Ruby = "ジュリアン" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -989,6 +1046,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(22) ,
 					Name = "Kate" ,
+					Ruby = "ケイト" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1009,6 +1068,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(23) ,
 					Name = "Katherine" ,
+					Ruby = "キャサリン" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1029,6 +1090,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(24) ,
 					Name = "Laura" ,
+					Ruby = "ローラ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1049,6 +1112,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(25) ,
 					Name = "Layla" ,
+					Ruby = "レイラ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1069,6 +1134,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(26) ,
 					Name = "Lily" ,
+					Ruby = "リリー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1089,6 +1156,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(27) ,
 					Name = "Lydia" ,
+					Ruby = "リディア" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1109,6 +1178,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(28) ,
 					Name = "Mary" ,
+					Ruby = "マリー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1129,6 +1200,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(29) ,
 					Name = "Melinda" ,
+					Ruby = "マリンダ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1149,6 +1222,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(30) ,
 					Name = "Mia" ,
+					Ruby = "ミア" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1169,6 +1244,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(30) ,
 					Name = "Nadia" ,
+					Ruby = "ナディア" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1189,6 +1266,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(31) ,
 					Name = "Natalie" ,
+					Ruby = "ナタリー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1209,6 +1288,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(32) ,
 					Name = "Nina" ,
+					Ruby = "ニーナ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1229,6 +1310,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(33) ,
 					Name = "Olivia" ,
+					Ruby = "オリヴィア" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1249,6 +1332,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(34) ,
 					Name = "Patricia" ,
+					Ruby = "パトリシア" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1269,6 +1354,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(35) ,
 					Name = "Paula" ,
+					Ruby = "ポーラ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1289,6 +1376,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(36) ,
 					Name = "Phyllis" ,
+					Ruby = "フィリス" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1309,6 +1398,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(37) ,
 					Name = "Rachel" ,
+					Ruby = "レイチェル" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1329,6 +1420,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(38) ,
 					Name = "Rebecca" ,
+					Ruby = "レベッカ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1349,6 +1442,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(39) ,
 					Name = "Rosa" ,
+					Ruby = "ローザ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1369,6 +1464,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(40) ,
 					Name = "Sarah" ,
+					Ruby = "サラ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1389,6 +1486,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(41) ,
 					Name = "Sharon" ,
+					Ruby = "シャロン" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1409,6 +1508,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(42) ,
 					Name = "Sherry" ,
+					Ruby = "シェリー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1429,6 +1530,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(43) ,
 					Name = "Shirley" ,
+					Ruby = "シャーリー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1449,6 +1552,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(44) ,
 					Name = "Sonia" ,
+					Ruby = "ソニア" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1469,6 +1574,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(45) ,
 					Name = "Sophia" ,
+					Ruby = "ソフィア" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1489,6 +1596,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(46) ,
 					Name = "Sophie" ,
+					Ruby = "ソフィー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1509,6 +1618,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(47) ,
 					Name = "Stacy" ,
+					Ruby = "ステイシー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1529,6 +1640,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(48) ,
 					Name = "Stella" ,
+					Ruby = "ステラ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1549,6 +1662,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(49) ,
 					Name = "Stephanie" ,
+					Ruby = "ステファニー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1569,6 +1684,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(50) ,
 					Name = "Sylvia" ,
+					Ruby = "シルヴィア" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1589,6 +1706,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(51) ,
 					Name = "Tina" ,
+					Ruby = "ティナ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1609,6 +1728,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(52) ,
 					Name = "Tracy" ,
+					Ruby = "トレイシー" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1629,6 +1750,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(53) ,
 					Name = "Viola" ,
+					Ruby = "ヴィオラ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1649,6 +1772,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(54) ,
 					Name = "Vivian" ,
+					Ruby = "ビビアン" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1669,6 +1794,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(55) ,
 					Name = "Wendy" ,
+					Ruby = "ウェンディ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,
@@ -1689,6 +1816,8 @@ namespace Presenters.Customize {
 				new BodyModel(){
 					Id = new ReactiveProperty<int?>(56) ,
 					Name = "Wilhelmina" ,
+					Ruby = "ウィルミナ" ,
+					Flavor = "永遠の17歳" ,
 					EquipablePlaces = new List<EquipablePlaceModel>() {
 						new EquipablePlaceModel() {
 							Id = new ReactiveProperty<int>(5) ,

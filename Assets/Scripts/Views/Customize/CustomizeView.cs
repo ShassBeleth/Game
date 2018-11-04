@@ -110,6 +110,28 @@ namespace Views.Customize {
 
 		}
 		
+		/// <summary>
+		/// 詳細
+		/// </summary>
+		public class BodyDetail {
+
+			/// <summary>
+			/// 名前
+			/// </summary>
+			public string Name { set; get; }
+
+			/// <summary>
+			/// ルビ
+			/// </summary>
+			public string Ruby { set; get; }
+
+			/// <summary>
+			/// フレーバーテキスト
+			/// </summary>
+			public string Flavor { set; get; }
+
+		}
+
 		#region 素体関係
 		/// <summary>
 		/// BodyNodeのPrefab
@@ -518,6 +540,21 @@ namespace Views.Customize {
 		public GameObject DetailGameObject;
 
 		/// <summary>
+		/// 素体名
+		/// </summary>
+		public Text BodyNameText;
+
+		/// <summary>
+		/// 素体名ルビ
+		/// </summary>
+		public Text BodyRubyText;
+
+		/// <summary>
+		/// 素体フレーバーテキスト
+		/// </summary>
+		public Text BodyFlavorText;
+
+		/// <summary>
 		/// 詳細画面のアクティブ設定
 		/// </summary>
 		/// <param name="isActive">アクティブかどうか</param>
@@ -525,6 +562,29 @@ namespace Views.Customize {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Active is {isActive}." );
 			this.DetailGameObject.SetActive( isActive );
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 素体詳細設定
+		/// </summary>
+		/// <param name="detail">詳細情報</param>
+		public void SetBodyDetail( BodyDetail detail ) {
+			Logger.Debug( "Start" );
+
+			if( detail == null ) {
+				Logger.Warning( "Body Detail is Null." );
+				return;
+			}
+
+			Logger.Debug( $"Name is {detail.Name}." );
+			Logger.Debug( $"Ruby is {detail.Ruby}." );
+			Logger.Debug( $"Flavor is {detail.Flavor}." );
+
+			this.BodyNameText.text = detail.Name;
+			this.BodyRubyText.text = detail.Ruby;
+			this.BodyFlavorText.text = detail.Flavor;
+
 			Logger.Debug( "End" );
 		}
 
