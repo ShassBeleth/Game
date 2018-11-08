@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using SceneManagers;
+using Repositories;
+using System.Collections.Generic;
 
 /// <summary>
 /// アプリ起動時初期化
@@ -15,6 +17,11 @@ public class RuntimeInitializer : MonoBehaviour {
 
 		// SceneManager開始
 		SceneManager.GetInstance();
+		
+		List<Body> bodies = BodyRepository.GetInstance().Rows;
+		foreach( Body body in bodies ) {
+			Logger.Warning( $"{body.id}:{body.name} , {body.ruby} , {body.flavor}." );
+		}
 		
 		Logger.Debug( "End" );
 
