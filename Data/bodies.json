@@ -1,5 +1,5 @@
 {
-	"bodies" : [
+	"rows" : [
 		{"id":0,"name":"Alice","ruby":"アリス","flavor":"永遠の17歳"},
 		{"id":1,"name":"Agatha","ruby":"アガサ","flavor":"永遠の17歳"},
 		{"id":2,"name":"Beatrice","ruby":"ベアトリス","flavor":"永遠の17歳"},

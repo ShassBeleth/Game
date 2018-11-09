@@ -2,6 +2,7 @@
 using SceneManagers;
 using Repositories;
 using System.Collections.Generic;
+using Repositories.Models;
 
 /// <summary>
 /// アプリ起動時初期化
