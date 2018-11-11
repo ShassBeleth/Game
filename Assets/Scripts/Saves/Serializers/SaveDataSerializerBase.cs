@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-namespace Saves.Serializers {
+namespace SavesTemp.Serializers {
 
 	/// <summary>
 	/// セーブデータの読み書き親クラス

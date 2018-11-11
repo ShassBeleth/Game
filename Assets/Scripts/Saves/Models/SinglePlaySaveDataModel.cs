@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Saves.Models {
+namespace SavesTemp.Models {
 	
 	/// <summary>
 	/// 一人プレイのセーブデータのモデル

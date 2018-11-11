@@ -1,6 +1,6 @@
-﻿using Saves.Models;
+﻿using SavesTemp.Models;
 
-namespace Saves.Serializers {
+namespace SavesTemp.Serializers {
 
 	public class OptionSaveDataSerializer : SaveDataSerializerBase{
 

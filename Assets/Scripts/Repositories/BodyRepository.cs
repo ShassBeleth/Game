@@ -49,10 +49,7 @@ namespace Repositories {
 		/// </summary>
 		private BodyRepository() {
 			Logger.Debug( "Start" );
-
-			Logger.Debug( $"Directory Path is {this.DirectoryPath}." );
-			Logger.Debug( $"File Path is {this.FilePath}." );
-
+			
 			Bodies bodies = this.Load<Bodies>( this.FilePath );
 			this.Rows = bodies.rows;
 

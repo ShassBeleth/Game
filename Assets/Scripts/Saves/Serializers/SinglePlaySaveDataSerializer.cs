@@ -1,6 +1,6 @@
-﻿using Saves.Models;
+﻿using SavesTemp.Models;
 
-namespace Saves.Serializers {
+namespace SavesTemp.Serializers {
 
 	/// <summary>
 	/// 一人プレイセーブデータ読み書きクラス

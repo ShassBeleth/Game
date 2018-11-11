@@ -54,7 +54,6 @@ namespace Repositories {
 
 			Logger.Debug( "End" );
 			return data;
-
 		}
 
 		/// <summary>
@@ -92,7 +91,6 @@ namespace Repositories {
 			}
 
 			Logger.Debug( "End" );
-
 		}
 
 		/// <summary>
