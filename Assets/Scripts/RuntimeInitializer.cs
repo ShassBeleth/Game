@@ -18,20 +18,25 @@ public class RuntimeInitializer : MonoBehaviour {
 
 		// SceneManager開始
 		SceneManager.GetInstance();
-		
-		List<Body> bodies = BodyRepository.GetInstance().Rows;
-		/*
-		foreach( Body body in bodies ) {
-			Logger.Warning( $"{body.id}:{body.name} , {body.ruby} , {body.flavor}." );
-		}
-		*/
-		List<EquipablePlace> equipablePlaces = EquipablePlaceRepository.GetInstance().Rows;
-		foreach( EquipablePlace equipablePlace in equipablePlaces ) {
-			Logger.Warning( $"{equipablePlace.id}:{equipablePlace.name}." );
-		}
-		
+
+		// 各種リポジトリの起動
+		StartRepository();
+
 		Logger.Debug( "End" );
 
+	}
+
+	/// <summary>
+	/// 各種リポジトリの起動
+	/// </summary>
+	private static void StartRepository() {
+		Logger.Debug( "Start" );
+
+		BodyRepository.GetInstance();
+		EquipablePlaceRepository.GetInstance();
+		SaveRepository.GetInstance();
+
+		Logger.Debug( "End" );
 	}
 
 }

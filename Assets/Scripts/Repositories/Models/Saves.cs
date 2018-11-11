@@ -21,6 +21,17 @@ namespace Repositories.Models {
 	/// </summary>
 	[Serializable]
 	public class Save {
+
+		/// <summary>
+		/// ID
+		/// </summary>
+		public int id;
+
+		/// <summary>
+		/// 最終更新日時
+		/// </summary>
+		public string latestUpdateDatetime;
+
 	}
 
 }
