@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Repositories.Models {
 
 	/// <summary>
 	/// パラメータ一覧
 	/// </summary>
+	[Serializable]
 	public class Parameters {
 
 		/// <summary>
@@ -17,6 +19,7 @@ namespace Repositories.Models {
 	/// <summary>
 	/// パラメータ
 	/// </summary>
+	[Serializable]
 	public class Parameter {
 	}
 

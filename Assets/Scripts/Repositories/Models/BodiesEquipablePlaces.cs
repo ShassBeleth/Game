@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Repositories.Models {
 
 	/// <summary>
 	/// 素体：装備可能箇所一覧
 	/// </summary>
+	[Serializable]
 	public class BodiesEquipablePlaces {
 
 		/// <summary>
@@ -17,6 +19,7 @@ namespace Repositories.Models {
 	/// <summary>
 	/// 素体：装備可能箇所一覧
 	/// </summary>
+	[Serializable]
 	public class BodyEquipablePlace {
 	}
 

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Repositories.Models {
 
 	/// <summary>
 	/// チャプター一覧
 	/// </summary>
+	[Serializable]
 	public class Chapters {
 
 		/// <summary>
@@ -17,6 +19,7 @@ namespace Repositories.Models {
 	/// <summary>
 	/// チャプター
 	/// </summary>
+	[Serializable]
 	public class Chapter {
 	}
 

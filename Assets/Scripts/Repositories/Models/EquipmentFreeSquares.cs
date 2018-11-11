@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Repositories.Models {
 
 	/// <summary>
 	/// 装備することで増える空きマス一覧
 	/// </summary>
+	[Serializable]
 	public class EquipmentFreeSquares {
 
 		/// <summary>
@@ -17,6 +19,7 @@ namespace Repositories.Models {
 	/// <summary>
 	/// 装備することで増える空きマス
 	/// </summary>
+	[Serializable]
 	public class EquipmentFreeSquare {
 	}
 

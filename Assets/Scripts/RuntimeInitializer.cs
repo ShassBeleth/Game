@@ -20,8 +20,14 @@ public class RuntimeInitializer : MonoBehaviour {
 		SceneManager.GetInstance();
 		
 		List<Body> bodies = BodyRepository.GetInstance().Rows;
+		/*
 		foreach( Body body in bodies ) {
 			Logger.Warning( $"{body.id}:{body.name} , {body.ruby} , {body.flavor}." );
+		}
+		*/
+		List<EquipablePlace> equipablePlaces = EquipablePlaceRepository.GetInstance().Rows;
+		foreach( EquipablePlace equipablePlace in equipablePlaces ) {
+			Logger.Warning( $"{equipablePlace.id}:{equipablePlace.name}." );
 		}
 		
 		Logger.Debug( "End" );

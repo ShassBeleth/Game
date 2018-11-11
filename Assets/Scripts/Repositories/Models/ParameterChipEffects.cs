@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Repositories.Models {
 
 	/// <summary>
 	/// パラメータチップの効果一覧
 	/// </summary>
+	[Serializable]
 	public class ParameterChipEffects {
 
 		/// <summary>
@@ -16,6 +18,7 @@ namespace Repositories.Models {
 	/// <summary>
 	/// パラメータチップの効果
 	/// </summary>
+	[Serializable]
 	public class ParameterChipEffect {
 	}
 

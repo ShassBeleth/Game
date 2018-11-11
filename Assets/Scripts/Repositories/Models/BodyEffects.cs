@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Repositories.Models {
 
 	/// <summary>
 	/// 素体の効果一覧
 	/// </summary>
+	[Serializable]
 	public class BodyEffects {
 
 		/// <summary>
@@ -16,8 +18,8 @@ namespace Repositories.Models {
 
 	/// <summary>
 	/// 素体の効果
-	/// 
 	/// </summary>
+	[Serializable]
 	public class BodyEffect {
 	}
 

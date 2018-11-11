@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Repositories.Models {
 
 	/// <summary>
 	/// パラメータチップのマス一覧
 	/// </summary>
+	[Serializable]
 	public class ParameterChipSquares {
 
 		/// <summary>
@@ -16,6 +18,7 @@ namespace Repositories.Models {
 	/// <summary>
 	/// パラメータチップ
 	/// </summary>
+	[Serializable]
 	public class ParameterChipSquare {
 	}
 
