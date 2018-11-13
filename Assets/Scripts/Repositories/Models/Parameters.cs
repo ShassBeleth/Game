@@ -21,6 +21,17 @@ namespace Repositories.Models {
 	/// </summary>
 	[Serializable]
 	public class Parameter {
+		
+		/// <summary>
+		/// パラメータID
+		/// </summary>
+		public int id;
+
+		/// <summary>
+		/// パラメータ名
+		/// </summary>
+		public string name;
+		
 	}
 
 }
