@@ -26,6 +26,16 @@ namespace Repositories.Models {
 		/// ID
 		/// </summary>
 		public int id;
+		
+		/// <summary>
+		/// 垂直方向のカメラ移動を反転させるかどうか
+		/// </summary>
+		public bool isReverseVerticalCamera;
+
+		/// <summary>
+		/// 水平方向のカメラ移動を反転させるかどうか
+		/// </summary>
+		public bool isReverseHorizontalCamera;
 
 		/// <summary>
 		/// 最終更新日時

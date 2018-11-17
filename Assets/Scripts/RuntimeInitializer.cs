@@ -35,10 +35,10 @@ public class RuntimeInitializer : MonoBehaviour {
 		BodyRepository.GetInstance();
 		EquipablePlaceRepository.GetInstance();
 		SaveRepository.GetInstance();
-		List<Parameter> parameters = ParameterRepository.GetInstance().Rows;
-		foreach( Parameter parameter in parameters ) {
-			Logger.Warning( $"{parameter.id}:{parameter.name}." );
-		}
+		ParameterRepository.GetInstance();
+		ChapterRepository.GetInstance();
+		ChapterClearStatusRepository.GetInstance();
+
 		Logger.Debug( "End" );
 	}
 
