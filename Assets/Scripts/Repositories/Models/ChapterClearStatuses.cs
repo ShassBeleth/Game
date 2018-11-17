@@ -21,6 +21,17 @@ namespace Repositories.Models {
 	/// </summary>
 	[Serializable]
 	public class ChapterClearStatus {
+
+		/// <summary>
+		/// セーブID
+		/// </summary>
+		public int saveId;
+
+		/// <summary>
+		/// チャプターID
+		/// </summary>
+		public int chapterId;
+
 	}
 
 }

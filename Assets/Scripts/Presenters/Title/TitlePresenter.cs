@@ -1,7 +1,5 @@
 ﻿using Models;
 using Models.Title;
-using SavesTemp.Models;
-using SavesTemp.Serializers;
 using Services.Scenes;
 using Services.Scenes.Parameters;
 using UniRx;
@@ -95,13 +93,8 @@ namespace Presenters.Title {
 			
 			// Optionの設定
 			{
-				// オプション設定値をストレージから取得
-				OptionSaveDataModel optionSaveDataModel = OptionSaveDataSerializer.LoadOptionSaveData();
-				// Modelに値を入れる
-				this.optionModel = new OptionModel(
-					optionSaveDataModel?.isReverseVerticalCamera ?? false ,
-					optionSaveDataModel?.isReverseHorizontalCamera ?? false
-				);
+				// TODO オプション設定値をストレージから取得
+				
 				// Viewに渡せる形に変換してから渡す
 				OptionView.OptionValue optionValue = this.ConvertOptionValue( this.optionModel );
 				// オプション設定値の設定
@@ -358,11 +351,8 @@ namespace Presenters.Title {
 			// 設定値の取得
 			OptionView.OptionValue optionValue = this.OptionView.GetOptionValue();
 
-			// 設定値の保存
-			this.ConvertOptionModel( optionValue , ref this.optionModel );
-			OptionSaveDataSerializer.WriteOptionSaveData(
-				this.ConvertSaveDataModel( this.optionModel )
-			);
+			// TODO 設定値の保存
+			
 			Logger.Debug( "End" );
 		}
 
@@ -375,8 +365,8 @@ namespace Presenters.Title {
 			Logger.Debug( "Start" );
 			Logger.Debug( "End" );
 			return new OptionView.OptionValue() {
-				IsReverseVerticalCamera = model.IsReverseVerticalCamera.Value ,
-				IsReverseHorizontalCamera = model.IsReverseHorizontalCamera.Value
+				IsReverseVerticalCamera = model?.IsReverseVerticalCamera?.Value ?? false ,
+				IsReverseHorizontalCamera = model?.IsReverseHorizontalCamera?.Value ?? false
 			};
 		}
 
@@ -390,20 +380,6 @@ namespace Presenters.Title {
 			optionModel.IsReverseVerticalCamera.Value = optionValue.IsReverseVerticalCamera;
 			optionModel.IsReverseHorizontalCamera.Value = optionValue.IsReverseHorizontalCamera;
 			Logger.Debug( "End" );
-		}
-
-		/// <summary>
-		/// OptionModelをオプションセーブデータモデルに変換
-		/// </summary>
-		/// <param name="optionValue">画面上のオプションの項目</param>
-		/// <param name="optionModel">オプションModel</param>
-		private OptionSaveDataModel ConvertSaveDataModel ( OptionModel optionModel ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( "End" );
-			return new OptionSaveDataModel() {
-				isReverseVerticalCamera = optionModel.IsReverseVerticalCamera.Value ,
-				isReverseHorizontalCamera = optionModel.IsReverseHorizontalCamera.Value
-			};
 		}
 
 	}

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Models;
-using Models.Chapter;
-using SavesTemp.Models;
-using SavesTemp.Serializers;
+using Services.Saves;
 using Services.Scenes;
 using Services.Scenes.Parameters;
 using UniRx;
@@ -22,10 +20,10 @@ namespace Presenters.SelectSaveData {
 		#region Model
 
 		/// <summary>
-		/// セーブデータ選択Model
+		/// 選択されたセーブデータのId
 		/// </summary>
-		private SelectSaveDataModel selectSaveDataModel;
-		
+		public ReactiveProperty<int> selectedSaveDataId = new ReactiveProperty<int>( -1 );
+
 		#endregion
 
 		#region View
@@ -49,8 +47,13 @@ namespace Presenters.SelectSaveData {
 		/// </summary>
 		private SceneService sceneService = SceneService.GetInstance();
 
-		#endregion
+		/// <summary>
+		/// セーブService
+		/// </summary>
+		private SaveService saveService = SaveService.GetInstance();
 
+		#endregion
+		
 		/// <summary>
 		/// 一人プレイかどうか
 		/// </summary>
@@ -69,34 +72,24 @@ namespace Presenters.SelectSaveData {
 			// Viewの設定
 			this.InitialViewSetting();
 
-			// Model変更時イベント設定
-			this.selectSaveDataModel = new SelectSaveDataModel( null , new List<SaveDataModel>() {
-				this.ConvertSaveDataModel( 0 , SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 0 ) ) ,
-				this.ConvertSaveDataModel( 1 , SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 1 ) ) ,
-				this.ConvertSaveDataModel( 2 , SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 2 ) ) ,
-				this.ConvertSaveDataModel( 3 , SinglePlaySaveDataSerializer.LoadSinglePlaySaveData( 3 ) )
-			} );
-
 			// ModelのSubscribeを設定
 			this.InitialModelSubscribeSetting();
 
 			// セーブデータをViewに必要な情報に加工
-			List<SelectSaveDataView.SaveData> saveDataList = new List<SelectSaveDataView.SaveData>() {
-				this.ConvertSaveDataOfView( 0 ) ,
-				this.ConvertSaveDataOfView( 1 ) ,
-				this.ConvertSaveDataOfView( 2 ) ,
-				this.ConvertSaveDataOfView( 3 )
-			};
+			List<SelectSaveDataView.SaveData> saveDataList = this.saveService.GetSaves()
+				.Select( s => ConvertSaveDataOfPresenterToSaveDataOfView( s ) )
+				.OrderBy( s => s.Id )
+				.ToList();
 
 			// セーブデータリストの描画
 			this.SelectSaveDataView.SetSaveDataList( saveDataList );
 			
 			// Save1が選ばれている状態にしておく
-			this.SelectSaveDataView.SetSelectedSaveData( this.SelectSaveDataView.saves[ 0 ] );
+			this.SelectSaveDataView.SetSelectedSaveData( this.SelectSaveDataView.Saves[ 0 ] );
 
 			Logger.Debug( "End" );
 		}
-
+		
 		#region 初期設定
 
 		/// <summary>
@@ -117,7 +110,7 @@ namespace Presenters.SelectSaveData {
 		/// </summary>
 		private void InitialModelSubscribeSetting() {
 			Logger.Debug( "Start" );
-			this.selectSaveDataModel.selectedSaveDataIndex.Subscribe( ( index ) => this.ChangedSelectSaveData( index ) ).AddTo( this.SelectSaveDataView );
+			this.selectedSaveDataId.Subscribe( ( id ) => this.ChangedSelectSaveData( id ) ).AddTo( this.SelectSaveDataView );
 			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } ).AddTo( this.SelectSaveDataView );
 			Logger.Debug( "End" );
 		}
@@ -129,23 +122,27 @@ namespace Presenters.SelectSaveData {
 		/// <summary>
 		/// 選択されたセーブデータ変更時イベント
 		/// </summary>
-		/// <param name="index">選択されたセーブデータのIndex</param>
-		private void ChangedSelectSaveData( int? index ) {
+		/// <param name="index">選択されたセーブデータのId</param>
+		private void ChangedSelectSaveData( int id ) {
 			Logger.Debug( "Start" );
+			List<SaveDataModel> saves = this.saveService.GetSaves();
+			SaveDataModel save = saves.FirstOrDefault( s => s.id == id );
 
-			if( index.HasValue ) {
-				if( !this.selectSaveDataModel.saveData[ index.Value ].exsitsAlreadyData ) {
-
+			if( save != null ) {
+				if( !save.exsitsAlreadyData ) {
 					// 値がある場合でセーブデータがない場合はセーブデータを作成し遷移
-					this.selectSaveDataModel.saveData[ index.Value ] = this.ConvertSaveDataModel( index.Value , this.CreateSinglePlaySaveData( index.Value ) );
+					this.saveService.CreateNewSave( id );
 					Logger.Warning( "未実装" );
-
 				}
 				else {
 
+					int index = saves
+						.Select( ( content , i ) => new { Content = content , Index = i } )
+						.FirstOrDefault( element => element.Content.id == id ).Index;
+
 					// 値がある場合でセーブデータがある場合はパネルを表示
-					this.SelectSaveDataView.ShowPanel( index , this.ConvertSaveDataOfView( index.Value ) );
-					this.SelectSaveDataView.SetSelectedButtonInPanel( index.Value );
+					this.SelectSaveDataView.ShowPanel( index , this.ConvertSaveDataOfPresenterToSaveDataOfView( save ) );
+					this.SelectSaveDataView.SetSelectedButtonInPanel( index );
 
 				}
 			}
@@ -164,9 +161,9 @@ namespace Presenters.SelectSaveData {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Value is {value}." );
 			if( value == 1 ) {
-				Logger.Warning( $"Selected Save Data Index is {( this.selectSaveDataModel.selectedSaveDataIndex.HasValue ? this.selectSaveDataModel.selectedSaveDataIndex.Value.ToString() : "Null" )}." );
+				Logger.Warning( $"Selected Save Data Index is {this.selectedSaveDataId.Value}." );
 				// パネルが非表示ならタイトルに戻る
-				if( !this.selectSaveDataModel.selectedSaveDataIndex.Value.HasValue ) {
+				if( this.selectedSaveDataId.Value == -1 ) {
 					Logger.Debug( "Panel Don't show" );
 					TitleParameter parameter = new TitleParameter() {
 						InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu
@@ -176,8 +173,8 @@ namespace Presenters.SelectSaveData {
 				// パネルが表示されているならパネルを非表示にする
 				else {
 					Logger.Debug( "Close Panel" );
-					this.SelectSaveDataView.SetSelectedSaveData( this.SelectSaveDataView.saves[ this.selectSaveDataModel.selectedSaveDataIndex.Value.Value ] );
-					this.selectSaveDataModel.selectedSaveDataIndex.Value = null;
+					this.SelectSaveDataView.SetSelectedSaveData( this.SelectSaveDataView.Saves[ this.selectedSaveDataId.Value ] );
+					this.selectedSaveDataId.Value = -1;
 				}
 			}
 			Logger.Debug( "End" );
@@ -190,20 +187,20 @@ namespace Presenters.SelectSaveData {
 		/// <summary>
 		/// セーブデータ選択時イベント
 		/// </summary>
-		/// <param name="index">index</param>
-		private void ClickedSaveData( int index ) {
+		/// <param name="id">id</param>
+		private void ClickedSaveData( int id ) {
 			Logger.Debug( "Start" );
-			this.selectSaveDataModel.selectedSaveDataIndex.Value = index;
+			this.selectedSaveDataId.Value = id;
 			Logger.Debug( "End" );
 		}
 
 		/// <summary>
 		/// 続きからボタン押下時イベント
 		/// </summary>
-		/// <param name="index">index</param>
-		private void ClickedContinueButtonEvent( int index ) {
+		/// <param name="id">id</param>
+		private void ClickedContinueButtonEvent( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( $"Index is {index}" );
+			Logger.Debug( $"Id is {id}" );
 
 			Logger.Warning( "未実装" );
 
@@ -213,13 +210,20 @@ namespace Presenters.SelectSaveData {
 		/// <summary>
 		/// チャプターセレクトボタン押下時イベント
 		/// </summary>
-		/// <param name="index">Index</param>
-		private void ClickedChapterSelectButtonEvent( int index ) {
+		/// <param name="id">Id</param>
+		private void ClickedChapterSelectButtonEvent( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( $"Index is {index}" );
+			Logger.Debug( $"Id is {id}" );
+			SaveDataModel save = this.saveService.GetSaves().FirstOrDefault( s => s.id == id );
+			ChapterSelectParameter parameter = new ChapterSelectParameter() {
+				SaveDataId = save.id ,
+				IsSinglePlayMode = this.isSinglePlayMode ,
+				ClearedChapters
+					= save.clearedChapters
+						.Select( c => new ChapterSelectParameter.Chapter() { Id = c.Id } ).ToList()
+			};
 
-			// チャプターセレクトに遷移
-			this.TransitionToChapterSelect( this.selectSaveDataModel.saveData[ index ] );
+			this.sceneService.LoadScene( "ChapterSelect" , parameter );
 
 			Logger.Debug( "End" );
 		}
@@ -227,10 +231,10 @@ namespace Presenters.SelectSaveData {
 		/// <summary>
 		/// コピーボタン押下時イベント
 		/// </summary>
-		/// <param name="index">index</param>
-		private void ClickedCopyButtonEvent( int index ) {
+		/// <param name="id">id</param>
+		private void ClickedCopyButtonEvent( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( $"Index is {index}" );
+			Logger.Debug( $"Id is {id}" );
 
 			Logger.Warning( "未実装" );
 			Logger.Debug( "End" );
@@ -239,12 +243,12 @@ namespace Presenters.SelectSaveData {
 		/// <summary>
 		/// 削除ボタン押下時イベント
 		/// </summary>
-		/// <param name="index">index</param>
-		private void ClickedDeleteButtonEvent( int index ) {
+		/// <param name="id">id</param>
+		private void ClickedDeleteButtonEvent( int id ) {
 			Logger.Debug( "Start" );
-			Logger.Debug( $"Index is {index}" );
+			Logger.Debug( $"Id is {id}" );
 
-			SinglePlaySaveDataSerializer.DeleteSinglePlaySaveData( index );
+			this.saveService.DeleteSaveData( id );
 
 			// TODO レイアウトの更新
 
@@ -253,125 +257,32 @@ namespace Presenters.SelectSaveData {
 
 		#endregion
 
-		/// <summary>
-		/// 読み込んだセーブデータをModelに変換する
-		/// </summary>
-		/// <param name="id">ID</param>
-		/// <param name="singlePlaySaveDataModel">セーブデータ</param>
-		/// <returns></returns>
-		private SaveDataModel ConvertSaveDataModel( int id , SinglePlaySaveDataModel singlePlaySaveDataModel ) {
-			Logger.Debug( "Start" );
-			SaveDataModel model = new SaveDataModel() {
-				exsitsAlreadyData = singlePlaySaveDataModel != null ,
-				id = singlePlaySaveDataModel?.id ?? id ,
-				userName = singlePlaySaveDataModel?.userName ,
-				latestUpdateDateTime = singlePlaySaveDataModel?.latestUpdateDateTime ?? new DateTime() ,
-				clearedChapters = new List<ChapterModel>()
-			};
-			if( singlePlaySaveDataModel?.clearedChapters != null ) {
-				foreach( ChapterSaveDataModel chapter in singlePlaySaveDataModel.clearedChapters ) {
-					model.clearedChapters.Add( new ChapterModel() {
-						Id = chapter.id ,
-						Name = chapter.Name
-					} );
-				}
-			}
-			Logger.Debug( "End" );
-			return model;
-		}
+		#region 変換
 
 		/// <summary>
-		/// 読み込んだセーブデータをViewに渡す形に変換する
+		/// ModelをViewで使える形に変換する
 		/// </summary>
-		/// <param name="index">index</param>
-		/// <param name="singlePlaySaveDataModel">セーブデータModel</param>
-		/// <returns>Viewに表示するセーブデータ</returns>
-		private SelectSaveDataView.SaveData ConvertSaveDataOfView( int index ) {
+		/// <param name="model">Model</param>
+		/// <returns>Viewで使用する形</returns>
+		private SelectSaveDataView.SaveData ConvertSaveDataOfPresenterToSaveDataOfView( SaveDataModel model ) {
 			Logger.Debug( "Start" );
-
-			SelectSaveDataView.SaveData saveData = new SelectSaveDataView.SaveData() {
-				ExistsAlreadyData = this.selectSaveDataModel.saveData[index].exsitsAlreadyData ,
-				Id = this.selectSaveDataModel.saveData[ index ].id ,
-				userName = this.selectSaveDataModel.saveData[ index ].userName  ,
-				latestUpdateDateTime = this.selectSaveDataModel.saveData[ index ].latestUpdateDateTime ,
-				OnClickedSaveData = () => this.ClickedSaveData( index ) ,
-				OnClickContinueButtonEventHandler = () => this.ClickedContinueButtonEvent( index ) ,
-				OnClickChapterSelectButtonEventHandler = () => this.ClickedChapterSelectButtonEvent( index ) ,
-				OnClickCopyButtonEventHandler = () => this.ClickedCopyButtonEvent( index ) ,
-				OnClickDeleteButtonEventHandler = () => this.ClickedDeleteButtonEvent( index )
+			SelectSaveDataView.SaveData data = new SelectSaveDataView.SaveData() {
+				Id = model.id ,
+				ExistsAlreadyData = model.exsitsAlreadyData ,
+				userName = model.userName ,
+				latestUpdateDateTime = model.latestUpdateDateTime ,
+				OnClickedSaveData = () => this.ClickedSaveData( model.id ) ,
+				OnClickContinueButtonEventHandler = () => this.ClickedContinueButtonEvent( model.id ) ,
+				OnClickChapterSelectButtonEventHandler = () => this.ClickedChapterSelectButtonEvent( model.id ) ,
+				OnClickCopyButtonEventHandler = () => this.ClickedCopyButtonEvent( model.id ) ,
+				OnClickDeleteButtonEventHandler = () => this.ClickedDeleteButtonEvent( model.id )
 			};
-
 			Logger.Debug( "End" );
-			return saveData;
-		}
-		
-		/// <summary>
-		/// セーブデータを作成する
-		/// </summary>
-		/// <param name="index">index</param>
-		/// <returns>作成したセーブデータModel</returns>
-		private SinglePlaySaveDataModel CreateSinglePlaySaveData( int index ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Index is {index}" );
-
-			SinglePlaySaveDataModel model = new SinglePlaySaveDataModel() {
-				id = index ,
-				userName = Guid.NewGuid().ToString() ,
-				latestUpdateDateTime = new DateTime()
-			};
-			// TODO 仮
-			{
-				model.clearedChapters = new ChapterSaveDataModel[ 3 ];
-				model.clearedChapters[ 0 ] = new ChapterSaveDataModel() {
-					id = 4 ,
-					Name = "a"
-				};
-				model.clearedChapters[ 1 ] = new ChapterSaveDataModel() {
-					id = 7 ,
-					Name = "b"
-				};
-				model.clearedChapters[ 2 ] = new ChapterSaveDataModel() {
-					id = 13 ,
-					Name = "c"
-				};
-			}
-
-			this.selectSaveDataModel.saveData[ index ] = this.ConvertSaveDataModel( index , model );
-
-			// セーブデータに書き込み
-			SinglePlaySaveDataSerializer.WriteSinglePlaySaveData( index , model );
-
-			Logger.Debug( "End" );
-			return model;
+			return data;
 		}
 
-		/// <summary>
-		/// チャプター選択画面へ遷移
-		/// </summary>
-		/// <param name="saveDataModel">セーブデータモデル</param>
-		private void TransitionToChapterSelect( SaveDataModel saveDataModel ) {
-			Logger.Debug( "Start" );
+		#endregion
 
-			ChapterSelectParameter parameter = new ChapterSelectParameter() {
-				SaveDataId = saveDataModel.id ,
-				IsSinglePlayMode = this.isSinglePlayMode
-			};
-			parameter.ClearedChapters = new List<ChapterSelectParameter.Chapter>();
-			Logger.Debug( $"Cleared Chapters Length is {( saveDataModel.clearedChapters?.Count ?? 0 )}" );
-			if( saveDataModel.clearedChapters != null ) {
-				foreach( ChapterModel chapter in saveDataModel.clearedChapters ) {
-					parameter.ClearedChapters.Add(
-						new ChapterSelectParameter.Chapter {
-							Id = chapter.Id
-						}
-					);
-				}
-			}
-
-			this.sceneService.LoadScene( "ChapterSelect" , parameter );
-			Logger.Debug( "End" );
-		}
-		
 	}
 
 }

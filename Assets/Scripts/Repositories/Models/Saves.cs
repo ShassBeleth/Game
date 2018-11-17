@@ -26,7 +26,12 @@ namespace Repositories.Models {
 		/// ID
 		/// </summary>
 		public int id;
-		
+
+		/// <summary>
+		/// 既にセーブデータが存在するかどうか
+		/// </summary>
+		public bool exsitsAlreadyData;
+
 		/// <summary>
 		/// 垂直方向のカメラ移動を反転させるかどうか
 		/// </summary>

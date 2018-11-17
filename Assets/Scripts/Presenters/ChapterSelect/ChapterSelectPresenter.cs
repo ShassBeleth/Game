@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Models.Chapter;
+using Services.Chapters;
 using Services.Scenes;
 using Services.Scenes.Parameters;
 using UniRx;
@@ -49,6 +50,11 @@ namespace Presenters.ChapterSelect {
 		/// シーンService
 		/// </summary>
 		private SceneService sceneService = SceneService.GetInstance();
+
+		/// <summary>
+		/// チャプターService
+		/// </summary>
+		private ChapterService chapterService = ChapterService.GetInstance();
 
 		#endregion
 

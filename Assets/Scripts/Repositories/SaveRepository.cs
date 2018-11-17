@@ -57,5 +57,16 @@ namespace Repositories {
 
 		}
 
+		/// <summary>
+		/// セーブデータの書き込み
+		/// </summary>
+		public void Write() {
+			Logger.Debug( "Start" );
+			this.Write<Saves>( this.FilePath , new Saves() {
+				rows = this.Rows
+			} );
+			Logger.Debug( "End" );
+		}
+
 	}
 }

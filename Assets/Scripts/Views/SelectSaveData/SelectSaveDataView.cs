@@ -74,7 +74,7 @@ namespace Views.SelectSaveData {
 		/// <summary>
 		/// セーブデータ群
 		/// </summary>
-		public GameObject[] saves;
+		public GameObject[] Saves;
 		
 		/// <summary>
 		/// セーブデータの設定
@@ -83,7 +83,7 @@ namespace Views.SelectSaveData {
 		public void SetSaveDataList( List<SaveData> saveDataList ) {
 			Logger.Debug( "Start" );
 			
-			foreach( int i in Enumerable.Range( 0 , this.saves.Length ) ) {
+			foreach( int i in Enumerable.Range( 0 , this.Saves.Length ) ) {
 				int index = i;
 
 				Logger.Debug( $"Save Data List[ {index} ] {( !saveDataList[ index ].ExistsAlreadyData ? "Don't" : "" )} Exists Save Data" );
@@ -91,7 +91,7 @@ namespace Views.SelectSaveData {
 				Logger.Debug( $"User Name is {saveDataList[ index ].userName ?? "Null"}" );
 				Logger.Debug( $"Latest Update Date Time is {saveDataList[ index ].latestUpdateDateTime.ToString( "yyyy/MM/dd hh:mm:ss" )}" );
 				
-				GameObject save = this.saves[ index ];
+				GameObject save = this.Saves[ index ];
 				// ユーザ名表示
 				save.transform.Find( "UserNameText" ).GetComponent<Text>().text
 					= saveDataList[ index ].ExistsAlreadyData

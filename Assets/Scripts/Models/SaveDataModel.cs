@@ -9,6 +9,9 @@ namespace Models {
 	/// </summary>
 	public class SaveDataModel {
 
+		/// <summary>
+		/// 既にセーブデータが存在するかどうか
+		/// </summary>
 		public bool exsitsAlreadyData;
 
 		/// <summary>
