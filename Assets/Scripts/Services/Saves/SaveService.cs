@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Models;
 using Models.Chapter;
 using Repositories;
 using Repositories.Models;
+using Utils;
 
 namespace Services.Saves {
 
@@ -52,11 +51,6 @@ namespace Services.Saves {
 		#endregion
 		
 		/// <summary>
-		/// 日付フォーマット
-		/// </summary>
-		private static readonly string UpdateDateTimeFormat = "yyyy/MM/dd HH:mm:ss";
-		
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		private SaveService() {
@@ -89,7 +83,7 @@ namespace Services.Saves {
 				id = save.id ,
 				userName = "" ,
 				exsitsAlreadyData = save.exsitsAlreadyData ,
-				latestUpdateDateTime = this.ConvertStringToDateTime( save.latestUpdateDatetime ) ,
+				latestUpdateDateTime = DateTimeUtil.ConvertStringToDateTime( save.latestUpdateDatetime ) ,
 				clearedChapters = this.chapterClearStatusRepository.Rows
 						.Where( row => row.saveId == save.id )
 						.Select( row => new ChapterModel() { Id = row.chapterId } )
@@ -119,47 +113,14 @@ namespace Services.Saves {
 			Logger.Debug( "End" );
 			return this.ConvertModelOfRepositoryToModelOfPresenter( save );
 		}
-
-		/// <summary>
-		/// 日付文字列からDateTimeへの変換
-		/// </summary>
-		/// <param name="dateTimeString">日付文字列</param>
-		/// <returns>日付</returns>
-		public DateTime ConvertStringToDateTime( string dateTimeString ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Date Time String is {dateTimeString}." );
-
-			if( dateTimeString == null ) {
-				Logger.Warning( "Date Time is Null." );
-				return new DateTime();
-			}
-
-			DateTime dateTime;
-			try {
-				dateTime = DateTime.ParseExact(
-					dateTimeString ,
-					UpdateDateTimeFormat ,
-					DateTimeFormatInfo.InvariantInfo ,
-					DateTimeStyles.NoCurrentDateDefault
-				);
-			}
-			catch( Exception ) {
-				Logger.Warning( "Convert Error." );
-				Logger.Debug( "End" );
-				return new DateTime();
-			}
-
-			Logger.Debug( "End" );
-			return dateTime;
-		}
-
+		
 		/// <summary>
 		/// 指定フォーマットで現在日時を返す
 		/// </summary>
 		/// <returns>現在日時</returns>
 		public string GetNowString() {
 			Logger.Debug( "Start" );
-			string now = DateTime.Now.ToString( UpdateDateTimeFormat );
+			string now = DateTimeUtil.GetNowString();
 			Logger.Debug( $"Now is {now}." );
 			Logger.Debug( "End" );
 			return now;

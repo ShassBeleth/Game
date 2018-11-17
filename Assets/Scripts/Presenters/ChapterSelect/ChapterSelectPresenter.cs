@@ -17,12 +17,7 @@ namespace Presenters.ChapterSelect {
 	public class ChapterSelectPresenter {
 
 		#region Model
-
-		/// <summary>
-		/// チャプターリスト
-		/// </summary>
-		private List<ChapterModel> chapters = new List<ChapterModel>();
-
+		
 		/// <summary>
 		/// 選択中のチャプターID
 		/// </summary>
@@ -62,6 +57,11 @@ namespace Presenters.ChapterSelect {
 		/// 一人プレイかどうか
 		/// </summary>
 		private bool isSinglePlayMode;
+
+		/// <summary>
+		/// クリア済みチャプターID一覧
+		/// </summary>
+		private List<int> clearedChapterIds;
 		
 		/// <summary>
 		/// コンストラクタ
@@ -79,21 +79,28 @@ namespace Presenters.ChapterSelect {
 						cleardChapterIds += chapter.Id.ToString() + " ";
 					}
 				);
-				Logger.Debug( $"Cleared Chapter Id is {cleardChapterIds}" );
+				Logger.Warning( $"Cleared Chapter Id is {cleardChapterIds}" );
 			}
 
 			this.isSinglePlayMode = parameter.IsSinglePlayMode;
+			this.clearedChapterIds = parameter.ClearedChapters.Select( chapter => chapter.Id ).ToList();
 			
 			// Viewの初期設定
 			this.InitialViewSetting();
 
-			// 全チャプターの情報をリストで保持
-			this.chapters = this.GetChapterData( parameter.SaveDataId );
-			this.chapterSelectView.SetScrollViewContent( this.ConvertChapterModel( this.chapters ) );
+			// スクロールにチャプター一覧を渡す
+			this.chapterSelectView.SetScrollViewContent(
+				this.ConvertChapterModel(
+					this.chapterService.GetChapters( this.clearedChapterIds )
+				) 
+			);
 			// タイムラインにはクリアした項目のみ渡す
 			this.chapterSelectView.SetTimelineContent( 
 				this.ConvertChapterModel( 
-					this.chapters.Where( chapter => chapter.IsCleared ).ToList() 
+					this.chapterService.GetChapters( 
+						this.clearedChapterIds
+					)
+					.Where( chapter => chapter.IsCleared ).ToList() 
 				) 
 			);
 			
@@ -121,12 +128,12 @@ namespace Presenters.ChapterSelect {
 					Id = models[ index ].Id ,
 					Name = models[ index ].Name ,
 					NumberOrder = models[ index ].NumberOrder ,
-					TimelineOrder = models[ index ].TimelineOrder ,
+					TimelineOrder = 0 ,
 					OnClickDecisionButtonEventHandler = () => this.ClickedDecisionButtonEvent( models[ index ].Id ) ,
 					IsShownScrollView = models[ index ].IsCleared ,
 					IsShownTimeline = models[ index ].IsCleared ,
-					NodeCoodinate = models[ index ].NodeCoodinate ,
-					CoodinateOnLine = models[ index ].CoodinateOnLine
+					NodeCoodinate = 0 ,
+					CoodinateOnLine = 0
 				} );
 			}
 			Logger.Debug( "End" );
@@ -178,7 +185,8 @@ namespace Presenters.ChapterSelect {
 			this.chapterSelectView.SetSelectedScrollNode( id );
 			this.chapterSelectView.SetSelectedTimelineNode( id );
 			this.chapterSelectView.SetDetailText( 
-				this.chapters?.FirstOrDefault( (chapter) => chapter.Id == id )?.Detail ?? ""
+				this.chapterService.GetChapters( this.clearedChapterIds )
+					.FirstOrDefault( (chapter) => chapter.Id == id ).Detail
 			);
 			Logger.Debug( "End" );
 		}
@@ -203,7 +211,9 @@ namespace Presenters.ChapterSelect {
 
 			// チャプター順にソート
 			IOrderedEnumerable<ChapterModel> sortedChapters
-				= this.chapters.OrderByDescending( chapter => chapter.NumberOrder );
+				= this.chapterService
+					.GetChapters( this.clearedChapterIds )
+					.OrderByDescending( chapter => chapter.NumberOrder );
 
 			// 選択中のチャプターの次のチャプターを取得
 			ChapterModel nextObject = sortedChapters
@@ -247,7 +257,8 @@ namespace Presenters.ChapterSelect {
 
 			// チャプター順にソート
 			IOrderedEnumerable<ChapterModel> sortedChapters
-				= this.chapters.OrderBy( chapter => chapter.NumberOrder );
+				= this.chapterService.GetChapters( this.clearedChapterIds )
+					.OrderBy( chapter => chapter.NumberOrder );
 			
 			// 選択中のチャプターの次のチャプターを取得
 			ChapterModel nextObject = sortedChapters
@@ -292,11 +303,12 @@ namespace Presenters.ChapterSelect {
 			int selectedChapterId = this.chapterSelectView.GetSelectedChapterId();
 			Logger.Debug( $"Selected Chapter Id is {selectedChapterId}." );
 
-			IOrderedEnumerable<ChapterModel> sortedAndClearedOnlyChapters = this.chapters
-				// クリア済みに絞り込む
-				.Where( chapter => chapter.IsCleared )
-				// 時系列順にソート
-				.OrderByDescending( chapter => chapter.TimelineOrder );
+			IOrderedEnumerable<ChapterModel> sortedAndClearedOnlyChapters
+				= this.chapterService.GetChapters( this.clearedChapterIds )
+					// クリア済みに絞り込む
+					.Where( chapter => chapter.IsCleared )
+					// 時系列順にソート
+					.OrderByDescending( chapter => 0 );
 
 			// 選択中のチャプターの次のチャプターを取得
 			ChapterModel nextObject = sortedAndClearedOnlyChapters
@@ -341,11 +353,12 @@ namespace Presenters.ChapterSelect {
 			int selectedChapterId = this.chapterSelectView.GetSelectedChapterId();
 			Logger.Debug( $"Selected Chapter Id is {selectedChapterId}." );
 
-			IOrderedEnumerable<ChapterModel> sortedAndClearedOnlyChapters = this.chapters
-				// クリア済みに絞り込む
-				.Where( chapter => chapter.IsCleared )
-				// 時系列順にソート
-				.OrderBy( chapter => chapter.TimelineOrder );
+			IOrderedEnumerable<ChapterModel> sortedAndClearedOnlyChapters
+				= this.chapterService.GetChapters( this.clearedChapterIds )
+					// クリア済みに絞り込む
+					.Where( chapter => chapter.IsCleared )
+					// 時系列順にソート
+					.OrderBy( chapter => 0 );
 
 			// 選択中のチャプターの次のチャプターを取得
 			ChapterModel nextObject = sortedAndClearedOnlyChapters
@@ -408,34 +421,6 @@ namespace Presenters.ChapterSelect {
 		}
 
 		#endregion
-
-		/// <summary>
-		/// チャプター内のすべての情報を取得する
-		/// </summary>
-		/// <param name="saveDataId">セーブデータID</param>
-		/// <returns>チャプター一覧</returns>
-		/// TODO サーバ等からデータを取得する　returnで返ってくる値もサーバから取ってきた形のデータモデル
-		private List<ChapterModel> GetChapterData( int saveDataId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Save Data Id is {saveDataId}." );
-
-			List<ChapterModel> list = new List<ChapterModel>();
-			for(int i = 0 ; i < 100 ; i++ ) {
-				list.Add( new ChapterModel() {
-					Id = i ,
-					Name = "Chapter1-" + i ,
-					Detail = "おなかすいた" + i ,
-					NumberOrder = i ,
-					TimelineOrder = i,
-					IsCleared = i % 2 == 0 ,
-					NodeCoodinate = -600 + i * 130 ,
-					CoodinateOnLine = -630 + ( i % 5 ) * 30
-				} );
-			}
-			
-			Logger.Debug( "End" );
-			return list;
-		}
 		
 	}
 
