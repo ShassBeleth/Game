@@ -4,8 +4,8 @@ using Models;
 using Models.Chapter;
 using SavesTemp.Models;
 using SavesTemp.Serializers;
-using SceneManagers;
-using SceneManagers.Parameters;
+using Services.Scenes;
+using Services.Scenes.Parameters;
 using UniRx;
 using UnityEngine;
 using Views.SelectSaveData;
@@ -39,6 +39,15 @@ namespace Presenters.SelectSaveData {
 		/// UserControllerView
 		/// </summary>
 		private UserControllerView UserControllerView { set; get; }
+
+		#endregion
+
+		#region Service
+
+		/// <summary>
+		/// シーンService
+		/// </summary>
+		private SceneService sceneService = SceneService.GetInstance();
 
 		#endregion
 
@@ -162,7 +171,7 @@ namespace Presenters.SelectSaveData {
 					TitleParameter parameter = new TitleParameter() {
 						InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu
 					};
-					SceneManager.GetInstance().LoadScene( "Title" , parameter );
+					this.sceneService.LoadScene( "Title" , parameter );
 				}
 				// パネルが表示されているならパネルを非表示にする
 				else {
@@ -359,7 +368,7 @@ namespace Presenters.SelectSaveData {
 				}
 			}
 
-			SceneManager.GetInstance().LoadScene( "ChapterSelect" , parameter );
+			this.sceneService.LoadScene( "ChapterSelect" , parameter );
 			Logger.Debug( "End" );
 		}
 		

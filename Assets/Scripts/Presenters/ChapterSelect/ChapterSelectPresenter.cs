@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Models.Chapter;
-using SceneManagers;
-using SceneManagers.Parameters;
+using Services.Scenes;
+using Services.Scenes.Parameters;
 using UniRx;
 using UnityEngine;
 using Views.ChapterSelect;
@@ -40,6 +40,15 @@ namespace Presenters.ChapterSelect {
 		/// User Controller View
 		/// </summary>
 		private UserControllerView userControllerView;
+
+		#endregion
+
+		#region Service
+
+		/// <summary>
+		/// シーンService
+		/// </summary>
+		private SceneService sceneService = SceneService.GetInstance();
 
 		#endregion
 
@@ -367,7 +376,7 @@ namespace Presenters.ChapterSelect {
 				return;
 			}
 
-			SceneManager.GetInstance().LoadScene( "SelectSaveData" , new SelectSaveDataParameter() {
+			this.sceneService.LoadScene( "SelectSaveData" , new SelectSaveDataParameter() {
 				IsSinglePlayMode = this.isSinglePlayMode
 			} );
 
@@ -388,7 +397,7 @@ namespace Presenters.ChapterSelect {
 			CustomizeParameter parameter = new CustomizeParameter() {
 				
 			};
-			SceneManager.GetInstance().LoadScene( "Customize" , parameter );
+			this.sceneService.LoadScene( "Customize" , parameter );
 			Logger.Debug( "End" );
 		}
 

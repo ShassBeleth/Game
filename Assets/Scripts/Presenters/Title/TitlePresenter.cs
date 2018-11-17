@@ -2,8 +2,8 @@
 using Models.Title;
 using SavesTemp.Models;
 using SavesTemp.Serializers;
-using SceneManagers;
-using SceneManagers.Parameters;
+using Services.Scenes;
+using Services.Scenes.Parameters;
 using UniRx;
 using UnityEditor;
 using UnityEngine;
@@ -62,6 +62,15 @@ namespace Presenters.Title {
 		/// 何かキーを押してくださいView
 		/// </summary>
 		private PleasePushAnyKeyView PleasePushAnyKeyView { set; get; }
+
+		#endregion
+
+		#region Service
+
+		/// <summary>
+		/// シーンService
+		/// </summary>
+		private SceneService sceneService = SceneService.GetInstance();
 
 		#endregion
 
@@ -229,10 +238,10 @@ namespace Presenters.Title {
 					SelectSaveDataParameter parameter = new SelectSaveDataParameter() {
 						IsSinglePlayMode = this.nextSceneModel.IsSingleMode
 					};
-					SceneManager.GetInstance().LoadScene( sceneName , parameter );
+					this.sceneService.LoadScene( sceneName , parameter );
 					break;
 				default:
-					SceneManager.GetInstance().LoadScene( sceneName , null );
+					this.sceneService.LoadScene( sceneName , null );
 					break;
 			}
 

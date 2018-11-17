@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using SceneManagers;
 using Repositories;
 using System.Collections.Generic;
 using Repositories.Models;
+using Services.Scenes;
 
 /// <summary>
 /// アプリ起動時初期化
@@ -16,8 +16,8 @@ public class RuntimeInitializer : MonoBehaviour {
 	public static void Initialize() {
 		Logger.Debug( "Start" );
 
-		// SceneManager開始
-		SceneManager.GetInstance();
+		// SceneService開始
+		SceneService.GetInstance();
 
 		// 各種リポジトリの起動
 		StartRepository();

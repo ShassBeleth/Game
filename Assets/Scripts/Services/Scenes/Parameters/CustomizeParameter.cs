@@ -1,4 +1,4 @@
-﻿namespace SceneManagers.Parameters {
+﻿namespace Services.Scenes.Parameters {
 
 	/// <summary>
 	/// CustomizeSceneに使用するパラメータ

@@ -1,5 +1,5 @@
-﻿using SceneManagers;
-using SceneManagers.Parameters;
+﻿using Services.Scenes;
+using Services.Scenes.Parameters;
 using UnityEngine;
 using Views.Ranking;
 
@@ -20,6 +20,15 @@ namespace Presenters.Ranking {
 		/// ランキングView
 		/// </summary>
 		private RankingView rankingView { set; get; }
+
+		#endregion
+
+		#region Service
+
+		/// <summary>
+		/// シーンService
+		/// </summary>
+		private SceneService sceneService = SceneService.GetInstance();
 
 		#endregion
 
@@ -62,7 +71,7 @@ namespace Presenters.Ranking {
 		/// </summary>
 		private void ClickedBackButtonEvent() {
 			Logger.Debug( "Start" );
-			SceneManager.GetInstance().LoadScene(
+			this.sceneService.LoadScene(
 				"Title" ,
 				new TitleParameter() {
 					InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu

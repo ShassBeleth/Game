@@ -1,37 +1,41 @@
-﻿using Presenters.ChapterSelect;
-using Presenters.Customize;
+﻿using UnityEngine.SceneManagement;
+using Services.Scenes.Parameters;
+using Presenters.Title;
 using Presenters.Gallery;
 using Presenters.Ranking;
 using Presenters.SelectSaveData;
-using Presenters.Title;
-using SceneManagers.Parameters;
-using UnityEngine.SceneManagement;
+using Presenters.ChapterSelect;
+using Presenters.Customize;
 
-namespace SceneManagers {
+namespace Services.Scenes {
 
 	/// <summary>
-	/// シーンの管理
+	/// シーンService
 	/// </summary>
-	public class SceneManager {
+	public class SceneService {
+
+		#region シングルトン
 
 		/// <summary>
 		/// インスタンス
 		/// </summary>
-		private static SceneManager Instance;
-		
+		private static SceneService Instance = null;
+
 		/// <summary>
 		/// インスタンス取得
 		/// </summary>
-		/// <returns>SceneManager</returns>
-		public static SceneManager GetInstance() {
+		/// <returns>インスタンス</returns>
+		public static SceneService GetInstance() {
 			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null" );
-				Instance = new SceneManager();
+				Logger.Debug( "Instance is Null." );
+				Instance = new SceneService();
 			}
 			Logger.Debug( "End" );
 			return Instance;
 		}
+
+		#endregion
 
 		/// <summary>
 		/// 画面遷移時に渡すパラメータ
@@ -57,11 +61,11 @@ namespace SceneManagers {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		private SceneManager() {
+		private SceneService() {
 			Logger.Debug( "Start" );
 
 			// シーン切り替え時イベント追加
-			UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+			SceneManager.sceneLoaded += OnSceneLoaded;
 
 			if( EqualsActiveSceneName( "Title" ) ) {
 				Logger.Debug( "Active Scene Name Equals Title." );
@@ -71,7 +75,7 @@ namespace SceneManagers {
 			// 初期シーンがタイトルでなかったらタイトルに切り替え
 			else {
 				Logger.Warning( "Active Scene Name don't Equals Title." );
-				UnityEngine.SceneManagement.SceneManager.LoadScene( "Title" );
+				SceneManager.LoadScene( "Title" );
 			}
 
 			Logger.Debug( "End" );
@@ -85,7 +89,7 @@ namespace SceneManagers {
 		public void LoadScene( string sceneName , object parameter ) {
 			Logger.Debug( "Start" );
 			Parameter = parameter;
-			UnityEngine.SceneManagement.SceneManager.LoadScene( sceneName );
+			SceneManager.LoadScene( sceneName );
 			Logger.Debug( "End" );
 		}
 
@@ -98,7 +102,7 @@ namespace SceneManagers {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Scene Name is {sceneName}" );
 			Logger.Debug( "End" );
-			return UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals( sceneName );
+			return SceneManager.GetActiveScene().name.Equals( sceneName );
 		}
 
 		/// <summary>
@@ -148,7 +152,7 @@ namespace SceneManagers {
 					Logger.Warning( "Loaded Scene Name is Unexpected Name." );
 					break;
 			}
-			
+
 			// staticフィールドなので、一回使ったらパラメータ内を削除
 			Parameter = null;
 

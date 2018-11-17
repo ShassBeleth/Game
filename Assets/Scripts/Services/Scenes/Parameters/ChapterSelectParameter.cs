@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SceneManagers.Parameters {
+namespace Services.Scenes.Parameters {
 
 	/// <summary>
 	/// ChapterSelectSceneに使用するパラメータ

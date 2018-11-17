@@ -2,8 +2,8 @@
 using System.Linq;
 using Models.Charactor;
 using Models.Customize;
-using SceneManagers;
-using SceneManagers.Parameters;
+using Services.Scenes;
+using Services.Scenes.Parameters;
 using UniRx;
 using UnityEngine;
 using Views.Customize;
@@ -67,6 +67,15 @@ namespace Presenters.Customize {
 		/// ユーザ入力View
 		/// </summary>
 		private UserControllerView UserControllerView { set; get; }
+
+		#endregion
+		
+		#region Service
+
+		/// <summary>
+		/// シーンService
+		/// </summary>
+		private SceneService sceneService = SceneService.GetInstance();
 
 		#endregion
 
