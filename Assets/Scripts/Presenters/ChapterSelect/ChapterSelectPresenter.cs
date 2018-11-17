@@ -59,6 +59,11 @@ namespace Presenters.ChapterSelect {
 		private bool isSinglePlayMode;
 
 		/// <summary>
+		/// セーブデータID
+		/// </summary>
+		private int SaveDataId;
+
+		/// <summary>
 		/// クリア済みチャプターID一覧
 		/// </summary>
 		private List<int> clearedChapterIds;
@@ -83,6 +88,7 @@ namespace Presenters.ChapterSelect {
 			}
 
 			this.isSinglePlayMode = parameter.IsSinglePlayMode;
+			this.SaveDataId = parameter.SaveDataId;
 			this.clearedChapterIds = parameter.ClearedChapters.Select( chapter => chapter.Id ).ToList();
 			
 			// Viewの初期設定
@@ -414,7 +420,7 @@ namespace Presenters.ChapterSelect {
 			Logger.Debug( "Start" );
 			Logger.Debug( $"Chapter Id is {id}." );
 			CustomizeParameter parameter = new CustomizeParameter() {
-				
+				SaveId = this.SaveDataId
 			};
 			this.sceneService.LoadScene( "Customize" , parameter );
 			Logger.Debug( "End" );

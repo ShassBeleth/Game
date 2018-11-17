@@ -21,6 +21,17 @@ namespace Repositories.Models {
 	/// </summary>
 	[Serializable]
 	public class HavingBody {
+
+		/// <summary>
+		/// セーブID
+		/// </summary>
+		public int saveId;
+
+		/// <summary>
+		/// 素体ID
+		/// </summary>
+		public int bodyId;
+
 	}
 
 }

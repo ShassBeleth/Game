@@ -2,6 +2,7 @@
 using System.Linq;
 using Models.Charactor;
 using Models.Customize;
+using Services.Characters;
 using Services.Scenes;
 using Services.Scenes.Parameters;
 using UniRx;
@@ -22,17 +23,7 @@ namespace Presenters.Customize {
 		/// WindowModel
 		/// </summary>
 		private CustomizeWindowModel CustomizeWindowModel { set; get; } = new CustomizeWindowModel( SelectableNameEnum.None );
-
-		/// <summary>
-		/// 持っている素体一覧
-		/// </summary>
-		private List<BodyModel> HaveBodies { set; get; } = new List<BodyModel>();
-
-		/// <summary>
-		/// 装備一覧
-		/// </summary>
-		private List<EquipmentModel> HaveEquipments { set; get; } = new List<EquipmentModel>();
-
+		
 		/// <summary>
 		/// 作成したキャラクター
 		/// </summary>
@@ -77,13 +68,26 @@ namespace Presenters.Customize {
 		/// </summary>
 		private SceneService sceneService = SceneService.GetInstance();
 
+		/// <summary>
+		/// キャラクターService
+		/// </summary>
+		private CharacterService characterService = CharacterService.GetInstance();
+
 		#endregion
+
+		/// <summary>
+		/// セーブデータID
+		/// </summary>
+		private int saveId;
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public CustomizePresenter( CustomizeParameter parameter ) {
 			Logger.Debug( "Start" );
+			Logger.Debug( $"Save Data Id is {parameter.SaveId}." );
+
+			this.saveId = parameter.SaveId;
 
 			// Viewの設定
 			this.InitialViewSetting();
@@ -92,12 +96,18 @@ namespace Presenters.Customize {
 			this.InitialModelSubscribeSetting();
 
 			// 素体一覧取得
-			this.HaveBodies = this.GetHaveBodies();
-			this.CustomizeView.SetBodies( this.ConvertBodies( this.HaveBodies ) );
+			this.CustomizeView.SetBodies( 
+				this.ConvertBodies( 
+					this.characterService.GetHavingBodies( this.saveId ) 
+				) 
+			);
 
 			// 装備一覧取得
-			this.HaveEquipments = this.GetHaveEquipments();
-			this.CustomizeView.SetEquipments( this.ConvertEquipments( this.HaveEquipments ) );
+			this.CustomizeView.SetEquipments( 
+				this.ConvertEquipments( 
+					this.characterService.GetHavingEquipments( this.saveId ) 
+				) 
+			);
 
 			// パラメータチップ一覧取得
 			// TODO 実際は型が違うから変換が必要
@@ -390,6 +400,7 @@ namespace Presenters.Customize {
 			if( id.HasValue ) {
 
 				// 装備可能箇所IDから所持装備のうち、装備できるものだけリストにする
+				/*
 				this.CustomizeView.SetEquipments(
 					this.ConvertEquipments(
 						this.HaveEquipments
@@ -398,7 +409,7 @@ namespace Presenters.Customize {
 							).ToList()
 					)
 				);
-				
+				*/
 			}
 
 			Logger.Debug( "End" );
@@ -477,7 +488,7 @@ namespace Presenters.Customize {
 			Logger.Debug( $"Body Id is {bodyId}" );
 
 			// 素体IDからどの素体が選ばれたか調べる
-			this.CreatedCharacterModel.Value = this.HaveBodies.FirstOrDefault( body => body.Id.HasValue && bodyId == body.Id.Value );
+			this.CreatedCharacterModel.Value = this.characterService.GetHavingBodies( this.saveId ).FirstOrDefault( body => body.Id.HasValue && bodyId == body.Id.Value );
 
 			// ウィンドウ表示切替
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipmentMenu;
@@ -530,12 +541,12 @@ namespace Presenters.Customize {
 				.FirstOrDefault(
 					equipablePlace => equipablePlace.Id.Value == selectedEquipablePlaceId
 				)
-				.EquipmentModel = this.HaveEquipments.FirstOrDefault( equipment => equipment.Id.Value.Value == equipmentId );
+				.EquipmentModel = this.characterService.GetHavingEquipments( this.saveId ).FirstOrDefault( equipment => equipment.Id.Value.Value == equipmentId );
 
 			// 一覧更新
 			this.CustomizeView.UpdateEquipablePlaceText( 
 				selectedEquipablePlaceId , 
-				this.HaveEquipments.FirstOrDefault( equipment => equipment.Id.Value.Value == equipmentId ).Name 
+				this.characterService.GetHavingEquipments( this.saveId ).FirstOrDefault( equipment => equipment.Id.Value.Value == equipmentId ).Name 
 			);
 						
 			// 表示切替
@@ -1843,34 +1854,6 @@ namespace Presenters.Customize {
 							}
 						}
 					}
-				}
-			};
-			Logger.Debug( "End" );
-			return list;
-		}
-
-		/// <summary>
-		/// 取得済み装備一覧取得
-		/// </summary>
-		/// <returns>取得済み装備一覧</returns>
-		/// TODO サーバ等から取得する　返り値もレスポンスデータのまま
-		private List<EquipmentModel> GetHaveEquipments() {
-			Logger.Debug( "Start" );
-			List<EquipmentModel> list = new List<EquipmentModel>() {
-				new EquipmentModel() {
-					Id = new ReactiveProperty<int?>(0) ,
-					Name = "鉛筆" ,
-					EquipablePlaceIds = { 0 , 1 , 3 }
-				} ,
-				new EquipmentModel() {
-					Id = new ReactiveProperty<int?>(1) ,
-					Name = "シャーペン" ,
-					EquipablePlaceIds = { 0 , 1 , 2 }
-				} ,
-				new EquipmentModel() {
-					Id = new ReactiveProperty<int?>(2) ,
-					Name = "消しゴム" ,
-					EquipablePlaceIds = { 3 , 4 , 5 , 6 }
 				}
 			};
 			Logger.Debug( "End" );

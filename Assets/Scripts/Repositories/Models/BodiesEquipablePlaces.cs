@@ -21,6 +21,22 @@ namespace Repositories.Models {
 	/// </summary>
 	[Serializable]
 	public class BodyEquipablePlace {
+
+		/// <summary>
+		/// 素体ID
+		/// </summary>
+		public int bodyId;
+
+		/// <summary>
+		/// 装備可能箇所ID
+		/// </summary>
+		public int equipablePlaceId;
+
+		/// <summary>
+		/// 表示順
+		/// </summary>
+		public int displayOrder;
+
 	}
 
 }

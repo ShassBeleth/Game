@@ -19,10 +19,20 @@ namespace Models.Charactor {
 		public string Name { set; get; }
 
 		/// <summary>
-		/// 装備可能箇所
+		/// 装備名ルビ
 		/// </summary>
-		public List<int> EquipablePlaceIds = new List<int>();
+		public string Ruby { set; get; }
 
+		/// <summary>
+		/// フレーバーテキスト
+		/// </summary>
+		public string Flavor { set; get; }
+
+		/// <summary>
+		/// 表示順
+		/// </summary>
+		public int DisplayOrder { set; get; }
+		
 	}
 
 }

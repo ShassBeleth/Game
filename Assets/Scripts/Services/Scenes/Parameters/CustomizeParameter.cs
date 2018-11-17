@@ -5,7 +5,10 @@
 	/// </summary>
 	public class CustomizeParameter {
 
-
+		/// <summary>
+		/// セーブID
+		/// </summary>
+		public int SaveId { set; get; }
 
 	}
 
