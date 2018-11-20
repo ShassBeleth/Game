@@ -21,6 +21,17 @@ namespace Repositories.Models {
 	/// </summary>
 	[Serializable]
 	public class EquipmentEquipableInEquipablePlace {
+
+		/// <summary>
+		/// 装備ID
+		/// </summary>
+		public int equipmentId;
+
+		/// <summary>
+		/// 装備可能箇所ID
+		/// </summary>
+		public int equipablePlaceId;
+
 	}
 
 }

@@ -1,0 +1,7 @@
+{
+	"rows" : [
+		{"equipmentId": 0 , "equipablePlaceId":0} ,
+		{"equipmentId": 0 , "equipablePlaceId":1} ,
+		{"equipmentId": 0 , "equipablePlaceId":2}
+	]
+}

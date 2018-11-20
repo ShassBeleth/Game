@@ -1,0 +1,23 @@
+{
+	"rows" : [
+		{"saveId": 0,"equipmentId": 0},
+		{"saveId": 0,"equipmentId": 1},
+		{"saveId": 0,"equipmentId": 2},
+		{"saveId": 0,"equipmentId": 3},
+		{"saveId": 0,"equipmentId": 4},
+		{"saveId": 0,"equipmentId": 5},
+		{"saveId": 0,"equipmentId": 6},
+		{"saveId": 1,"equipmentId": 0},
+		{"saveId": 1,"equipmentId": 1},
+		{"saveId": 1,"equipmentId": 2},
+		{"saveId": 1,"equipmentId": 3},
+		{"saveId": 1,"equipmentId": 4},
+		{"saveId": 2,"equipmentId": 0},
+		{"saveId": 2,"equipmentId": 5},
+		{"saveId": 2,"equipmentId": 6},
+		{"saveId": 2,"equipmentId": 7},
+		{"saveId": 3,"equipmentId": 9},
+		{"saveId": 3,"equipmentId":10},
+		{"saveId": 3,"equipmentId":12}
+	]
+}

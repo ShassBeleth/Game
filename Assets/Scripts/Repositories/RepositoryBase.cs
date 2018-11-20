@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security;
 using System.Text;
 using UnityEngine;
 
@@ -31,16 +32,36 @@ namespace Repositories {
 
 			string jsonData = "";
 			try {
-				using( StreamReader streamReader = new StreamReader( this.DirectoryPath + filePath , Encoding.UTF8 ) ) {
-					jsonData = streamReader.ReadToEnd();
-					streamReader.Close();
-				}
+				jsonData = File.ReadAllText( Path.Combine( this.DirectoryPath , filePath ) , Encoding.UTF8 );
 			}
-			// 何かしらエラーがあった場合にはnullを返す
-			catch( Exception e ) {
-				Logger.Warning( $"Load File is Error : {e.Message}" );
-				return null;
+			catch( ArgumentNullException e ) {
+				Logger.Error( $"{e.Message}." );
 			}
+			catch( ArgumentException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( PathTooLongException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( DirectoryNotFoundException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( FileNotFoundException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( IOException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( UnauthorizedAccessException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( NotSupportedException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( SecurityException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			
 			Logger.Debug( $"Json Data is {jsonData}" );
 
 			// 何かしらエラーの影響で取得したjsonデータが空文字だった場合nullを返す
@@ -71,8 +92,9 @@ namespace Repositories {
 			Logger.Debug( $"Json Data is {jsonData}" );
 
 			// ディレクトリが存在するか確認
-			Logger.Debug( $"Directory Path is {this.DirectoryPath + filePath}" );
-			string directoryName = Path.GetDirectoryName( this.DirectoryPath + filePath );
+			Logger.Debug( $"Directory Path is {this.DirectoryPath}." );
+			Logger.Debug( $"File Path is {filePath}." );
+			string directoryName = Path.GetDirectoryName( Path.Combine( this.DirectoryPath , filePath ) );
 			Logger.Debug( $"Directory Name is {directoryName}" );
 			if( !Directory.Exists( directoryName ) ) {
 				Logger.Debug( "Directory Doesn't Exist." );
@@ -80,14 +102,32 @@ namespace Repositories {
 			}
 
 			// ファイルへ書き込み
-			using(
-				StreamWriter streamWriter = new StreamWriter(
-					new FileStream( this.DirectoryPath + filePath , FileMode.Create ) ,
-					Encoding.UTF8
-				)
-			) {
-				streamWriter.Write( jsonData );
-				streamWriter.Close();
+			try {
+				File.WriteAllText( Path.Combine( this.DirectoryPath , filePath ) , jsonData );
+			}
+			catch( ArgumentNullException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( ArgumentException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( PathTooLongException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( DirectoryNotFoundException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( IOException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( UnauthorizedAccessException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( NotSupportedException e ) {
+				Logger.Error( $"{e.Message}." );
+			}
+			catch( SecurityException e ) {
+				Logger.Error( $"{e.Message}." );
 			}
 
 			Logger.Debug( "End" );

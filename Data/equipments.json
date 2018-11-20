@@ -1,0 +1,30 @@
+{
+	"rows" : [
+		{"id": 0,"name":"頭と肩に装備できる装備","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id": 1,"name":"装備すると装備可能箇所が増える装備","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id": 2,"name":"装備C","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id": 3,"name":"装備D","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id": 4,"name":"装備E","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id": 5,"name":"装備F","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id": 6,"name":"装備G","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id": 7,"name":"装備H","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id": 8,"name":"装備I","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id": 9,"name":"装備J","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":10,"name":"装備K","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":11,"name":"装備L","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":12,"name":"装備M","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":13,"name":"装備N","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":14,"name":"装備O","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":15,"name":"装備P","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":16,"name":"装備Q","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":17,"name":"装備R","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":18,"name":"装備S","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":19,"name":"装備T","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":20,"name":"装備U","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":21,"name":"装備V","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":22,"name":"装備W","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":23,"name":"装備X","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":24,"name":"装備Y","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0},
+		{"id":25,"name":"装備Z","ruby":"ソウビエー","flavor":"ねむい","displayOrder":0}
+	]
+}

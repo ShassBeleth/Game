@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using Repositories;
-using System.Collections.Generic;
-using Repositories.Models;
 using Services.Scenes;
 
 /// <summary>

@@ -86,6 +86,9 @@ namespace Views.Customize {
 			/// </summary>
 			public string Name { set; get; }
 
+
+			public bool CanEquip { set; get; }
+
 			/// <summary>
 			/// 決定ボタン押下時イベントハンドラ
 			/// </summary>

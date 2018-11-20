@@ -32,6 +32,11 @@ namespace Models.Charactor {
 		/// 表示順
 		/// </summary>
 		public int DisplayOrder { set; get; }
+
+		/// <summary>
+		/// 装備できるかどうか
+		/// </summary>
+		public bool CanEquip { set; get; }
 		
 	}
 
