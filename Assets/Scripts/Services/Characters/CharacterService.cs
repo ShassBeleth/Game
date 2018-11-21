@@ -5,6 +5,7 @@ using Models.Charactor;
 using Repositories;
 using Repositories.Models;
 using UniRx;
+using Utils.Exxtensions;
 
 namespace Services.Characters {
 
@@ -380,6 +381,46 @@ namespace Services.Characters {
 
 			Logger.Debug( "End" );
 			return model;
+		}
+
+		/// <summary>
+		/// 作成したキャラクターの装備可能箇所を更新する
+		/// </summary>
+		/// <param name="createdCharacter">作成したキャラクター</param>
+		/// <param name="equipablePlaces">装備可能箇所一覧</param>
+		/// <returns>更新された作成されたキャラクター</returns>
+		public BodyModel UpdateEquipablePlacesOfCreatedCharacter( 
+			BodyModel createdCharacter , 
+			List<EquipablePlaceModel> equipablePlaces 
+		) {
+			Logger.Debug( "Start" );
+			
+			if( createdCharacter == null ) {
+				Logger.Warning( "Created Character is Null." );
+				return null;
+			}
+
+			// どの装備可能箇所にどの装備が装備されているかを一覧として取得
+			Dictionary<int , EquipmentModel> equipments = new Dictionary<int , EquipmentModel>();
+			createdCharacter.EquipablePlaces
+				.ForEach( equipablePlace => equipments.Add(
+					equipablePlace.Id?.Value ?? -1 ,
+					( equipablePlace.EquipmentModel?.Id.HasValue ?? false )
+						? equipablePlace.EquipmentModel
+						: new EquipmentModel()
+				) );
+
+			// 装備可能箇所更新
+			createdCharacter.EquipablePlaces = equipablePlaces;
+
+			// 装備を付けなおす
+			createdCharacter.EquipablePlaces
+				.ForEach( equipablePlace =>
+					equipablePlace.EquipmentModel = equipments.GetOrDefault( equipablePlace.Id.Value , new EquipmentModel() )
+				);
+
+			Logger.Debug( "End" );
+			return createdCharacter;
 		}
 
 	}

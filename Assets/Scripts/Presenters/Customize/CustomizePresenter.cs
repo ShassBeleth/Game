@@ -545,17 +545,23 @@ namespace Presenters.Customize {
 				)
 				.EquipmentModel = equipmentModel;
 			
-			// 選ばれた素体に装備できる一覧を設定する
+			// 選ばれた素体に装備できる装備可能箇所一覧を設定する
 			List<EquipablePlaceModel> models
 				= this.characterService.GetEquipablePlaces(
 					this.CreatedCharacterModel.Value
 				);
-			this.CustomizeView.SetEquipablePlaces(
-				this.ConvertEquipablePlaces( models )
+
+			// 素体の持つ装備可能箇所を更新する
+			this.CreatedCharacterModel.Value = this.characterService.UpdateEquipablePlacesOfCreatedCharacter(
+				this.CreatedCharacterModel.Value ,
+				models
 			);
 
+			this.CustomizeView.SetEquipablePlaces(
+				this.ConvertEquipablePlaces( this.CreatedCharacterModel.Value.EquipablePlaces )
+			);
+			
 			// 一覧更新
-			// TODO ここ
 			this.CustomizeView.UpdateEquipablePlaceText( 
 				selectedEquipablePlaceId ,
 				equipmentModel.Name
