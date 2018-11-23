@@ -10,6 +10,9 @@
 		Body ,
 		Equipments ,
 		ParameterMenu ,
+		CustomFreeSquares ,
+		HavingParameterChips ,
+		CustomParameterChips ,
 	}
 	
 }

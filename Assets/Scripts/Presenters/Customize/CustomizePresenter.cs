@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Models.Charactor;
 using Models.Customize;
@@ -38,7 +39,7 @@ namespace Presenters.Customize {
 		/// パラメータチップ一覧
 		/// </summary>
 		/// TODO Viewの形で持つの嫌だ
-		private List<CustomizeView.ParameterChip> parameterChips { set; get; }
+		private List<CustomizeView.ParameterChip> ParameterChips { set; get; }
 
 		#endregion
 
@@ -104,8 +105,8 @@ namespace Presenters.Customize {
 			
 			// パラメータチップ一覧取得
 			// TODO 実際は型が違うから変換が必要
-			this.parameterChips = this.GetAcquiredParameterChip();
-			this.CustomizeView.SetParameterChips( this.parameterChips );
+			this.ParameterChips = this.GetAcquiredParameterChip();
+			this.CustomizeView.SetParameterChips( this.ParameterChips );
 
 			// 初期表示
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipmentMenu;
@@ -207,9 +208,14 @@ namespace Presenters.Customize {
 			this.ShowcaseView = GameObject.Find( "Showcase" ).GetComponent<ShowcaseView>();
 
 			// CutomizeViewのEventHandler設定
-			this.CustomizeView.OnClickDecisionButtonEventHandler = this.ClickedEquipmentDecisionButtonEvent;
+			this.CustomizeView.OnClickEquipmentDecisionButtonEventHandler = this.ClickedEquipmentDecisionButtonEvent;
 			this.CustomizeView.OnClickBodyButtonEventHandler = this.ClickedBodyButtonFromMenuEvent;
 			this.CustomizeView.OnClickEquipablePlaceScrollViewEventHandler = this.ClickedEquipablePlaceScrollViewEvent;
+			this.CustomizeView.OnClickParameterDecisionButtonEventHandler = this.ClickedParameterChipDecisionButtonEvent;
+			this.CustomizeView.OnClickCustomFreeSquaresButtonEventHandler = this.ClickedCustomFreeSquaresButtonEvent;
+			this.CustomizeView.OnClickCustomParameterChipsButtonEventHandler = this.ClickedCustomParameterChipsButtonEvent;
+			this.CustomizeView.OnClickCustomParameterChipsDecisionButtonEventHandler = this.ClickedCustomParameterChipsDecisionButtonEvent;
+			this.CustomizeView.OnClickFreeSquaresDecisionButtonEventHandler = this.ClickedFreeSquaresDecisionButtonEvent;
 
 			Logger.Debug( "End" );
 		}
@@ -296,7 +302,32 @@ namespace Presenters.Customize {
 					break;
 
 				case SelectableNameEnum.ParameterMenu:
-					this.CustomizeView.ShowCustomParameter();
+					this.CustomizeView.ShowParameterChipMenu();
+					// 遷移元の選択状態を調べる
+					switch( this.CustomizeWindowModel.BeforeSelectableName ) {
+						case SelectableNameEnum.CustomFreeSquares:
+							this.CustomizeView.SetSelectedGameObject( this.CustomizeView.CustomFreeSquaresButton );
+							break;
+						case SelectableNameEnum.CustomParameterChips:
+						case SelectableNameEnum.HavingParameterChips:
+							this.CustomizeView.SetSelectedGameObject( this.CustomizeView.CustomParameterChipsButton );
+							break;
+						default:
+							this.CustomizeView.SetSelectedGameObject( this.CustomizeView.CustomFreeSquaresButton );
+							break;
+					}
+					break;
+
+				case SelectableNameEnum.CustomFreeSquares:
+					this.CustomizeView.ShowCustomFreeSquares();
+					break;
+
+				case SelectableNameEnum.HavingParameterChips:
+					this.CustomizeView.ShowCustomParameterChips();
+					break;
+
+				case SelectableNameEnum.CustomParameterChips:
+					this.CustomizeView.ShowCustomParameterChips();
 					break;
 
 				default:
@@ -573,8 +604,53 @@ namespace Presenters.Customize {
 			Logger.Debug( "End" );
 		}
 
-		#endregion
+		/// <summary>
+		/// パラメータチップ変更ボタン押下時イベント
+		/// </summary>
+		private void ClickedCustomParameterChipsButtonEvent() {
+			Logger.Debug( "Start" );
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.CustomParameterChips;
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 空きマス変更ボタン押下時イベント
+		/// </summary>
+		private void ClickedCustomFreeSquaresButtonEvent() {
+			Logger.Debug( "Start" );
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.CustomFreeSquares;
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// パラメータチップの決定ボタン押下時イベント
+		/// </summary>
+		private void ClickedParameterChipDecisionButtonEvent() {
+			Logger.Debug( "Start" );
+			// TODO ここ
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 空きマス変更画面の決定ボタン押下時イベント
+		/// </summary>
+		private void ClickedFreeSquaresDecisionButtonEvent() {
+			Logger.Debug( "Start" );
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.ParameterMenu;
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// パラメータチップ変更画面の決定ボタン押下時イベント
+		/// </summary>
+		private void ClickedCustomParameterChipsDecisionButtonEvent() {
+			Logger.Debug( "Start" );
+			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.ParameterMenu;
+			Logger.Debug( "End" );
+		}
 		
+		#endregion
+
 		/// <summary>
 		/// 取得済みパラメータチップ一覧取得
 		/// </summary>

@@ -238,10 +238,12 @@ namespace Views.Customize {
 			}
 			// IDがなければ0番目を取得
 			else {
-				selectedGameObject = this.bodyScrollViewContent.transform.GetChild( 0 ).gameObject;
+				selectedGameObject = this.bodyScrollViewContent.transform.GetChild( 0 )?.gameObject;
 			}
 
-			this.eventSystem.SetSelectedGameObject( selectedGameObject );
+			if( selectedGameObject != null ) {
+				this.eventSystem.SetSelectedGameObject( selectedGameObject );
+			}
 			Logger.Debug( "End" );
 		}
 
@@ -453,19 +455,22 @@ namespace Views.Customize {
 		/// </summary>
 		public GameObject equipmentsGameObject;
 
-		#region 画面切り替え用Showメソッド群
-				
 		/// <summary>
-		/// パラメータカスタマイズ表示
+		/// パラメータチップメニューGameObject
 		/// </summary>
-		public void ShowCustomParameter() {
-			Logger.Debug( "Start" );
+		public GameObject parameterChipMenuGameObject;
 
-			this.customParameterGameObject.SetActive( true );
-			this.customEquipmentGameObject.SetActive( false );
+		/// <summary>
+		/// 空きマスカスタマイズGameObject
+		/// </summary>
+		public GameObject customFreeSquaresGameObject;
 
-			Logger.Debug( "End" );
-		}
+		/// <summary>
+		/// パラメータチップカスタマイズGameObject
+		/// </summary>
+		public GameObject customParameterChipsGameObject;
+
+		#region 画面切り替え用Showメソッド群
 
 		/// <summary>
 		/// 装備素体一覧表示
@@ -515,22 +520,70 @@ namespace Views.Customize {
 			Logger.Debug( "End" );
 		}
 
-		#endregion
-		
-		#endregion
-
-		#region 決定ボタン
 		/// <summary>
-		/// 決定ボタン押下時イベントハンドラ
+		/// パラメータチップメニュー表示
 		/// </summary>
-		public Action OnClickDecisionButtonEventHandler { set; get; }
-
-		/// <summary>
-		/// 決定ボタン押下時イベント
-		/// </summary>
-		public void OnClickDecisionButtonEvent() {
+		public void ShowParameterChipMenu() {
 			Logger.Debug( "Start" );
-			this.OnClickDecisionButtonEventHandler?.Invoke();
+
+			this.customParameterGameObject.SetActive( true );
+			this.customEquipmentGameObject.SetActive( false );
+
+			this.parameterChipMenuGameObject.SetActive( true );
+			this.customParameterChipsGameObject.SetActive( false );
+			this.customFreeSquaresGameObject.SetActive( false );
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// パラメータチップカスタマイズ表示
+		/// </summary>
+		public void ShowCustomParameterChips() {
+			Logger.Debug( "Start" );
+
+			this.customParameterGameObject.SetActive( true );
+			this.customEquipmentGameObject.SetActive( false );
+
+			this.customParameterChipsGameObject.SetActive( true );
+			this.parameterChipMenuGameObject.SetActive( false );
+			this.customFreeSquaresGameObject.SetActive( false );
+
+			Logger.Debug( "End" );
+		}
+
+		/// <summary>
+		/// 空きマスカスタマイズ表示
+		/// </summary>
+		public void ShowCustomFreeSquares() {
+			Logger.Debug( "Start" );
+
+			this.customParameterGameObject.SetActive( true );
+			this.customEquipmentGameObject.SetActive( false );
+
+			this.customFreeSquaresGameObject.SetActive( true );
+			this.customParameterChipsGameObject.SetActive( false );
+			this.parameterChipMenuGameObject.SetActive( false );
+
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		#endregion
+
+		#region 装備決定ボタン
+		/// <summary>
+		/// 装備決定ボタン押下時イベントハンドラ
+		/// </summary>
+		public Action OnClickEquipmentDecisionButtonEventHandler { set; get; }
+
+		/// <summary>
+		/// 装備決定ボタン押下時イベント
+		/// </summary>
+		public void OnClickEquipmentDecisionButtonEvent() {
+			Logger.Debug( "Start" );
+			this.OnClickEquipmentDecisionButtonEventHandler?.Invoke();
 			Logger.Debug( "End" );
 		}
 		#endregion
@@ -590,6 +643,133 @@ namespace Views.Customize {
 
 			Logger.Debug( "End" );
 		}
+
+		#endregion
+
+		#region パラメータチップのメニューについて
+
+		#region 空きマスを変更するボタン
+
+		/// <summary>
+		/// 空きマスを変更するボタン
+		/// </summary>
+		public GameObject CustomFreeSquaresButton;
+
+		/// <summary>
+		/// 空きマスを変更するボタン押下時イベントハンドラ
+		/// </summary>
+		public Action OnClickCustomFreeSquaresButtonEventHandler;
+
+		/// <summary>
+		/// 空きマスを変更するボタン押下時イベント
+		/// </summary>
+		public void OnClickCustomFreeSquaresButtonEvent() {
+			Logger.Debug( "Start" );
+			this.OnClickCustomFreeSquaresButtonEventHandler?.Invoke();
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		#region パラメータカスタマイズボタン
+
+		/// <summary>
+		/// パラメータカスタマイズボタン
+		/// </summary>
+		public GameObject CustomParameterChipsButton;
+
+		/// <summary>
+		/// パラメータカスタマイズボタン押下時イベントハンドラ
+		/// </summary>
+		public Action OnClickCustomParameterChipsButtonEventHandler;
+
+		/// <summary>
+		/// パラメータカスタマイズボタン押下時イベント
+		/// </summary>
+		public void OnClickCustomParameterChipsButtonEvent() {
+			Logger.Debug( "Start" );
+			this.OnClickCustomParameterChipsButtonEventHandler?.Invoke();
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		#region パラメータカスタマイズの決定ボタン
+
+		/// <summary>
+		/// パラメータカスタマイズの決定ボタン
+		/// </summary>
+		public GameObject ParameterDecisionButton;
+
+		/// <summary>
+		/// パラメータカスタマイズの決定ボタン押下時イベントハンドラ
+		/// </summary>
+		public Action OnClickParameterDecisionButtonEventHandler;
+
+		/// <summary>
+		/// パラメータカスタマイズの決定ボタン押下時イベント
+		/// </summary>
+		public void OnClickParameterDecisionButtonEvent() {
+			Logger.Debug( "Start" );
+			this.OnClickParameterDecisionButtonEventHandler?.Invoke();
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		#endregion
+
+		#region 空きマス変更画面について
+
+		#region 決定ボタンについて
+
+		/// <summary>
+		/// 空きマス変更の決定ボタン
+		/// </summary>
+		public GameObject FreeSquaresDecisionButton;
+
+		/// <summary>
+		/// 空きマス変更の決定ボタン押下時イベントハンドラ
+		/// </summary>
+		public Action OnClickFreeSquaresDecisionButtonEventHandler { set; get; }
+
+		/// <summary>
+		/// 空きマス変更の決定ボタン押下時イベント
+		/// </summary>
+		public void OnClickFreeSquaresDecisionButtonEvent() {
+			Logger.Debug( "Start" );
+			this.OnClickFreeSquaresDecisionButtonEventHandler?.Invoke();
+			Logger.Debug( "End" );
+		}
+
+		#endregion
+
+		#endregion
+
+		#region パラメータチップ変更画面について
+
+		#region 決定ボタンについて
+
+		/// <summary>
+		/// パラメータチップ変更の決定ボタン
+		/// </summary>
+		public GameObject CustomParameterChipsDecisionButton;
+
+		/// <summary>
+		/// パラメータチップ変更の決定ボタン押下時イベントハンドラ
+		/// </summary>
+		public Action OnClickCustomParameterChipsDecisionButtonEventHandler { set; get; }
+
+		/// <summary>
+		/// パラメータチップ変更の決定ボタン押下時イベント
+		/// </summary>
+		public void OnClickCustomParameterChipsDecisionButtonEvent() {
+			Logger.Debug( "Start" );
+			this.OnClickCustomParameterChipsDecisionButtonEventHandler?.Invoke();
+			Logger.Debug( "End" );
+		}
+
+		#endregion
 
 		#endregion
 
