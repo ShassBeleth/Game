@@ -1,8 +1,1 @@
-{
-	"rows" : [
-		{"equipmentId": 0 , "equipablePlaceId":0} ,
-		{"equipmentId": 0 , "equipablePlaceId":1} ,
-		{"equipmentId": 1 , "equipablePlaceId":0} ,
-		{"equipmentId": 2 , "equipablePlaceId":0}
-	]
-}
+{"rows":[{"equipmentId":0,"equipablePlaceId":0},{"equipmentId":0,"equipablePlaceId":1},{"equipmentId":1,"equipablePlaceId":0},{"equipmentId":2,"equipablePlaceId":0}]}

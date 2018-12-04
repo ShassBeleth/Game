@@ -1,17 +1,1 @@
-{
-	"rows" : [
-		{"id":  0,"category":0 ,"name": "phase1 of VF"  ,"numberOrder": 1,"timelineOrder": "2100/1/1 13:45:00","text":"リモートで操作できるようになった\nカメラや音声のチェックが済み、身体能力について確認することになる"} ,
-		{"id":  1,"category":0 ,"name": "phase2 of VF"  ,"numberOrder": 2,"timelineOrder": "2100/1/1 14:10:00","text":"VFを手足のように動かせることが確認できた\nVFは武器を換装させることでコストを大幅に削減できることが利点だ\n次は装備の換装が成功することを確認する"} ,
-		{"id":  2,"category":0 ,"name": "phase3 of VF"  ,"numberOrder": 3,"timelineOrder": "2100/1/1 14:35:00","text":"換装試験は順調に進んだ\n最後は街中でテロリストによる籠城事件を想定した模擬戦を行う"} ,
-		{"id":  3,"category":1 ,"name": "phase1 of Test","numberOrder": 5,"timelineOrder": "2100/2/1 13:45:00","text":"テスト1"} ,
-		{"id":  4,"category":1 ,"name": "phase2 of Test","numberOrder": 6,"timelineOrder": "2100/3/1 13:45:00","text":"テスト２"} ,
-		{"id":  5,"category":1 ,"name": "phase3 of Test","numberOrder": 7,"timelineOrder": "2100/4/1 13:45:00","text":"テスト３"} ,
-		{"id":  6,"category":1 ,"name": "phase4 of Test","numberOrder": 8,"timelineOrder": "2100/5/1 13:45:00","text":"テスト４"} ,
-		{"id":  7,"category":2 ,"name": "phase5 of Test","numberOrder": 9,"timelineOrder": "2100/6/1 13:45:00","text":"テスト５"} ,
-		{"id":  8,"category":2 ,"name": "phase6 of Test","numberOrder":10,"timelineOrder": "2100/7/1 13:45:00","text":"テスト６"} ,
-		{"id":  9,"category":2 ,"name": "phase7 of Test","numberOrder":11,"timelineOrder": "2100/8/1 13:45:00","text":"テスト７"} ,
-		{"id": 10,"category":2 ,"name": "phase8 of Test","numberOrder":12,"timelineOrder": "2100/9/1 13:45:00","text":"テスト８"} ,
-		{"id": 11,"category":2 ,"name": "phase9 of Test","numberOrder": 4,"timelineOrder":"2100/10/1 13:45:00","text":"テスト９\nこれだけはテストフェーズの先頭に来る"} ,
-		{"id": 12,"category":2 ,"name":"phase10 of Test","numberOrder":13,"timelineOrder":"2099/11/1 13:45:00","text":"テスト１０\nこれだけはタイムライン順の先頭に来る"}
-	]
-}
+{"rows":[{"id":0,"category":0,"name":"phase1 of VF","text":"リモートで操作できるようになった\nカメラや音声のチェックが済み、身体能力について確認することになる","numberOrder":1,"eventDateTime":null},{"id":1,"category":0,"name":"phase2 of VF","text":"VFを手足のように動かせることが確認できた\nVFは武器を換装させることでコストを大幅に削減できることが利点だ\n次は装備の換装が成功することを確認する","numberOrder":2,"eventDateTime":null},{"id":2,"category":0,"name":"phase3 of VF","text":"換装試験は順調に進んだ\n最後は街中でテロリストによる籠城事件を想定した模擬戦を行う","numberOrder":3,"eventDateTime":null},{"id":3,"category":1,"name":"phase1 of Test","text":"テスト1","numberOrder":5,"eventDateTime":null},{"id":4,"category":1,"name":"phase2 of Test","text":"テスト２","numberOrder":6,"eventDateTime":null},{"id":5,"category":1,"name":"phase3 of Test","text":"テスト３","numberOrder":7,"eventDateTime":null},{"id":6,"category":1,"name":"phase4 of Test","text":"テスト４","numberOrder":8,"eventDateTime":null},{"id":7,"category":2,"name":"phase5 of Test","text":"テスト５","numberOrder":9,"eventDateTime":null},{"id":8,"category":2,"name":"phase6 of Test","text":"テスト６","numberOrder":10,"eventDateTime":null},{"id":9,"category":2,"name":"phase7 of Test","text":"テスト７","numberOrder":11,"eventDateTime":null},{"id":10,"category":2,"name":"phase8 of Test","text":"テスト８","numberOrder":12,"eventDateTime":null},{"id":11,"category":2,"name":"phase9 of Test","text":"テスト９\nこれだけはテストフェーズの先頭に来る","numberOrder":4,"eventDateTime":null},{"id":12,"category":2,"name":"phase10 of Test","text":"テスト１０\nこれだけはタイムライン順の先頭に来る","numberOrder":13,"eventDateTime":null}]}

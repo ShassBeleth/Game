@@ -1,14 +1,1 @@
-{
-	"rows" : [
-		{"bodyId": 0 , "equipablePlaceId":0 , "displayOrder" : 0} ,
-		{"bodyId": 0 , "equipablePlaceId":1 , "displayOrder" : 1} ,
-		{"bodyId": 0 , "equipablePlaceId":2 , "displayOrder" : 2} ,
-		{"bodyId": 0 , "equipablePlaceId":3 , "displayOrder" : 3} ,
-		{"bodyId": 0 , "equipablePlaceId":4 , "displayOrder" : 4} ,
-		{"bodyId": 1 , "equipablePlaceId":0 , "displayOrder" : 5} ,
-		{"bodyId": 1 , "equipablePlaceId":3 , "displayOrder" : 6} ,
-		{"bodyId": 1 , "equipablePlaceId":4 , "displayOrder" : 7} ,
-		{"bodyId": 1 , "equipablePlaceId":5 , "displayOrder" : 8} ,
-		{"bodyId": 1 , "equipablePlaceId":6 , "displayOrder" : 9}
-	]
-}
+{"rows":[{"bodyId":0,"equipablePlaceId":0,"displayOrder":0},{"bodyId":0,"equipablePlaceId":1,"displayOrder":1},{"bodyId":0,"equipablePlaceId":2,"displayOrder":2},{"bodyId":0,"equipablePlaceId":3,"displayOrder":3},{"bodyId":0,"equipablePlaceId":4,"displayOrder":4},{"bodyId":1,"equipablePlaceId":0,"displayOrder":5},{"bodyId":1,"equipablePlaceId":3,"displayOrder":6},{"bodyId":1,"equipablePlaceId":4,"displayOrder":7},{"bodyId":1,"equipablePlaceId":5,"displayOrder":8},{"bodyId":1,"equipablePlaceId":6,"displayOrder":9}]}

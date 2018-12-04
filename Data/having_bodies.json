@@ -1,6 +1,1 @@
-{
-	"rows" : [
-		{"saveId": 0,"bodyId":0} ,
-		{"saveId": 0,"bodyId":1}
-	]
-}
+{"rows":[{"saveId":0,"bodyId":0},{"saveId":0,"bodyId":1}]}
