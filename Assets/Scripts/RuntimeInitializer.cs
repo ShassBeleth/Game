@@ -5,13 +5,15 @@ using Services.Scenes;
 /// <summary>
 /// アプリ起動時初期化
 /// </summary>
-public class RuntimeInitializer : MonoBehaviour {
+public class RuntimeInitializer : MonoBehaviour
+{
 
 	/// <summary>
 	/// アプリ起動時初期化
 	/// </summary>
 	[RuntimeInitializeOnLoadMethod]
-	public static void Initialize() {
+	public static void Initialize()
+	{
 		Logger.Debug( "Start" );
 
 		// SceneService開始
@@ -27,15 +29,32 @@ public class RuntimeInitializer : MonoBehaviour {
 	/// <summary>
 	/// 各種リポジトリの起動
 	/// </summary>
-	private static void StartRepository() {
+	private static void StartRepository()
+	{
 		Logger.Debug( "Start" );
 
+		BodyEffectRepository.GetInstance();
+		BodyEquipablePlaceRepository.GetInstance();
+		BodyFreeSquareRepository.GetInstance();
 		BodyRepository.GetInstance();
-		EquipablePlaceRepository.GetInstance();
-		SaveRepository.GetInstance();
-		ParameterRepository.GetInstance();
-		ChapterRepository.GetInstance();
 		ChapterClearStatusRepository.GetInstance();
+		ChapterRepository.GetInstance();
+		DesignatedPlaceToEquipmentByEffectRepository.GetInstance();
+		EquipablePlaceRepository.GetInstance();
+		EquipmentEffectRepository.GetInstance();
+		EquipmentEquipableInEquipablePlaceRepository.GetInstance();
+		EquipmentFreeSquareRepository.GetInstance();
+		EquipmentRepository.GetInstance();
+		EquippedWhenIncreasingEquipablePlaceRepository.GetInstance();
+		EquippedWhenUnequippingEquipablePlaceRepository.GetInstance();
+		HavingBodyRepository.GetInstance();
+		HavingEquipmentRepository.GetInstance();
+		HavingParameterChipRepository.GetInstance();
+		ParameterChipEffectRepository.GetInstance();
+		ParameterChipRepository.GetInstance();
+		ParameterChipSquareRepository.GetInstance();
+		ParameterRepository.GetInstance();
+		SaveRepository.GetInstance();
 
 		Logger.Debug( "End" );
 	}
