@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static EquipmentFreeSquareRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new EquipmentFreeSquareRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private EquipmentFreeSquareRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			EquipmentFreeSquares equipmentFreeSquares = this.Load<EquipmentFreeSquares>( this.FilePath );
 			this.Rows = equipmentFreeSquares.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 

@@ -73,9 +73,9 @@ namespace Presenters.ChapterSelect {
 		/// </summary>
 		/// <param name="parameter">前画面から受けとるパラメータ</param>
 		public ChapterSelectPresenter( ChapterSelectParameter parameter ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Id is {parameter.SaveDataId}" );
-			Logger.Debug( $"Single Play Mode is {parameter.IsSinglePlayMode}" );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Id is {parameter.SaveDataId}" );
+			this.LogDebug( $"Single Play Mode is {parameter.IsSinglePlayMode}" );
 			// デバッグ用
 			{
 				string cleardChapterIds = "";
@@ -84,7 +84,7 @@ namespace Presenters.ChapterSelect {
 						cleardChapterIds += chapter.Id.ToString() + " ";
 					}
 				);
-				Logger.Warning( $"Cleared Chapter Id is {cleardChapterIds}" );
+				this.LogWarning( $"Cleared Chapter Id is {cleardChapterIds}" );
 			}
 
 			this.isSinglePlayMode = parameter.IsSinglePlayMode;
@@ -113,7 +113,7 @@ namespace Presenters.ChapterSelect {
 			// ModelのSubscribeを設定
 			this.InitialModelSubscribeSetting();
 			
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 
@@ -125,7 +125,7 @@ namespace Presenters.ChapterSelect {
 		/// <param name="models">Modelのリスト</param>
 		/// <returns>Viewに渡せる形に変換したリスト</returns>
 		private List<ChapterSelectView.Chapter> ConvertChapterModel( List<ChapterModel> models ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			List<ChapterSelectView.Chapter> list = new List<ChapterSelectView.Chapter>();
 			foreach( int i in Enumerable.Range( 0 , models.Count ) ) {
@@ -142,7 +142,7 @@ namespace Presenters.ChapterSelect {
 					CoodinateOnLine = 0
 				} );
 			}
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return list;
 		}
 
@@ -154,27 +154,27 @@ namespace Presenters.ChapterSelect {
 		/// Viewの設定
 		/// </summary>
 		private void InitialViewSetting() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			
 			// Viewを取得
 			this.chapterSelectView = GameObject.Find( "Canvas" ).GetComponent<ChapterSelectView>();
 			this.userControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// ModelのSubscribeを設定
 		/// </summary>
 		private void InitialModelSubscribeSetting() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.selectedChapterId.Subscribe( ( id ) => { this.ChangedSelectedChapterId( id ); } );
 			this.userControllerView.MenuButtons[ "CursorUp" ].Subscribe( value => this.ChangedCursorUp( value ) );
 			this.userControllerView.MenuButtons[ "CursorDown" ].Subscribe( value => this.ChangedCursorDown( value ) );
 			this.userControllerView.MenuButtons[ "CursorLeft" ].Subscribe( value => this.ChangedCursorLeft( value ) );
 			this.userControllerView.MenuButtons[ "CursorRight" ].Subscribe( value => this.ChangedCursorRight( value ) );
 			this.userControllerView.MenuButtons[ "Cancel" ].Subscribe( value => this.ChangedCancel( value ) );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -186,15 +186,15 @@ namespace Presenters.ChapterSelect {
 		/// </summary>
 		/// <param name="id">チャプターId</param>
 		private void ChangedSelectedChapterId( int id ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Chapter Id is {id}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Chapter Id is {id}." );
 			this.chapterSelectView.SetSelectedScrollNode( id );
 			this.chapterSelectView.SetSelectedTimelineNode( id );
 			this.chapterSelectView.SetDetailText( 
 				this.chapterService.GetChapters( this.clearedChapterIds )
 					.FirstOrDefault( (chapter) => chapter.Id == id ).Detail
 			);
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -202,8 +202,8 @@ namespace Presenters.ChapterSelect {
 		/// </summary>
 		/// <param name="value">値</param>
 		private void ChangedCursorUp( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Value is {value}." );
 
 			// イベント実行条件
 			// ・初回1フレーム目
@@ -213,7 +213,7 @@ namespace Presenters.ChapterSelect {
 			}
 
 			int selectedChapterId = this.chapterSelectView.GetSelectedChapterId();
-			Logger.Debug( $"Selected Chapter Id is {selectedChapterId}." );
+			this.LogDebug( $"Selected Chapter Id is {selectedChapterId}." );
 
 			// チャプター順にソート
 			IOrderedEnumerable<ChapterModel> sortedChapters
@@ -232,24 +232,24 @@ namespace Presenters.ChapterSelect {
 
 			// 選択中のチャプターが一覧の末尾だった場合は先頭を選択
 			if( nextObject == null ) {
-				Logger.Debug( "Next Object is Null." );
+				this.LogDebug( "Next Object is Null." );
 				nextObject = sortedChapters.FirstOrDefault();
 			}
 			else {
-				Logger.Debug( $"Next Object Id is {nextObject.Id}." );
+				this.LogDebug( $"Next Object Id is {nextObject.Id}." );
 			}
 
 			this.selectedChapterId.Value = nextObject.Id;
 			
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		/// <summary>
 		/// 十字下変更時イベント
 		/// </summary>
 		/// <param name="value">値</param>
 		private void ChangedCursorDown( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Value is {value}." );
 
 			// イベント実行条件
 			// ・初回1フレーム目
@@ -259,7 +259,7 @@ namespace Presenters.ChapterSelect {
 			}
 			
 			int selectedChapterId = this.chapterSelectView.GetSelectedChapterId();
-			Logger.Debug( $"Selected Chapter Id is {selectedChapterId}." );
+			this.LogDebug( $"Selected Chapter Id is {selectedChapterId}." );
 
 			// チャプター順にソート
 			IOrderedEnumerable<ChapterModel> sortedChapters
@@ -277,16 +277,16 @@ namespace Presenters.ChapterSelect {
 
 			// 選択中のチャプターが一覧の末尾だった場合は先頭を選択
 			if( nextObject == null ) {
-				Logger.Debug( "Next Object is Null." );
+				this.LogDebug( "Next Object is Null." );
 				nextObject = sortedChapters.FirstOrDefault();
 			}
 			else {
-				Logger.Debug( $"Next Object Id is {nextObject.Id}." );
+				this.LogDebug( $"Next Object Id is {nextObject.Id}." );
 			}
 
 			this.selectedChapterId.Value = nextObject.Id;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -296,8 +296,8 @@ namespace Presenters.ChapterSelect {
 		/// TODO 未クリアの項目を選択中に左右ボタン押下で先頭か末尾が選ばれてしまう
 		/// 一番近いものを選択するようにする
 		private void ChangedCursorLeft( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Value is {value}." );
 
 			// イベント実行条件
 			// ・初回1フレーム目
@@ -307,7 +307,7 @@ namespace Presenters.ChapterSelect {
 			}
 
 			int selectedChapterId = this.chapterSelectView.GetSelectedChapterId();
-			Logger.Debug( $"Selected Chapter Id is {selectedChapterId}." );
+			this.LogDebug( $"Selected Chapter Id is {selectedChapterId}." );
 
 			IOrderedEnumerable<ChapterModel> sortedAndClearedOnlyChapters
 				= this.chapterService.GetChapters( this.clearedChapterIds )
@@ -327,16 +327,16 @@ namespace Presenters.ChapterSelect {
 
 			// 選択中のチャプターが一覧の末尾だった場合は先頭を選択
 			if( nextObject == null ) {
-				Logger.Debug( "Next Object is Null." );
+				this.LogDebug( "Next Object is Null." );
 				nextObject = sortedAndClearedOnlyChapters.FirstOrDefault();
 			}
 			else {
-				Logger.Debug( $"Next Object Id is {nextObject.Id}." );
+				this.LogDebug( $"Next Object Id is {nextObject.Id}." );
 			}
 
 			this.selectedChapterId.Value = nextObject.Id;
 			
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		
 		/// <summary>
@@ -346,8 +346,8 @@ namespace Presenters.ChapterSelect {
 		/// TODO 未クリアの項目を選択中に左右ボタン押下で先頭か末尾が選ばれてしまう
 		/// 一番近いものを選択するようにする
 		private void ChangedCursorRight( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Value is {value}." );
 
 			// イベント実行条件
 			// ・初回1フレーム目
@@ -357,7 +357,7 @@ namespace Presenters.ChapterSelect {
 			}
 			
 			int selectedChapterId = this.chapterSelectView.GetSelectedChapterId();
-			Logger.Debug( $"Selected Chapter Id is {selectedChapterId}." );
+			this.LogDebug( $"Selected Chapter Id is {selectedChapterId}." );
 
 			IOrderedEnumerable<ChapterModel> sortedAndClearedOnlyChapters
 				= this.chapterService.GetChapters( this.clearedChapterIds )
@@ -377,16 +377,16 @@ namespace Presenters.ChapterSelect {
 
 			// 選択中のチャプターが一覧の末尾だった場合は先頭を選択
 			if( nextObject == null ) {
-				Logger.Debug( "Next Object is Null." );
+				this.LogDebug( "Next Object is Null." );
 				nextObject = sortedAndClearedOnlyChapters.FirstOrDefault();
 			}
 			else {
-				Logger.Debug( $"Next Object Id is {nextObject.Id}." );
+				this.LogDebug( $"Next Object Id is {nextObject.Id}." );
 			}
 
 			this.selectedChapterId.Value = nextObject.Id;
 			
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -394,8 +394,8 @@ namespace Presenters.ChapterSelect {
 		/// </summary>
 		/// <param name="value">値</param>
 		private void ChangedCancel( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Value is {value}." );
 
 			if( value != 1 ) {
 				return;
@@ -405,7 +405,7 @@ namespace Presenters.ChapterSelect {
 				IsSinglePlayMode = this.isSinglePlayMode
 			} );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -417,13 +417,13 @@ namespace Presenters.ChapterSelect {
 		/// </summary>
 		/// <param name="id">チャプターId</param>
 		private void ClickedDecisionButtonEvent( int id ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Chapter Id is {id}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Chapter Id is {id}." );
 			CustomizeParameter parameter = new CustomizeParameter() {
 				SaveId = this.SaveDataId
 			};
 			this.sceneService.LoadScene( "Customize" , parameter );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion

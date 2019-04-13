@@ -18,9 +18,9 @@ namespace Views.Customize {
 		/// 決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickDecisionEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickDecisionEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -28,9 +28,9 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="equipmentName">装備名</param>
 		public void SetEquipmentName( string equipmentName ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.transform.GetChild( 0 ).GetComponent<Text>().text = equipmentName ?? "None Name";
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}

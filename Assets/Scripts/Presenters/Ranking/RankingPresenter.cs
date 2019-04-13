@@ -36,13 +36,13 @@ namespace Presenters.Ranking {
 		/// コンストラクタ
 		/// </summary>
 		public RankingPresenter() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			// Viewの設定
 			this.InitialViewSetting();
 
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#region 初期設定
@@ -51,7 +51,7 @@ namespace Presenters.Ranking {
 		/// Viewの設定
 		/// </summary>
 		private void InitialViewSetting() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			// hierarchyからViewを取得
 			this.rankingView = GameObject.Find( "Canvas" ).GetComponent<RankingView>();
@@ -59,7 +59,7 @@ namespace Presenters.Ranking {
 			// ランキングViewのEventHandler設定
 			this.rankingView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -70,14 +70,14 @@ namespace Presenters.Ranking {
 		/// 戻るボタン押下時イベント
 		/// </summary>
 		private void ClickedBackButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.sceneService.LoadScene(
 				"Title" ,
 				new TitleParameter() {
 					InitialTitlePart = TitleParameter.InitialTitlePartEnum.MainMenu
 				}
 			);
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion

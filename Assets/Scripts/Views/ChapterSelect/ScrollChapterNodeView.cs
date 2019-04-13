@@ -33,9 +33,9 @@ namespace Views.ChapterSelect {
 		/// 決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickDecisionButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickDecisionButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -43,9 +43,9 @@ namespace Views.ChapterSelect {
 		/// </summary>
 		/// <param name="text">テキスト</param>
 		public void SetText( string text ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.text.text = text;
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		
 	}

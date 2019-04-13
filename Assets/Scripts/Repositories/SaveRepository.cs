@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static SaveRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new SaveRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private SaveRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			Saves saves = this.Load<Saves>( this.FilePath );
 			this.Rows = saves.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 
@@ -61,11 +58,11 @@ namespace Repositories {
 		/// セーブデータの書き込み
 		/// </summary>
 		public void Write() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.Write<Saves>( this.FilePath , new Saves() {
 				rows = this.Rows
 			} );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}

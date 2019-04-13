@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static ParameterChipSquareRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new ParameterChipSquareRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private ParameterChipSquareRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			ParameterChipSquares parameterChipSquares = this.Load<ParameterChipSquares>( this.FilePath );
 			this.Rows = parameterChipSquares.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 

@@ -1,175 +1,100 @@
 ﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
+using Configs.Logs;
+using UnityEditor;
+using UnityEngine;
 /// <summary>
-/// Logger設定クラス
+/// ログ出力拡張メソッド
 /// </summary>
-public class LoggerConfiguer {
+public static class LogExtentions {
 
 	/// <summary>
-	/// デバッグログを出力するかどうか
+	/// アセットパス
 	/// </summary>
-	public static bool HasOutputDebugLog = true;
+	private static readonly string AssetPath = "Assets/Resources/Config/Log.asset";
 
-	/// <summary>
-	/// 警告ログを出力するかどうか
-	/// </summary>
-	public static bool HasOutputWarningLog = true;
-
-	/// <summary>
-	/// エラーログを出力するかどうか
-	/// </summary>
-	public static bool HasOutputErrorLog = true;
-
-	/// <summary>
-	/// Viewのログを出力するかどうか
-	/// </summary>
-	public static bool HasOutputViewLog = true;
-
-	/// <summary>
-	/// Presenterのログを出力するかどうか
-	/// </summary>
-	public static bool HasOutputPresenterLog = true;
-
-	/// <summary>
-	/// ViewとPresenterのログを出力するかどうか
-	/// </summary>
-	public static bool HasOutputOtherLog = true;
-
-}
-
-/// <summary>
-/// ログ出力クラス
-/// </summary>
-public static class Logger {
-	
 	/// <summary>
 	/// ログレベル
 	/// </summary>
 	private enum LogLevel {
-		Debug ,
-		Warning ,
+		Debug,
+		Warning,
 		Error
 	};
-	
-	/// <summary>
-	/// ログ出力するかどうかの判定
-	/// </summary>
-	/// <param name="logLevel">ログレベル</param>
-	/// <param name="className">クラス名</param>
-	/// <returns>ログ出力するかどうか</returns>
-	private static bool HasOutputLog( LogLevel logLevel , string className ) {
 
-		// ログレベル毎に出力フラグを見て判定
-		if( logLevel == LogLevel.Debug && !LoggerConfiguer.HasOutputDebugLog ) {
-			return false;
-		}
-		if( logLevel == LogLevel.Warning && !LoggerConfiguer.HasOutputWarningLog ) {
-			return false;
-		}
-		if( logLevel == LogLevel.Error && !LoggerConfiguer.HasOutputErrorLog ) {
-			return false;
-		}
-
-		// クラス名毎に出力フラグを見て判定
-		if( className.EndsWith( "View" ) && !LoggerConfiguer.HasOutputViewLog ) {
-			return false;
-		}
-		if( className.EndsWith( "Presenter" ) && !LoggerConfiguer.HasOutputPresenterLog ) {
-			return false;
-		}
-		if( !className.EndsWith( "View" ) && !className.EndsWith( "Presenter" ) && !LoggerConfiguer.HasOutputOtherLog ) {
-			return false;
-		}
-
-		return true;
-
-	}
-
-	/// <summary>
-	/// ログ出力元からメッセージを加工
-	/// </summary>
-	/// <param name="className">クラス名</param>
-	/// <param name="methodName">メソッド名</param>
-	/// <param name="message">メッセージ</param>
-	/// <returns>加工されたログ</returns>
-	private static string ProcessMessage(
-		string className ,
-		string methodName ,
-		string message
-	) {
-
-		string processedMessage = "[" + className + "." + methodName + "]" + message;
-		if( className.EndsWith( "View" ) ) {
-			return $"<color=blue>{processedMessage}</color>";
-		}
-		else if( className.EndsWith( "Presenter" ) ) {
-			return $"<color=green>{processedMessage}</color>";
-		}
-
-		return processedMessage;
-
-	}
-
-	/// <summary>
-	/// ログレベルに応じてログを出力する
-	/// </summary>
-	/// <param name="logLevel">ログレベル</param>
-	/// <param name="message">メッセージ</param>
-	private static void OutputLog( LogLevel logLevel , string message ) {
-		switch( logLevel ) {
-			case LogLevel.Debug:
-				UnityEngine.Debug.Log( message );
-				break;
-			case LogLevel.Warning:
-				UnityEngine.Debug.LogWarning( message );
-				break;
-			case LogLevel.Error:
-				UnityEngine.Debug.LogError( message );
-				break;
-		}
-	}
-
-	/// <summary>
-	/// ログ出力
-	/// </summary>
-	/// <param name="logLevel">ログレベル</param>
-	/// <param name="message">メッセージ</param>
 	private static void WriteLog( LogLevel logLevel , string message ) {
 
 		// 2つ前のスタックからメソッド名とクラス名を取得
-		System.Diagnostics.StackFrame callerFrame = new System.Diagnostics.StackFrame( 2 );
+		StackFrame callerFrame = new StackFrame( 2 );
 		string methodName = callerFrame.GetMethod().Name;
 		string className = callerFrame.GetMethod().ReflectedType.FullName;
 
-		if( !HasOutputLog( logLevel , className ) ) {
-			return;
+		ScriptableLogConfig config = AssetDatabase.LoadAssetAtPath( AssetPath , typeof( ScriptableLogConfig ) ) as ScriptableLogConfig;
+		string processedMessage = $"[{className}.{methodName}]{message}";
+		foreach( ScriptableLogConfig.Check check in config.CheckList ) {
+			if( !check.IsValid ) {
+				continue;
+			}
+			if(
+				( !string.IsNullOrEmpty( check.RegexClass ) && Regex.IsMatch( className , check.RegexClass ) ) ||
+				( !string.IsNullOrEmpty( check.RegexMethod ) && Regex.IsMatch( methodName , check.RegexMethod ) ) ||
+				( !string.IsNullOrEmpty( check.RegexMessage ) && Regex.IsMatch( message , check.RegexMessage ) )
+			) {
+				switch( check.Type ) {
+					case ScriptableLogConfig.Check.ActionType.Hide:
+						return;
+					case ScriptableLogConfig.Check.ActionType.Bold:
+						processedMessage = $"<b>{processedMessage}</b>";
+						break;
+					case ScriptableLogConfig.Check.ActionType.Color:
+						string rgb = "#" + ColorUtility.ToHtmlStringRGB( check.Color );
+						processedMessage = $"<color={rgb}>{processedMessage}</color>";
+						break;
+					default:
+						break;
+				}
+			}
 		}
 
-		message = ProcessMessage( className , methodName , message );
-
-		OutputLog( logLevel , message );
+		// ログ出力
+		switch( logLevel ) {
+			case LogLevel.Debug:
+				UnityEngine.Debug.Log( processedMessage );
+				break;
+			case LogLevel.Warning:
+				UnityEngine.Debug.LogWarning( processedMessage );
+				break;
+			case LogLevel.Error:
+				UnityEngine.Debug.LogError( processedMessage );
+				break;
+			default:
+				break;
+		};
 
 	}
 
 	/// <summary>
 	/// デバッグログ出力
 	/// </summary>
-	/// <param name="message">メッセージ</param>
-	[Conditional("DEBUG")]
-	public static void Debug( string message )
+	/// <param name="obj">拡張オブジェクト</param>
+	/// <param name="message">ログメッセージ</param>
+	public static void LogDebug( this object obj , string message )
 		=> WriteLog( LogLevel.Debug , message );
 
 	/// <summary>
 	/// 警告ログ出力
 	/// </summary>
-	/// <param name="message">メッセージ</param>
-	public static void Warning( string message )
+	/// <param name="obj">拡張オブジェクト</param>
+	/// <param name="message">ログメッセージ</param>
+	public static void LogWarning( this object obj , string message )
 		=> WriteLog( LogLevel.Warning , message );
 
 	/// <summary>
 	/// エラーログ出力
 	/// </summary>
-	/// <param name="message">メッセージ</param>
-	public static void Error( string message )
+	/// <param name="obj">拡張オブジェクト</param>
+	/// <param name="message">ログメッセージ</param>
+	public static void LogError( this object obj , string message )
 		=> WriteLog( LogLevel.Error , message );
-	
+
 }

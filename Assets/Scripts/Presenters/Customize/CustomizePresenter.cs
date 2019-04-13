@@ -85,8 +85,8 @@ namespace Presenters.Customize {
 		/// コンストラクタ
 		/// </summary>
 		public CustomizePresenter( CustomizeParameter parameter ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Save Data Id is {parameter.SaveId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Save Data Id is {parameter.SaveId}." );
 
 			this.saveId = parameter.SaveId;
 
@@ -111,7 +111,7 @@ namespace Presenters.Customize {
 			// 初期表示
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipmentMenu;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#region 変換
@@ -122,7 +122,7 @@ namespace Presenters.Customize {
 		/// <param name="bodies">素体Model一覧</param>
 		/// <returns>素体一覧</returns>
 		private List<CustomizeView.Body> ConvertBodies( List<BodyModel> bodies ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			List<CustomizeView.Body> list = bodies
 				.Select( ( content , index ) => new { Content = content , Index = index } )
 				.Select( ( element ) => new CustomizeView.Body() {
@@ -142,7 +142,7 @@ namespace Presenters.Customize {
 					}
 				} )
 				.ToList();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return list;
 		}
 
@@ -152,7 +152,7 @@ namespace Presenters.Customize {
 		/// <param name="equipments">装備Model一覧</param>
 		/// <returns>装備一覧</returns>
 		private List<CustomizeView.Equipment> ConvertEquipments( List<EquipmentModel> equipments ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			List<CustomizeView.Equipment> list = equipments
 				.Select( ( content , index ) => new { Content = content , Index = index } )
 				.Select( ( element ) => new CustomizeView.Equipment(){
@@ -163,7 +163,7 @@ namespace Presenters.Customize {
 					}
 				} )
 				.ToList();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return list;
 		}
 
@@ -173,7 +173,7 @@ namespace Presenters.Customize {
 		/// <param name="equipments">装備可能箇所Model一覧</param>
 		/// <returns>装備可能一覧</returns>
 		private List<CustomizeView.EquipablePlace> ConvertEquipablePlaces( List<EquipablePlaceModel> equipablePlaeces ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			List<CustomizeView.EquipablePlace> list = equipablePlaeces
 				.Select( ( content , index ) => new { Content = content , Index = index } )
 				.Select( ( element ) => new CustomizeView.EquipablePlace() {
@@ -185,7 +185,7 @@ namespace Presenters.Customize {
 					}
 				} )
 				.ToList();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return list;
 		}
 
@@ -197,7 +197,7 @@ namespace Presenters.Customize {
 		/// Viewの設定
 		/// </summary>
 		private void InitialViewSetting() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			// hierarchyからViewを持つGameObject取得
 			GameObject customizeGameObject = GameObject.Find( "Canvas" );
@@ -217,14 +217,14 @@ namespace Presenters.Customize {
 			this.CustomizeView.OnClickCustomParameterChipsDecisionButtonEventHandler = this.ClickedCustomParameterChipsDecisionButtonEvent;
 			this.CustomizeView.OnClickFreeSquaresDecisionButtonEventHandler = this.ClickedFreeSquaresDecisionButtonEvent;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// ModelのSubscribeを設定
 		/// </summary>
 		private void InitialModelSubscribeSetting() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.UserControllerView.TurnCharacter.Subscribe( value => { this.ChangedTurnCharacter( value ); } );
 			this.UserControllerView.MenuButtons[ "Cancel" ].Subscribe( ( value ) => { this.ChangedCancelButton( value ); } );
 			this.UserControllerView.MenuButtons[ "Detail" ].Subscribe( ( value ) => this.ChangedDetailButton( value ) );
@@ -232,7 +232,7 @@ namespace Presenters.Customize {
 			this.CreatedCharacterModel.Subscribe( ( bodyModel ) => this.ChangedBodyModel( bodyModel ) );
 			this.SelectedEquipablePlace.Subscribe( id => this.ChangedSelectedEquipablePlace( id ) );
 			this.CustomizeWindowModel.IsShownDetail.Subscribe( ( isShownDetail ) => this.ChangedShownDetail( isShownDetail ) );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -244,9 +244,9 @@ namespace Presenters.Customize {
 		/// </summary>
 		/// <param name="selectableName">選択状態</param>
 		private void ChangedSelectableName( SelectableNameEnum selectableName ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Selectable Name is {selectableName}." );
-			Logger.Debug( $"Before Selectable Name is {this.CustomizeWindowModel.BeforeSelectableName}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Selectable Name is {selectableName}." );
+			this.LogDebug( $"Before Selectable Name is {this.CustomizeWindowModel.BeforeSelectableName}." );
 			switch( selectableName ) {
 				case SelectableNameEnum.None:
 					break;
@@ -286,7 +286,7 @@ namespace Presenters.Customize {
 							this.CustomizeView.SetSelectedEquipablePlaceGameObject();
 							break;
 						default:
-							Logger.Warning( "Unexpected Window Name" );
+							this.LogWarning( "Unexpected Window Name" );
 							break;
 					}
 					break;
@@ -331,7 +331,7 @@ namespace Presenters.Customize {
 					break;
 
 				default:
-					Logger.Warning( "Unexpected Window Name" );
+					this.LogWarning( "Unexpected Window Name" );
 					break;
 
 			}
@@ -339,7 +339,7 @@ namespace Presenters.Customize {
 			// 遷移元状態として保持
 			this.CustomizeWindowModel.BeforeSelectableName = selectableName;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -347,7 +347,7 @@ namespace Presenters.Customize {
 		/// </summary>
 		/// <param name="value">値</param>
 		private void ChangedTurnCharacter( int value ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			if( value < -100 || 100 < value ) {
 				this.ShowcaseView.IsInput = true;
 				this.ShowcaseView.IncreaseAngle = value * -0.01f;
@@ -355,7 +355,7 @@ namespace Presenters.Customize {
 			else {
 				this.ShowcaseView.IncreaseAngle = 0f;
 			}
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -363,8 +363,8 @@ namespace Presenters.Customize {
 		/// </summary>
 		/// <param name="value">値</param>
 		private void ChangedCancelButton( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Value is {value}." );
 
 			if( value != 1 ) {
 				return;
@@ -389,7 +389,7 @@ namespace Presenters.Customize {
 					break;
 			}
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -397,12 +397,12 @@ namespace Presenters.Customize {
 		/// </summary>
 		/// <param name="body">素体</param>
 		private void ChangedBodyModel( BodyModel body ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			string bodyName = "None";
 			if( body != null && body.Id.Value.HasValue ) {
 				bodyName = body.Name;
 			}
-			Logger.Debug( $"Body Name is {bodyName}." );
+			this.LogDebug( $"Body Name is {bodyName}." );
 
 			List<EquipablePlaceModel> models = this.characterService.GetEquipablePlaces(
 				this.CreatedCharacterModel.Value
@@ -416,7 +416,7 @@ namespace Presenters.Customize {
 			// 素体ボタンの名前変更
 			this.CustomizeView.SetBodyButtonText( bodyName );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -424,8 +424,8 @@ namespace Presenters.Customize {
 		/// </summary>
 		/// <param name="id">装備可能箇所ID</param>
 		private void ChangedSelectedEquipablePlace( int? id ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Id is {(id.HasValue ? id.Value.ToString() : "Null")}" );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Id is {(id.HasValue ? id.Value.ToString() : "Null")}" );
 
 			if( id.HasValue ) {
 
@@ -442,7 +442,7 @@ namespace Presenters.Customize {
 				);
 			}
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -450,8 +450,8 @@ namespace Presenters.Customize {
 		/// </summary>
 		/// <param name="value">値</param>
 		private void ChangedDetailButton( int value ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Value is {value}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Value is {value}." );
 			
 			if( value != 1 ) {
 				return;
@@ -459,7 +459,7 @@ namespace Presenters.Customize {
 			
 			this.CustomizeWindowModel.IsShownDetail.Value = !this.CustomizeWindowModel.IsShownDetail.Value;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -467,8 +467,8 @@ namespace Presenters.Customize {
 		/// </summary>
 		/// <param name="isShownDetail"></param>
 		private void ChangedShownDetail( bool isShownDetail ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Shown Detail is {isShownDetail}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Shown Detail is {isShownDetail}." );
 
 			// 詳細窓を表示する場合は選択状態を見て表示する内容を決める
 			if( isShownDetail ) {
@@ -483,7 +483,7 @@ namespace Presenters.Customize {
 			}
 
 			this.CustomizeView.SetDetailActive( isShownDetail );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		
 		#endregion
@@ -494,19 +494,19 @@ namespace Presenters.Customize {
 		/// 装備の決定ボタン押下時イベント
 		/// </summary>
 		public void ClickedEquipmentDecisionButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.ParameterMenu;
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// メニューより素体ボタン押下時イベント
 		/// </summary>
 		public void ClickedBodyButtonFromMenuEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			// ウィンドウ表示切替
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.Body;
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -514,8 +514,8 @@ namespace Presenters.Customize {
 		/// </summary>
 		/// <param name="bodyId">素体ID</param>
 		public void ClickedBodyNodeDecisionButtonEvent( int bodyId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Body Id is {bodyId}" );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Body Id is {bodyId}" );
 
 			// 素体IDからどの素体が選ばれたか調べる
 			this.CreatedCharacterModel.Value = this.characterService.GetHavingBodies( this.saveId ).FirstOrDefault( body => body.Id.HasValue && bodyId == body.Id.Value );
@@ -524,19 +524,19 @@ namespace Presenters.Customize {
 			// ウィンドウ表示切替
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipmentMenu;
 			
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// 装備可能箇所一覧ScrollView選択時イベント
 		/// </summary>
 		public void ClickedEquipablePlaceScrollViewEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			// 一覧選択状態変更
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipablePlaceScrollView;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -544,8 +544,8 @@ namespace Presenters.Customize {
 		/// </summary>
 		/// <param name="equipablePlaceId">装備可能箇所ID</param>
 		public void ClickedEquipablePlaceNodeDecisionButtonEvent( int equipablePlaceId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Equipable Place Id is {equipablePlaceId}" );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Equipable Place Id is {equipablePlaceId}" );
 
 			// 選択中の装備可能箇所IDを保持
 			this.SelectedEquipablePlace.Value = equipablePlaceId;
@@ -553,7 +553,7 @@ namespace Presenters.Customize {
 			// 表示切替
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.Equipments;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -561,11 +561,11 @@ namespace Presenters.Customize {
 		/// </summary>
 		/// <param name="equipmentId">装備ID</param>
 		public void ClickedEquipmentNodeDecisionButtonEvent( int equipmentId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Equipment Id is {equipmentId}" );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Equipment Id is {equipmentId}" );
 
 			int selectedEquipablePlaceId = this.SelectedEquipablePlace.Value.Value;
-			Logger.Debug( $"Selected Equipable Place Id is {selectedEquipablePlaceId}." );
+			this.LogDebug( $"Selected Equipable Place Id is {selectedEquipablePlaceId}." );
 
 			EquipmentModel equipmentModel = this.characterService.GetEquipment( equipmentId );
 
@@ -601,52 +601,52 @@ namespace Presenters.Customize {
 			// 表示切替
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.EquipablePlaceScrollView;
 			
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// パラメータチップ変更ボタン押下時イベント
 		/// </summary>
 		private void ClickedCustomParameterChipsButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.CustomParameterChips;
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// 空きマス変更ボタン押下時イベント
 		/// </summary>
 		private void ClickedCustomFreeSquaresButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.CustomFreeSquares;
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// パラメータチップの決定ボタン押下時イベント
 		/// </summary>
 		private void ClickedParameterChipDecisionButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			// TODO ここ
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// 空きマス変更画面の決定ボタン押下時イベント
 		/// </summary>
 		private void ClickedFreeSquaresDecisionButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.ParameterMenu;
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// パラメータチップ変更画面の決定ボタン押下時イベント
 		/// </summary>
 		private void ClickedCustomParameterChipsDecisionButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.CustomizeWindowModel.SelectableName.Value = SelectableNameEnum.ParameterMenu;
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		
 		#endregion
@@ -657,7 +657,7 @@ namespace Presenters.Customize {
 		/// <returns>取得済みパラメータチップ一覧</returns>
 		/// TODO サーバ等から取得する　返り値もレスポンスデータのまま
 		private List<CustomizeView.ParameterChip> GetAcquiredParameterChip() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			List<CustomizeView.ParameterChip> list = new List<CustomizeView.ParameterChip>() {
 				new CustomizeView.ParameterChip(){
 					Id = 0 ,
@@ -672,7 +672,7 @@ namespace Presenters.Customize {
 					Name = "イカニンジャ"
 				}
 			};
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return list;
 		}
 

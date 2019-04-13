@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static EquipmentRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new EquipmentRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private EquipmentRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			Equipments equipments = this.Load<Equipments>( this.FilePath );
 			this.Rows = equipments.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 

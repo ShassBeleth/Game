@@ -74,12 +74,12 @@ namespace Views.ChapterSelect {
 		/// </summary>
 		/// <returns></returns>
 		public int GetSelectedChapterId() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			GameObject current = this.eventSystem.currentSelectedGameObject;
 			ScrollChapterNodeView view = current.GetComponent<ScrollChapterNodeView>();
 			int id = view.Id;
-			Logger.Debug( $"Selected Chapter Id is {id}.");
-			Logger.Debug( "End" );
+			this.LogDebug( $"Selected Chapter Id is {id}.");
+			this.LogDebug( "End" );
 			return id;
 		}
 		
@@ -100,7 +100,7 @@ namespace Views.ChapterSelect {
 		/// </summary>
 		/// <param name="chapterList">Chapter List</param>
 		public void SetTimelineContent( List<Chapter> chapterList ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			chapterList.ForEach( ( chapter ) => {
 
 				GameObject node = GameObject.Instantiate( this.TimelineNodePrefab );
@@ -114,7 +114,7 @@ namespace Views.ChapterSelect {
 				
 			} );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -122,16 +122,16 @@ namespace Views.ChapterSelect {
 		/// </summary>
 		/// <param name="id">Chapter Id</param>
 		public void SetSelectedTimelineNode( int id ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			foreach( Transform childTransform in this.TimelineContent.transform ) {
 				TimelineChapterNodeView view = childTransform.GetComponent<TimelineChapterNodeView>();
 				if( view == null ) {
-					Logger.Debug( "Continue" );
+					this.LogDebug( "Continue" );
 					continue;
 				}
 				view.IsSelected = view.Id == id;
 			}
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		
 		#endregion
@@ -153,7 +153,7 @@ namespace Views.ChapterSelect {
 		/// </summary>
 		/// <param name="chapterList">Chapter List</param>
 		public void SetScrollViewContent( List<Chapter> chapterList ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			List<GameObject> chapterGameObjects = new List<GameObject>();
 
@@ -177,7 +177,7 @@ namespace Views.ChapterSelect {
 
 				} );
 			
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -185,7 +185,7 @@ namespace Views.ChapterSelect {
 		/// </summary>
 		/// <param name="id">Chapter Id</param>
 		public void SetSelectedScrollNode( int id ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			GameObject selectedObject = null;
 			foreach( Transform childTransform in this.ScrollViewContent.transform ) {
 				ScrollChapterNodeView view = childTransform.GetComponent<ScrollChapterNodeView>();
@@ -195,11 +195,11 @@ namespace Views.ChapterSelect {
 				}
 			}
 			if( selectedObject == null ) {
-				Logger.Warning( "Selected Object is Null." );
+				this.LogWarning( "Selected Object is Null." );
 				return;
 			}
 			this.eventSystem.SetSelectedGameObject( selectedObject );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		
 		#endregion
@@ -216,9 +216,9 @@ namespace Views.ChapterSelect {
 		/// </summary>
 		/// <param name="text">テキスト</param>
 		public void SetDetailText( string text ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.DetailText.text = text;
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion

@@ -34,12 +34,12 @@ namespace Views.ChapterSelect {
 		/// </summary>
 		/// <param name="coodinate">座標</param>
 		public void SetNodeCoodinate( int coodinate ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Coodinate is {coodinate}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Coodinate is {coodinate}." );
 			RectTransform rect = this.GetComponent<RectTransform>();
 			RectTransform parentRect = this.transform.parent.GetComponent<RectTransform>();
 			rect.localPosition = new Vector3( (float)coodinate , 0f , parentRect.localPosition.z );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -47,9 +47,9 @@ namespace Views.ChapterSelect {
 		/// </summary>
 		/// <param name="coodinate">座標</param>
 		public void SetCoodinateOnLine( int coodinate ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Coodinate is {coodinate}." );
-			Logger.Debug( "End" );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Coodinate is {coodinate}." );
+			this.LogDebug( "End" );
 		}
 
 	}

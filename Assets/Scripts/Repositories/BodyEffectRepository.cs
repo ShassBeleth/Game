@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static BodyEffectRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new BodyEffectRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private BodyEffectRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			BodyEffects bodyEffects = this.Load<BodyEffects>( this.FilePath );
 			this.Rows = bodyEffects.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}

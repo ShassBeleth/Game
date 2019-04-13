@@ -28,9 +28,9 @@ namespace Views.Customize {
 		/// 決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickDecisionEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickDecisionEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -38,10 +38,10 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="bodyName">素体名</param>
 		public void SetBodyName( string bodyName ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Body Name is {bodyName}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Body Name is {bodyName}." );
 			this.Text.text = bodyName;
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		
 	}

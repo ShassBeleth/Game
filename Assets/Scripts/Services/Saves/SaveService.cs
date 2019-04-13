@@ -25,12 +25,9 @@ namespace Services.Saves {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static SaveService GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new SaveService();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -54,8 +51,8 @@ namespace Services.Saves {
 		/// コンストラクタ
 		/// </summary>
 		private SaveService() {
-			Logger.Debug( "Start" );
-			Logger.Debug( "End" );
+			this.LogDebug( "Start" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -63,12 +60,12 @@ namespace Services.Saves {
 		/// </summary>
 		/// <returns>セーブデータ一覧</returns>
 		public List<SaveDataModel> GetSaves() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			List<SaveDataModel> saves = this.saveRepository.Rows
 				.Select( saveRow => this.ConvertModelOfRepositoryToModelOfPresenter( saveRow ) )
 				.OrderBy( save => save.id )
 				.ToList();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return saves;
 		}
 
@@ -78,7 +75,7 @@ namespace Services.Saves {
 		/// <param name="save">RepositoryModel</param>
 		/// <returns>PresenterModel</returns>
 		public SaveDataModel ConvertModelOfRepositoryToModelOfPresenter( Save save ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			SaveDataModel model = new SaveDataModel() {
 				id = save.id ,
 				userName = "" ,
@@ -90,7 +87,7 @@ namespace Services.Saves {
 						.OrderBy( chapterClearStatus => chapterClearStatus.Id )
 						.ToList()
 			};
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return model;
 		}
 
@@ -99,10 +96,10 @@ namespace Services.Saves {
 		/// </summary>
 		/// <param name="id"></param>
 		public SaveDataModel CreateNewSave( int id ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			Save save = this.saveRepository.Rows.FirstOrDefault( row => row.id == id );
 			if( save.exsitsAlreadyData ) {
-				Logger.Warning( "Save Exists Already." );
+				this.LogWarning( "Save Exists Already." );
 				return this.ConvertModelOfRepositoryToModelOfPresenter( save );
 			}
 			save.exsitsAlreadyData = true;
@@ -110,7 +107,7 @@ namespace Services.Saves {
 			save.isReverseHorizontalCamera = false;
 			save.isReverseVerticalCamera = false;
 			this.saveRepository.Write();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return this.ConvertModelOfRepositoryToModelOfPresenter( save );
 		}
 		
@@ -119,10 +116,10 @@ namespace Services.Saves {
 		/// </summary>
 		/// <returns>現在日時</returns>
 		public string GetNowString() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			string now = DateTimeUtil.GetNowString();
-			Logger.Debug( $"Now is {now}." );
-			Logger.Debug( "End" );
+			this.LogDebug( $"Now is {now}." );
+			this.LogDebug( "End" );
 			return now;
 		}
 
@@ -131,13 +128,13 @@ namespace Services.Saves {
 		/// </summary>
 		/// <param name="id">セーブデータID</param>
 		public void DeleteSaveData( int id ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Id is {id}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Id is {id}." );
 
 			this.saveRepository.Rows.FirstOrDefault( s => s.id == id ).exsitsAlreadyData = false;
 			this.saveRepository.Write();
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}

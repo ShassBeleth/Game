@@ -17,9 +17,9 @@ namespace Models.Title {
 		/// </summary>
 		/// <param name="windowName">Window名</param>
 		public TitleWindowModel( WindowNameEnum windowName ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.windowName = new ReactiveProperty<WindowNameEnum>( windowName );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}

@@ -145,7 +145,7 @@ namespace Views.UserController {
 			foreach( string menuButtonKeyName in this.MenuButtonKeyNames ) {
 				if( Input.GetButton( menuButtonKeyName ) ) {
 					this.MenuButtons[ menuButtonKeyName ].Value++;
-					Logger.Debug( $"{menuButtonKeyName} is {this.MenuButtons[ menuButtonKeyName ]}" );
+					this.LogDebug( $"{menuButtonKeyName} is {this.MenuButtons[ menuButtonKeyName ]}" );
 				}
 				else {
 					this.MenuButtons[ menuButtonKeyName ].Value = 0;
@@ -155,7 +155,7 @@ namespace Views.UserController {
 			// カーソル左
 			if( Input.GetAxis( "Horizontal" ) < 0 ) {
 				this.MenuButtons[ "CursorLeft" ].Value++;
-				Logger.Debug( $"CursorLeft is {this.MenuButtons[ "CursorLeft" ]}" );
+				this.LogDebug( $"CursorLeft is {this.MenuButtons[ "CursorLeft" ]}" );
 			}
 			else {
 				this.MenuButtons[ "CursorLeft" ].Value = 0;
@@ -163,7 +163,7 @@ namespace Views.UserController {
 			// カーソル右
 			if( 0 < Input.GetAxis( "Horizontal" ) ) {
 				this.MenuButtons[ "CursorRight" ].Value++;
-				Logger.Debug( $"CursorRight is {this.MenuButtons[ "CursorRight" ]}" );
+				this.LogDebug( $"CursorRight is {this.MenuButtons[ "CursorRight" ]}" );
 			}
 			else {
 				this.MenuButtons[ "CursorRight" ].Value = 0;
@@ -171,7 +171,7 @@ namespace Views.UserController {
 			// カーソル下
 			if( Input.GetAxis( "Vertical" ) < 0 ) {
 				this.MenuButtons[ "CursorDown" ].Value++;
-				Logger.Debug( $"CursorDown is {this.MenuButtons[ "CursorDown" ]}" );
+				this.LogDebug( $"CursorDown is {this.MenuButtons[ "CursorDown" ]}" );
 			}
 			else {
 				this.MenuButtons[ "CursorDown" ].Value = 0;
@@ -179,7 +179,7 @@ namespace Views.UserController {
 			// カーソル上
 			if( 0 < Input.GetAxis( "Vertical" ) ) {
 				this.MenuButtons[ "CursorUp" ].Value++;
-				Logger.Debug( $"CursorUp is {this.MenuButtons[ "CursorUp" ]}" );
+				this.LogDebug( $"CursorUp is {this.MenuButtons[ "CursorUp" ]}" );
 			}
 			else {
 				this.MenuButtons[ "CursorUp" ].Value = 0;
@@ -188,19 +188,19 @@ namespace Views.UserController {
 			// カーソル上下
 			this.CursorVertical = (int)( Input.GetAxis( "CursorVertical" ) * 1000 );
 			if( this.CursorVertical != 0 ) {
-				Logger.Debug( $"CursorVertical is {this.CursorVertical}" );
+				this.LogDebug( $"CursorVertical is {this.CursorVertical}" );
 			}
 			
 			// カーソル左右
 			this.CursorHorizontal = (int)( Input.GetAxis( "CursorHorizontal" ) * 1000 );
 			if( this.CursorHorizontal != 0 ) {
-				Logger.Debug( $"CursorHorizontal is {this.CursorHorizontal}" );
+				this.LogDebug( $"CursorHorizontal is {this.CursorHorizontal}" );
 			}
 
 			// キャラクター回転
 			this.TurnCharacter.Value = (int)( Input.GetAxis( "TurnCharacter" ) * 1000 );
 			if( this.TurnCharacter.Value != 0 ) {
-				Logger.Debug( $"TurnCharacter is {this.TurnCharacter}" );
+				this.LogDebug( $"TurnCharacter is {this.TurnCharacter}" );
 			}
 			
 			#endregion
@@ -211,7 +211,7 @@ namespace Views.UserController {
 			foreach( string buttleButtonKeyName in this.ButtleButtonKeyNames ) {
 				if( Input.GetButton( buttleButtonKeyName ) ) {
 					this.ButtleButtons[ buttleButtonKeyName ]++;
-					Logger.Debug( $"{buttleButtonKeyName} is {this.ButtleButtons[ buttleButtonKeyName ]}" );
+					this.LogDebug( $"{buttleButtonKeyName} is {this.ButtleButtons[ buttleButtonKeyName ]}" );
 				}
 				else {
 					this.ButtleButtons[ buttleButtonKeyName ] = 0;
@@ -221,31 +221,31 @@ namespace Views.UserController {
 			// 水平移動
 			this.HorizontalMove = (int)( Input.GetAxis( "HorizontalMove" ) * 1000 );
 			if( this.HorizontalMove != 0 ) {
-				Logger.Debug( $"HorizontalMove is {this.HorizontalMove}" );
+				this.LogDebug( $"HorizontalMove is {this.HorizontalMove}" );
 			}
 
 			// 垂直移動
 			this.VerticalMove = (int)( Input.GetAxis( "VerticalMove" ) * 1000 );
 			if( this.VerticalMove != 0 ) {
-				Logger.Debug( $"VerticalMove is {this.VerticalMove}" );
+				this.LogDebug( $"VerticalMove is {this.VerticalMove}" );
 			}
 
 			// カメラ水平回転
 			this.HorizontalTurnCamera = (int)( Input.GetAxis( "HorizontalTurnCamera" ) * 1000 );
 			if( this.HorizontalTurnCamera != 0 ) {
-				Logger.Debug( $"HorizontalTurnCamera is {this.HorizontalTurnCamera}" );
+				this.LogDebug( $"HorizontalTurnCamera is {this.HorizontalTurnCamera}" );
 			}
 
 			// カメラ垂直回転
 			this.VerticalTurnCamera = (int)( Input.GetAxis( "VerticalTurnCamera" ) * 1000 );
 			if( this.VerticalTurnCamera != 0 ) {
-				Logger.Debug( $"VerticalTurnCamera is {this.VerticalTurnCamera}" );
+				this.LogDebug( $"VerticalTurnCamera is {this.VerticalTurnCamera}" );
 			}
 
 			// ブースト
 			this.Boost = (int)( ( ( Input.GetAxis( "Boost" ) * 1000 ) + 1000 ) / 2 );
 			if( this.Boost != 0 ) {
-				Logger.Debug( $"Boost is {this.Boost}" );
+				this.LogDebug( $"Boost is {this.Boost}" );
 			}
 			
 			#endregion

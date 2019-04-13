@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static HavingBodyRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new HavingBodyRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private HavingBodyRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			HavingBodies havingBodies = this.Load<HavingBodies>( this.FilePath );
 			this.Rows = havingBodies.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 

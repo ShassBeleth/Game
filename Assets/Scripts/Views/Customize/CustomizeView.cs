@@ -162,9 +162,9 @@ namespace Views.Customize {
 		/// 素体ボタン押下時イベント
 		/// </summary>
 		public void OnClickBodyEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickBodyButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -172,10 +172,10 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="bodyName">素体名</param>
 		public void SetBodyButtonText( string bodyName ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Body Name is {bodyName}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Body Name is {bodyName}." );
 			this.BodyButton.transform.GetChild( 0 ).GetComponent<Text>().text = $"Base：{bodyName}";
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -185,7 +185,7 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="bodies">素体一覧</param>
 		public void SetBodies( List<Body> bodies ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			List<GameObject> bodyGameObjects = new List<GameObject>();
 
@@ -209,7 +209,7 @@ namespace Views.Customize {
 				};
 				button.navigation = nav;
 			}
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -217,8 +217,8 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="id">選択状態となる素体のId nullなら先頭を選択</param>
 		public void SetSelectedBody( int? id ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"(Id is {(id.HasValue ? id.Value.ToString() : "Null")}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"(Id is {(id.HasValue ? id.Value.ToString() : "Null")}." );
 
 			GameObject selectedGameObject = null;
 			// IDがあれば一覧からGameObjectを取得
@@ -232,7 +232,7 @@ namespace Views.Customize {
 				}
 				// 不正なIDだった場合は0番目を取得
 				if( selectedGameObject == null ) {
-					Logger.Debug( "Unexpected Id" );
+					this.LogDebug( "Unexpected Id" );
 					selectedGameObject = this.bodyScrollViewContent.transform.GetChild( 0 ).gameObject;
 				}
 			}
@@ -244,7 +244,7 @@ namespace Views.Customize {
 			if( selectedGameObject != null ) {
 				this.eventSystem.SetSelectedGameObject( selectedGameObject );
 			}
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -275,9 +275,9 @@ namespace Views.Customize {
 		/// 装備可能箇所一覧Scroll View選択時イベント
 		/// </summary>
 		public void OnClickEquipmentScrollViewEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickEquipablePlaceScrollViewEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -285,7 +285,7 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="equipablePlaces">装備可能箇所一覧</param>
 		public void SetEquipablePlaces( List<EquipablePlace> equipablePlaces ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			// 既に子要素として含まれる一覧項目を削除
 			foreach( Transform child in this.equipablePlaceScrollViewContent.transform ) {
@@ -317,7 +317,7 @@ namespace Views.Customize {
 				button.navigation = nav;
 			}
 			
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -326,9 +326,9 @@ namespace Views.Customize {
 		/// <param name="name">装備可能箇所ID</param>
 		/// <param name="EquipmentName">装備名</param>
 		public void UpdateEquipablePlaceText( int id , string equipmentName ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Id is {id}." );
-			Logger.Debug( $"Equipment Name is {equipmentName}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Id is {id}." );
+			this.LogDebug( $"Equipment Name is {equipmentName}." );
 
 			foreach( Transform childTransform in this.equipablePlaceScrollViewContent.transform ) {
 				EquipablePlaceNodeView view = childTransform.GetComponent<EquipablePlaceNodeView>();
@@ -338,21 +338,21 @@ namespace Views.Customize {
 				}
 			}
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// 強制的に装備可能箇所一覧内の項目を選択状態にする
 		/// </summary>
 		public void SetSelectedEquipablePlaceGameObject() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			if( this.equipablePlaceScrollViewContent.transform.childCount == 0 ) {
-				Logger.Debug( "Equipable Place Scroll View Content Child Count is 0." );
+				this.LogDebug( "Equipable Place Scroll View Content Child Count is 0." );
 				return;
 			}
 			GameObject gameObject = this.equipablePlaceScrollViewContent.transform.GetChild( 0 ).gameObject;
 			this.eventSystem.SetSelectedGameObject( gameObject );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -378,7 +378,7 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="equipments">装備一覧</param>
 		public void SetEquipments( List<Equipment> equipments ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			// 既に子要素として含まれる一覧項目を削除
 			foreach( Transform child in this.equipmentScrollViewContent.transform ) {
@@ -409,21 +409,21 @@ namespace Views.Customize {
 				button.navigation = nav;
 			}
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		
 		/// <summary>
 		/// 強制的に装備一覧内の項目を選択状態にする
 		/// </summary>
 		public void SetSelectedEquipmentGameObject() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			if( this.firstEquipmentNode != null ) {
 				this.eventSystem.SetSelectedGameObject( this.firstEquipmentNode );
 			}
 			else {
-				Logger.Debug( "First Equipment Node is Null." );
+				this.LogDebug( "First Equipment Node is Null." );
 			}
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		
 		#endregion
@@ -476,7 +476,7 @@ namespace Views.Customize {
 		/// 装備素体一覧表示
 		/// </summary>
 		public void ShowEquipmentBodies() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			this.customEquipmentGameObject.SetActive( true );
 			this.customParameterGameObject.SetActive( false );
@@ -485,14 +485,14 @@ namespace Views.Customize {
 			this.equipmentMenuGameObject.SetActive( false );
 			this.equipmentsGameObject.SetActive( false );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// 装備メニュー表示
 		/// </summary>
 		public void ShowEquipmentMenu() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			this.customEquipmentGameObject.SetActive( true );
 			this.customParameterGameObject.SetActive( false );
@@ -501,14 +501,14 @@ namespace Views.Customize {
 			this.bodiesGameObject.SetActive( false );
 			this.equipmentsGameObject.SetActive( false );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// 装備一覧表示
 		/// </summary>
 		public void ShowEquipments() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			this.customEquipmentGameObject.SetActive( true );
 			this.customParameterGameObject.SetActive( false );
@@ -517,14 +517,14 @@ namespace Views.Customize {
 			this.equipmentMenuGameObject.SetActive( false );
 			this.bodiesGameObject.SetActive( false );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// パラメータチップメニュー表示
 		/// </summary>
 		public void ShowParameterChipMenu() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			this.customParameterGameObject.SetActive( true );
 			this.customEquipmentGameObject.SetActive( false );
@@ -533,14 +533,14 @@ namespace Views.Customize {
 			this.customParameterChipsGameObject.SetActive( false );
 			this.customFreeSquaresGameObject.SetActive( false );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// パラメータチップカスタマイズ表示
 		/// </summary>
 		public void ShowCustomParameterChips() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			this.customParameterGameObject.SetActive( true );
 			this.customEquipmentGameObject.SetActive( false );
@@ -549,14 +549,14 @@ namespace Views.Customize {
 			this.parameterChipMenuGameObject.SetActive( false );
 			this.customFreeSquaresGameObject.SetActive( false );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// 空きマスカスタマイズ表示
 		/// </summary>
 		public void ShowCustomFreeSquares() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			this.customParameterGameObject.SetActive( true );
 			this.customEquipmentGameObject.SetActive( false );
@@ -565,7 +565,7 @@ namespace Views.Customize {
 			this.customParameterChipsGameObject.SetActive( false );
 			this.parameterChipMenuGameObject.SetActive( false );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -582,9 +582,9 @@ namespace Views.Customize {
 		/// 装備決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickEquipmentDecisionButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickEquipmentDecisionButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		#endregion
 
@@ -615,10 +615,10 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="isActive">アクティブかどうか</param>
 		public void SetDetailActive( bool isActive ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Active is {isActive}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Active is {isActive}." );
 			this.DetailGameObject.SetActive( isActive );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -626,22 +626,22 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="detail">詳細情報</param>
 		public void SetBodyDetail( BodyDetail detail ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			if( detail == null ) {
-				Logger.Warning( "Body Detail is Null." );
+				this.LogWarning( "Body Detail is Null." );
 				return;
 			}
 
-			Logger.Debug( $"Name is {detail.Name}." );
-			Logger.Debug( $"Ruby is {detail.Ruby}." );
-			Logger.Debug( $"Flavor is {detail.Flavor}." );
+			this.LogDebug( $"Name is {detail.Name}." );
+			this.LogDebug( $"Ruby is {detail.Ruby}." );
+			this.LogDebug( $"Flavor is {detail.Flavor}." );
 
 			this.BodyNameText.text = detail.Name;
 			this.BodyRubyText.text = detail.Ruby;
 			this.BodyFlavorText.text = detail.Flavor;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -664,9 +664,9 @@ namespace Views.Customize {
 		/// 空きマスを変更するボタン押下時イベント
 		/// </summary>
 		public void OnClickCustomFreeSquaresButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickCustomFreeSquaresButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -687,9 +687,9 @@ namespace Views.Customize {
 		/// パラメータカスタマイズボタン押下時イベント
 		/// </summary>
 		public void OnClickCustomParameterChipsButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickCustomParameterChipsButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -710,9 +710,9 @@ namespace Views.Customize {
 		/// パラメータカスタマイズの決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickParameterDecisionButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickParameterDecisionButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -737,9 +737,9 @@ namespace Views.Customize {
 		/// 空きマス変更の決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickFreeSquaresDecisionButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickFreeSquaresDecisionButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -764,9 +764,9 @@ namespace Views.Customize {
 		/// パラメータチップ変更の決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickCustomParameterChipsDecisionButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickCustomParameterChipsDecisionButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -778,9 +778,9 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="gameObject">GameObject</param>
 		public void SetSelectedGameObject( GameObject gameObject ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.eventSystem.SetSelectedGameObject( gameObject );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -788,11 +788,11 @@ namespace Views.Customize {
 		/// </summary>
 		/// <param name="parameterChips">パラメータチップ一覧</param>
 		public void SetParameterChips( List<ParameterChip> parameterChips ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			parameterChips.ForEach( ( parameterChip ) => {
 				// TODO ここ何もしてない
 			} );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		
 	}

@@ -23,12 +23,9 @@ namespace Services.Chapters {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static ChapterService GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new ChapterService();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -44,9 +41,9 @@ namespace Services.Chapters {
 		/// コンストラクタ
 		/// </summary>
 		private ChapterService() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -55,7 +52,7 @@ namespace Services.Chapters {
 		/// <param name="clearedChapter"></param>
 		/// <returns></returns>
 		public List<ChapterModel> GetChapters( List<int> clearedChapters ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			// クリア済みカテゴリ一覧
 			List<int> clearedCategories = this.chapterRepository.Rows
@@ -76,7 +73,7 @@ namespace Services.Chapters {
 				} )
 				.OrderByDescending( chapter => chapter.NumberOrder )
 				.ToList();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return models;
 		}
 

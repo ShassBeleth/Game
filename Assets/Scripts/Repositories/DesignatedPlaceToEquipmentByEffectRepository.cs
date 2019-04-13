@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static DesignatedPlaceToEquipmentByEffectRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new DesignatedPlaceToEquipmentByEffectRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private DesignatedPlaceToEquipmentByEffectRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			DesignatedPlaceToEquipmentByEffects designatedPlaceToEquipmentByEffects = this.Load<DesignatedPlaceToEquipmentByEffects>( this.FilePath );
 			this.Rows = designatedPlaceToEquipmentByEffects.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 

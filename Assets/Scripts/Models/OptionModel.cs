@@ -26,12 +26,12 @@ namespace Models {
 			bool isReverseVerticalCamera ,
 			bool isReverseHorizontalCamera
 		) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			this.IsReverseVerticalCamera = new ReactiveProperty<bool>( isReverseVerticalCamera );
 			this.IsReverseHorizontalCamera = new ReactiveProperty<bool>( isReverseHorizontalCamera );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}

@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static EquipmentEffectRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new EquipmentEffectRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private EquipmentEffectRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			EquipmentEffects equipmentEffects = this.Load<EquipmentEffects>( this.FilePath );
 			this.Rows = equipmentEffects.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 

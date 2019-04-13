@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static ParameterChipEffectRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new ParameterChipEffectRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private ParameterChipEffectRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			ParameterChipEffects parameterChipEffects = this.Load<ParameterChipEffects>( this.FilePath );
 			this.Rows = parameterChipEffects.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 

@@ -27,11 +27,11 @@ namespace Models.Customize {
 		/// </summary>
 		/// <param name="selectableName">選択状態</param>
 		public CustomizeWindowModel( SelectableNameEnum selectableName ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.SelectableName = new ReactiveProperty<SelectableNameEnum>( selectableName );
 			this.BeforeSelectableName = SelectableNameEnum.None;
 			this.IsShownDetail = new ReactiveProperty<bool>( false );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}

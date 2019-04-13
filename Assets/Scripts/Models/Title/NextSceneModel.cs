@@ -21,9 +21,9 @@ namespace Models.Title {
 		/// コンストラクタ
 		/// </summary>
 		public NextSceneModel() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.nextSceneName = new ReactiveProperty<NextSceneNameEnum>( NextSceneNameEnum.None );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}

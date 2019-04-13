@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static EquipmentEquipableInEquipablePlaceRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new EquipmentEquipableInEquipablePlaceRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private EquipmentEquipableInEquipablePlaceRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			EquipmentsEquipableInEquipablePlaces equipmentsEquipableInEquipablePlaces = this.Load<EquipmentsEquipableInEquipablePlaces>( this.FilePath );
 			this.Rows = equipmentsEquipableInEquipablePlaces.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 

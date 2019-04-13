@@ -26,12 +26,9 @@ namespace Services.Characters {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static CharacterService GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new CharacterService();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -90,9 +87,9 @@ namespace Services.Characters {
 		/// コンストラクタ
 		/// </summary>
 		private CharacterService() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -101,13 +98,13 @@ namespace Services.Characters {
 		/// <param name="saveId">セーブID</param>
 		/// <returns>所持している素体一覧</returns>
 		private IEnumerable<Body> GetHavingBodyRows( int saveId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Save Id is {saveId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Save Id is {saveId}." );
 			IEnumerable<Body> bodies = this.bodyRepository.Rows
 				.Where( row =>
 					this.GetHavingBodyRowIds( saveId ).Contains( row.id )
 				);
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return bodies;
 		}
 
@@ -117,22 +114,22 @@ namespace Services.Characters {
 		/// <param name="saveId">セーブID</param>
 		/// <returns>所持している素体ID一覧</returns>
 		private IEnumerable<int> GetHavingBodyRowIds( int saveId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Save Id is {saveId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Save Id is {saveId}." );
 			IEnumerable<int> ids = this.havingBodyRepository.Rows
 					.Where( row => row.saveId == saveId )
 					.Select( row => row.bodyId );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return ids;
 		}
 		
 		private IEnumerable<int> GetIncreasingEquipablePlaceIds( int equipmentId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Equipment Id is {equipmentId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Equipment Id is {equipmentId}." );
 			IEnumerable<int> equipablePlaceIds = this.equippedWhenIncreasingEquipablePlaceRepository.Rows
 				.Where( row => row.equipmentId == equipmentId )
 				.Select( row => row.equipablePlaceId );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return equipablePlaceIds;
 		}
 
@@ -142,7 +139,7 @@ namespace Services.Characters {
 		/// <param name="equipmentIds">装備ID一覧</param>
 		/// <returns>装備可能箇所一覧</returns>
 		private IEnumerable<EquipablePlace> GetIncreasingEquipablePlaces( IEnumerable<int> equipmentIds ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			IEnumerable<int> equipablePlaceIds = equipmentIds
 				.SelectMany( equipmentId => this.GetIncreasingEquipablePlaceIds( equipmentId ) )
@@ -155,7 +152,7 @@ namespace Services.Characters {
 					name = row.name
 				} );
 			
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return equipablePlaces;
 		}
 		
@@ -165,12 +162,12 @@ namespace Services.Characters {
 		/// <param name="bodyId">素体ID</param>
 		/// <returns>装備可能箇所ID一覧</returns>
 		private IEnumerable<int> GetEquipablePlaceRowIdsAssociateInBody( int bodyId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Body Id is {bodyId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Body Id is {bodyId}." );
 			IEnumerable<int> ids = this.bodyEquipablePlaceRepository.Rows
 				.Where( row => row.bodyId == bodyId )
 				.Select( row => row.equipablePlaceId );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return ids;
 		}
 
@@ -180,14 +177,14 @@ namespace Services.Characters {
 		/// <param name="createdCharacter">作成したキャラクター</param>
 		/// <returns>装備可能箇所一覧</returns>
 		public List<EquipablePlaceModel> GetEquipablePlaces( BodyModel createdCharacter ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			if( 
 				createdCharacter == null 
 				|| !createdCharacter.Id.HasValue 
 				|| !createdCharacter.Id.Value.HasValue 
 			) {
-				Logger.Debug( "Created Character is Null." );
+				this.LogDebug( "Created Character is Null." );
 				return new List<EquipablePlaceModel>();
 			}
 			
@@ -223,7 +220,7 @@ namespace Services.Characters {
 				} )
 				.ToList();
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return models;
 		}
 
@@ -233,8 +230,8 @@ namespace Services.Characters {
 		/// <param name="saveId">セーブID</param>
 		/// <returns>所持している素体一覧</returns>
 		public List<BodyModel> GetHavingBodies( int saveId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Save Id is {saveId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Save Id is {saveId}." );
 			
 			List<BodyModel> models = this.GetHavingBodyRows( saveId )
 				// BodyModel作成
@@ -246,7 +243,7 @@ namespace Services.Characters {
 					EquipablePlaces = new List<EquipablePlaceModel>()
 				} )
 				.ToList();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return models;
 		}
 		
@@ -256,12 +253,12 @@ namespace Services.Characters {
 		/// <param name="saveId">セーブID</param>
 		/// <returns>所持している装備ID一覧</returns>
 		private IEnumerable<int> GetHavingEquipmentRowIds( int saveId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Save Id is {saveId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Save Id is {saveId}." );
 			IEnumerable<int> ids = this.havingEquipmentRepository.Rows
 					.Where( row => row.saveId == saveId )
 					.Select( row => row.equipmentId );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return ids;
 		}
 
@@ -271,11 +268,11 @@ namespace Services.Characters {
 		/// <param name="saveId">セーブID</param>
 		/// <returns>所持している装備一覧</returns>
 		private IEnumerable<Equipment> GetHavingEquipmentRows( int saveId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Save Id is {saveId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Save Id is {saveId}." );
 			IEnumerable<Equipment> equipments = this.equipmentRepository.Rows
 				.Where( row => this.GetHavingEquipmentRowIds( saveId ).Contains( row.id ) );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return equipments;
 		}
 
@@ -285,8 +282,8 @@ namespace Services.Characters {
 		/// <param name="saveId">セーブID</param>
 		/// <returns>所持している装備一覧</returns>
 		private IEnumerable<Equipment> GetHavingEquipmentsuipmentRows( int saveId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Save Id is {saveId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Save Id is {saveId}." );
 
 			IEnumerable<Equipment> model = this.equipmentRepository.Rows
 				.Where( row => this.havingEquipmentRepository.Rows
@@ -295,7 +292,7 @@ namespace Services.Characters {
 					.Contains( row.id )
 				);
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return model;
 		}
 
@@ -306,14 +303,14 @@ namespace Services.Characters {
 		/// <param name="equipablePlaceId">装備可能箇所ID</param>
 		/// <returns>装備可能かどうか</returns>
 		private bool IsEquipable( int equipmentId , int equipablePlaceId ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Equipment Id is {equipmentId}." );
-			Logger.Debug( $"Equipable Place Id is {equipablePlaceId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Equipment Id is {equipmentId}." );
+			this.LogDebug( $"Equipable Place Id is {equipablePlaceId}." );
 			bool isEquipable = this.equipmentEquipableInEquipablePlaceRepository.Rows
 				.FirstOrDefault( 
 					row => row.equipmentId == equipmentId && row.equipablePlaceId == equipablePlaceId 
 				) != null;
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return isEquipable;
 		}
 
@@ -329,9 +326,9 @@ namespace Services.Characters {
 			int equipablePlaceId , 
 			BodyModel createdCharacterModel 
 		) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Save Id is {saveId}." );
-			Logger.Debug( $"Equipable Place Id is {equipablePlaceId}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Save Id is {saveId}." );
+			this.LogDebug( $"Equipable Place Id is {equipablePlaceId}." );
 
 			// 装備済み装備可能箇所一覧
 			IEnumerable<int> equippedEquipablePlaces = createdCharacterModel.EquipablePlaces
@@ -355,7 +352,7 @@ namespace Services.Characters {
 				} )
 				.ToList();
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return models;
 		}
 
@@ -365,8 +362,8 @@ namespace Services.Characters {
 		/// <param name="id">装備ID</param>
 		/// <returns>装備Model</returns>
 		public EquipmentModel GetEquipment( int id ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Equipment Id is {id}." );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"Equipment Id is {id}." );
 			EquipmentModel model = this.equipmentRepository.Rows
 				.Where( row => row.id == id )
 				.Select( row => new EquipmentModel() {
@@ -379,7 +376,7 @@ namespace Services.Characters {
 				} )
 				.FirstOrDefault( row => row.Id.Value == id );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return model;
 		}
 
@@ -393,10 +390,10 @@ namespace Services.Characters {
 			BodyModel createdCharacter , 
 			List<EquipablePlaceModel> equipablePlaces 
 		) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			
 			if( createdCharacter == null ) {
-				Logger.Warning( "Created Character is Null." );
+				this.LogWarning( "Created Character is Null." );
 				return null;
 			}
 
@@ -419,7 +416,7 @@ namespace Services.Characters {
 					equipablePlace.EquipmentModel = equipments.GetOrDefault( equipablePlace.Id.Value , new EquipmentModel() )
 				);
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return createdCharacter;
 		}
 

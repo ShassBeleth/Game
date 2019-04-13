@@ -27,53 +27,53 @@ namespace Repositories {
 		/// <param name="filePath">ファイルパス</param>
 		/// <returns>読み込んだデータモデル</returns>
 		protected T Load<T>( string filePath ) where T : class {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"File Path is {filePath}" );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"File Path is {filePath}" );
 
 			string jsonData = "";
 			try {
 				jsonData = File.ReadAllText( Path.Combine( this.DirectoryPath , filePath ) , Encoding.UTF8 );
 			}
 			catch( ArgumentNullException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( ArgumentException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( PathTooLongException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( DirectoryNotFoundException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( FileNotFoundException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( IOException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( UnauthorizedAccessException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( NotSupportedException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( SecurityException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			
-			Logger.Debug( $"Json Data is {jsonData}" );
+			this.LogDebug( $"Json Data is {jsonData}" );
 
 			// 何かしらエラーの影響で取得したjsonデータが空文字だった場合nullを返す
 			if( "".Equals( jsonData ) ) {
-				Logger.Warning( "Load File is Empty String." );
+				this.LogWarning( "Load File is Empty String." );
 				return null;
 			}
 
 			// jsonデータをクラスに変換
 			T data = JsonUtility.FromJson<T>( jsonData );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 			return data;
 		}
 
@@ -84,20 +84,20 @@ namespace Repositories {
 		/// <param name="filePath">ファイルパス</param>
 		/// <param name="model">モデル</param>
 		protected void Write<T>( string filePath , T model ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"File Path is {filePath}" );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"File Path is {filePath}" );
 
 			// モデルをjsonに変換
 			string jsonData = JsonUtility.ToJson( model );
-			Logger.Debug( $"Json Data is {jsonData}" );
+			this.LogDebug( $"Json Data is {jsonData}" );
 
 			// ディレクトリが存在するか確認
-			Logger.Debug( $"Directory Path is {this.DirectoryPath}." );
-			Logger.Debug( $"File Path is {filePath}." );
+			this.LogDebug( $"Directory Path is {this.DirectoryPath}." );
+			this.LogDebug( $"File Path is {filePath}." );
 			string directoryName = Path.GetDirectoryName( Path.Combine( this.DirectoryPath , filePath ) );
-			Logger.Debug( $"Directory Name is {directoryName}" );
+			this.LogDebug( $"Directory Name is {directoryName}" );
 			if( !Directory.Exists( directoryName ) ) {
-				Logger.Debug( "Directory Doesn't Exist." );
+				this.LogDebug( "Directory Doesn't Exist." );
 				Directory.CreateDirectory( directoryName );
 			}
 
@@ -106,31 +106,31 @@ namespace Repositories {
 				File.WriteAllText( Path.Combine( this.DirectoryPath , filePath ) , jsonData );
 			}
 			catch( ArgumentNullException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( ArgumentException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( PathTooLongException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( DirectoryNotFoundException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( IOException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( UnauthorizedAccessException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( NotSupportedException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 			catch( SecurityException e ) {
-				Logger.Error( $"{e.Message}." );
+				this.LogError( $"{e.Message}." );
 			}
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -138,12 +138,12 @@ namespace Repositories {
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
 		protected void Delete( string filePath ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"File Path is {filePath}" );
+			this.LogDebug( "Start" );
+			this.LogDebug( $"File Path is {filePath}" );
 
 			File.Delete( this.DirectoryPath + filePath );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}

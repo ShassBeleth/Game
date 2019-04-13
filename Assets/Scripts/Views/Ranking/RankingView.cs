@@ -17,9 +17,9 @@ namespace Views.Ranking {
 		/// 戻るボタン押下時イベント
 		/// </summary>
 		public void OnClickBackButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickBackButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}

@@ -26,12 +26,9 @@ namespace Services.Scenes {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static SceneService GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new SceneService();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -62,23 +59,23 @@ namespace Services.Scenes {
 		/// コンストラクタ
 		/// </summary>
 		private SceneService() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			// シーン切り替え時イベント追加
 			SceneManager.sceneLoaded += OnSceneLoaded;
 
 			if( EqualsActiveSceneName( "Title" ) ) {
-				Logger.Debug( "Active Scene Name Equals Title." );
+				this.LogDebug( "Active Scene Name Equals Title." );
 				new TitlePresenter();
 			}
 			// デバッグ用
 			// 初期シーンがタイトルでなかったらタイトルに切り替え
 			else {
-				Logger.Warning( "Active Scene Name don't Equals Title." );
+				this.LogWarning( "Active Scene Name don't Equals Title." );
 				SceneManager.LoadScene( "Title" );
 			}
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -87,10 +84,10 @@ namespace Services.Scenes {
 		/// <param name="sceneName">読み込みシーン名</param>
 		/// <param name="parameter">遷移先シーンに渡すパラメータ</param>
 		public void LoadScene( string sceneName , object parameter ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			Parameter = parameter;
 			SceneManager.LoadScene( sceneName );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -98,12 +95,8 @@ namespace Services.Scenes {
 		/// </summary>
 		/// <param name="sceneName">シーン名</param>
 		/// <returns>現在のシーン名が指定のシーン名と一致するかどうか</returns>
-		private static bool EqualsActiveSceneName( string sceneName ) {
-			Logger.Debug( "Start" );
-			Logger.Debug( $"Scene Name is {sceneName}" );
-			Logger.Debug( "End" );
-			return SceneManager.GetActiveScene().name.Equals( sceneName );
-		}
+		private static bool EqualsActiveSceneName( string sceneName )
+			=> SceneManager.GetActiveScene().name.Equals( sceneName );
 
 		/// <summary>
 		/// シーン切り替え時イベント
@@ -114,20 +107,13 @@ namespace Services.Scenes {
 			Scene scene ,
 			LoadSceneMode loadSceneMode
 		) {
-			Logger.Debug( "Start" );
-
-			Logger.Debug( $"Scene Name is {scene.name}" );
-			Logger.Debug( $"Load Scene Mode is {loadSceneMode}" );
 
 			// シングルモードで遷移した場合は前シーンの名前を保持しておく
 			if( loadSceneMode == LoadSceneMode.Single ) {
 				BeforeSingleModeSceneName = CurrentSingleModeSceneName;
 				CurrentSingleModeSceneName = scene.name;
 			}
-
-			Logger.Debug( $"Before Single Mode Scene Name is {BeforeSingleModeSceneName}" );
-			Logger.Debug( $"Current Single Mode Scene Name is {CurrentSingleModeSceneName}" );
-
+			
 			// シーン切り替え時にはおおもとになるPresenterのインスタンスを生成
 			switch( scene.name ) {
 				case "Title":
@@ -149,14 +135,12 @@ namespace Services.Scenes {
 					new CustomizePresenter( Parameter as CustomizeParameter );
 					break;
 				default:
-					Logger.Warning( "Loaded Scene Name is Unexpected Name." );
 					break;
 			}
 
 			// staticフィールドなので、一回使ったらパラメータ内を削除
 			Parameter = null;
 
-			Logger.Debug( "End" );
 		}
 
 	}

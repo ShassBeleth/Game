@@ -35,9 +35,9 @@ namespace Views.Title {
 		/// </summary>
 		/// <param name="selectable">選択肢</param>
 		public void SetSelectedGameObject( GameObject selectable ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.eventSystem.SetSelectedGameObject( selectable );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -45,8 +45,8 @@ namespace Views.Title {
 		/// </summary>
 		/// <returns>設定値</returns>
 		public OptionValue GetOptionValue() {
-			Logger.Debug( "Start" );
-			Logger.Debug( "End" );
+			this.LogDebug( "Start" );
+			this.LogDebug( "End" );
 			return new OptionValue();
 		}
 
@@ -55,8 +55,8 @@ namespace Views.Title {
 		/// </summary>
 		/// <param name="optionValue">設定値</param>
 		public void SetOptionValue( OptionValue optionValue ) { 
-			Logger.Debug( "Start" );
-			Logger.Debug( "End" );
+			this.LogDebug( "Start" );
+			this.LogDebug( "End" );
 		}
 
 	}

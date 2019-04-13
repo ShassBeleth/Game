@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static ChapterClearStatusRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new ChapterClearStatusRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private ChapterClearStatusRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			ChapterClearStatuses chapterClearStatuses = this.Load<ChapterClearStatuses>( this.FilePath );
 			this.Rows = chapterClearStatuses.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 

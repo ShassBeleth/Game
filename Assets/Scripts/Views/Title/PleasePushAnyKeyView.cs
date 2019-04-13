@@ -28,10 +28,10 @@ namespace Views.Title {
 			if( !this.IsClickAnyKey && Input.anyKey ) {
 				this.IsClickAnyKey = true;
 				Observable.NextFrame().Subscribe( _ => {
-					Logger.Debug( "Start : Click Any Key is false." );
+					this.LogDebug( "Start : Click Any Key is false." );
 					this.OnClickAnyKeyEventHandler?.Invoke();
 				} );
-				Logger.Debug( "End" );
+				this.LogDebug( "End" );
 			}
 
 		}

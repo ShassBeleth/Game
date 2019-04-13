@@ -81,15 +81,15 @@ namespace Views.SelectSaveData {
 		/// </summary>
 		/// <param name="saveDataList">セーブデータのリスト</param>
 		public void SetSaveDataList( List<SaveData> saveDataList ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			
 			foreach( int i in Enumerable.Range( 0 , this.Saves.Length ) ) {
 				int index = i;
 
-				Logger.Debug( $"Save Data List[ {index} ] {( !saveDataList[ index ].ExistsAlreadyData ? "Don't" : "" )} Exists Save Data" );
-				Logger.Debug( $"Id is {( saveDataList[ index ].Id.ToString() )}" );
-				Logger.Debug( $"User Name is {saveDataList[ index ].userName ?? "Null"}" );
-				Logger.Debug( $"Latest Update Date Time is {saveDataList[ index ].latestUpdateDateTime.ToString( "yyyy/MM/dd hh:mm:ss" )}" );
+				this.LogDebug( $"Save Data List[ {index} ] {( !saveDataList[ index ].ExistsAlreadyData ? "Don't" : "" )} Exists Save Data" );
+				this.LogDebug( $"Id is {( saveDataList[ index ].Id.ToString() )}" );
+				this.LogDebug( $"User Name is {saveDataList[ index ].userName ?? "Null"}" );
+				this.LogDebug( $"Latest Update Date Time is {saveDataList[ index ].latestUpdateDateTime.ToString( "yyyy/MM/dd hh:mm:ss" )}" );
 				
 				GameObject save = this.Saves[ index ];
 				// ユーザ名表示
@@ -108,7 +108,7 @@ namespace Views.SelectSaveData {
 
 			}
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -116,9 +116,9 @@ namespace Views.SelectSaveData {
 		/// </summary>
 		/// <param name="selectable">選択肢</param>
 		public void SetSelectedSaveData( GameObject selectable ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.eventSystem.SetSelectedGameObject( selectable );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion
@@ -141,7 +141,7 @@ namespace Views.SelectSaveData {
 		/// <param name="saveIndex">表示するセーブデータのIndex nullの場合非表示</param>
 		/// <param name="saveData">セーブデータ</param>
 		public void ShowPanel( int? saveIndex , SaveData save ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			if( saveIndex.HasValue ) {
 				this.Panel.SetActive( true );
 
@@ -160,7 +160,7 @@ namespace Views.SelectSaveData {
 			else {
 				this.Panel.SetActive( false );
 			}
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
@@ -168,9 +168,9 @@ namespace Views.SelectSaveData {
 		/// </summary>
 		/// <param name="index">セーブデータのindex</param>
 		public void SetSelectedButtonInPanel( int index ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.eventSystem.SetSelectedGameObject( this.ContentInPanel.transform.Find( "ContinueButton" ).gameObject );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion

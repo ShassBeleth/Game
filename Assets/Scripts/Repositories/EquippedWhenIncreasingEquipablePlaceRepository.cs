@@ -20,12 +20,9 @@ namespace Repositories {
 		/// </summary>
 		/// <returns>インスタンス</returns>
 		public static EquippedWhenIncreasingEquipablePlaceRepository GetInstance() {
-			Logger.Debug( "Start" );
 			if( Instance == null ) {
-				Logger.Debug( "Instance is Null." );
 				Instance = new EquippedWhenIncreasingEquipablePlaceRepository();
 			}
-			Logger.Debug( "End" );
 			return Instance;
 		}
 
@@ -48,12 +45,12 @@ namespace Repositories {
 		/// コンストラクタ
 		/// </summary>
 		private EquippedWhenIncreasingEquipablePlaceRepository() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			EquippedWhenIncreasingEquipablePlaces equippedWhenIncreasingEquipablePlaces = this.Load<EquippedWhenIncreasingEquipablePlaces>( this.FilePath );
 			this.Rows = equippedWhenIncreasingEquipablePlaces.rows;
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 
 		}
 

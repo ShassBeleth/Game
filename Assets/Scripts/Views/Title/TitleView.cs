@@ -39,39 +39,39 @@ namespace Views.Title {
 		/// Please Push Any Keyの表示
 		/// </summary>
 		public void ShowPleasePushAnyKey() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			this.pleasePushAnyKeyGameObject.SetActive( true );
 			this.mainMenuGameObject.SetActive( false );
 			this.optionGameObject.SetActive( false );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// Main Menuの表示
 		/// </summary>
 		public void ShowMainMenu() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			this.mainMenuGameObject.SetActive( true );
 			this.pleasePushAnyKeyGameObject.SetActive( false );
 			this.optionGameObject.SetActive( false );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		/// <summary>
 		/// Optionの表示
 		/// </summary>
 		public void ShowOption() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 
 			this.optionGameObject.SetActive( true );
 			this.pleasePushAnyKeyGameObject.SetActive( false );
 			this.mainMenuGameObject.SetActive( false );
 
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 		#endregion

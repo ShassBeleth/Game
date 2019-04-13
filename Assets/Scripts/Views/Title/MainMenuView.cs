@@ -29,9 +29,9 @@ namespace Views.Title {
 		/// 一人プレイボタン押下時イベント
 		/// </summary>
 		public void OnClickSinglePlayButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickSinglePlayButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		#endregion
 
@@ -50,9 +50,9 @@ namespace Views.Title {
 		/// マルチプレイボタン押下時イベント
 		/// </summary>
 		public void OnClickMultiPlayButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickMultiPlayButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		#endregion
 
@@ -71,9 +71,9 @@ namespace Views.Title {
 		/// ギャラリーボタン押下時イベント
 		/// </summary>
 		public void OnClickGalleryButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickGalleryButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		#endregion
 
@@ -92,9 +92,9 @@ namespace Views.Title {
 		/// ランキングボタン押下時イベント
 		/// </summary>
 		public void OnClickRankingButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickRankingButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		#endregion
 
@@ -112,9 +112,9 @@ namespace Views.Title {
 		/// オプションボタン押下時イベント
 		/// </summary>
 		public void OnClickOptionButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickOptionButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		#endregion
 
@@ -133,9 +133,9 @@ namespace Views.Title {
 		/// ゲーム終了ボタン押下時イベント
 		/// </summary>
 		public void OnClickExitButtonEvent() {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.OnClickExitButtonEventHandler?.Invoke();
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 		#endregion
 		
@@ -144,9 +144,9 @@ namespace Views.Title {
 		/// </summary>
 		/// <param name="selectable">選択肢</param>
 		public void SetSelectedGameObject( GameObject selectable ) {
-			Logger.Debug( "Start" );
+			this.LogDebug( "Start" );
 			this.eventSystem.SetSelectedGameObject( selectable );
-			Logger.Debug( "End" );
+			this.LogDebug( "End" );
 		}
 
 	}
