@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -33,9 +34,9 @@ namespace Views.ChapterSelect {
 			public string Name { set; get; }
 
 			/// <summary>
-			/// 決定ボタン押下時イベントハンドラ
+			/// 決定ボタン押下時イベントSubject
 			/// </summary>
-			public Action OnClickDecisionButtonEventHandler { set; get; }
+			public Subject<Unit> OnClickedDecisionButtonSubject = new Subject<Unit>();
 
 			/// <summary>
 			/// 時系列順
@@ -169,7 +170,7 @@ namespace Views.ChapterSelect {
 				
 					ScrollChapterNodeView view = node.GetComponent<ScrollChapterNodeView>();
 					view.Id = chapter.Id;
-					view.OnClickDecisionButtonEventHandler = chapter.OnClickDecisionButtonEventHandler;
+					view.OnClickedDecisionButtonSubject = chapter.OnClickedDecisionButtonSubject;
 					view.SetText( chapter.Name );
 
 					Button button = node.GetComponent<Button>();

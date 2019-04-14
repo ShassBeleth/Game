@@ -20,17 +20,17 @@ namespace Presenters.Title {
 		/// <summary>
 		/// WindowModel
 		/// </summary>
-		private TitleWindowModel titleWindowModel = new TitleWindowModel( WindowNameEnum.PleasePushAnyKey );
+		private readonly TitleWindowModel titleWindowModel = new TitleWindowModel( WindowNameEnum.PleasePushAnyKey );
 
 		/// <summary>
 		/// NextSceneModel
 		/// </summary>
-		private NextSceneModel nextSceneModel = new NextSceneModel();
+		private readonly NextSceneModel nextSceneModel = new NextSceneModel();
 
 		/// <summary>
 		/// OptionModel
 		/// </summary>
-		private OptionModel optionModel;
+		private readonly OptionModel optionModel;
 
 		#endregion
 
@@ -68,7 +68,7 @@ namespace Presenters.Title {
 		/// <summary>
 		/// シーンService
 		/// </summary>
-		private SceneService sceneService = SceneService.GetInstance();
+		private readonly SceneService sceneService = SceneService.GetInstance();
 
 		#endregion
 
@@ -126,15 +126,15 @@ namespace Presenters.Title {
 			this.UserControllerView = GameObject.Find( "UserController" ).GetComponent<UserControllerView>();
 
 			// PleasePushAnyKeyViewのEventHandler設定
-			this.PleasePushAnyKeyView.OnClickAnyKeyEventHandler = this.ClickedAnyKeyEvent;
+			this.PleasePushAnyKeyView.OnClickedAnyKey.Subscribe( _ => this.ClickedAnyKeyEvent() );
 
 			// メインメニューViewのEventHandler設定
-			this.MainMenuView.OnClickSinglePlayButtonEventHandler = this.ClickedSinglePlayButtonEvent;
-			this.MainMenuView.OnClickMultiPlayButtonEventHandler = this.ClickedMultiPlayButtonEvent;
-			this.MainMenuView.OnClickGalleryButtonEventHandler = this.ClickedGalleryButtonEvent;
-			this.MainMenuView.OnClickRankingButtonEventHandler = this.ClickedRankingButtonEvent;
-			this.MainMenuView.OnClickOptionButtonEventHandler = this.ClickedOptionButtonEvent;
-			this.MainMenuView.OnClickExitButtonEventHandler = this.ClickedExitButtonEvent;
+			this.MainMenuView.OnClickedSinglePlayButton.Subscribe( _ => this.ClickedSinglePlayButtonEvent() );
+			this.MainMenuView.OnClickedMultiPlayButton.Subscribe( _ => this.ClickedMultiPlayButtonEvent() );
+			this.MainMenuView.OnClickedGalleryButton.Subscribe( _ => this.ClickedGalleryButtonEvent() );
+			this.MainMenuView.OnClickedRankingButton.Subscribe( _ => this.ClickedRankingButtonEvent() );
+			this.MainMenuView.OnClickedOptionButton.Subscribe( _ => this.ClickedOptionButtonEvent() );
+			this.MainMenuView.OnClickedExitButton.Subscribe( _ => this.ClickedExitButtonEvent() );
 
 			this.LogDebug( "End" );
 		}

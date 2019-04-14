@@ -1,4 +1,5 @@
 ﻿using System;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,16 +26,16 @@ namespace Views.ChapterSelect {
 		public Transform lineTransform;
 
 		/// <summary>
-		/// 決定ボタン押下時イベントハンドラ
+		/// 決定ボタン押下時イベントSubject
 		/// </summary>
-		public Action OnClickDecisionButtonEventHandler { set; get; }
+		public Subject<Unit> OnClickedDecisionButtonSubject = new Subject<Unit>();
 
 		/// <summary>
 		/// 決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickDecisionButtonEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickDecisionButtonEventHandler?.Invoke();
+			this.OnClickedDecisionButtonSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 

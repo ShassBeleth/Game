@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d86cc58c1129d548bc2a6e5576f3d33, type: 3}
   m_Name: Log
   m_EditorClassIdentifier: 
-  checkList: []
-  type: 0
-  color: {r: 0, g: 0, b: 0, a: 0}
+  checkList:
+  - isValid: 1
+    comment: 
+    regexClass: wefwefwef
+    regexMethod: 
+    regexMessage: 
+    type: 0
+    color: {r: 0, g: 0, b: 0, a: 0}

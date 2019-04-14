@@ -2,6 +2,7 @@
 using Services.Scenes.Parameters;
 using UnityEngine;
 using Views.Gallery;
+using UniRx;
 
 namespace Presenters.Gallery {
 
@@ -28,7 +29,7 @@ namespace Presenters.Gallery {
 		/// <summary>
 		/// シーンService
 		/// </summary>
-		private SceneService sceneService = SceneService.GetInstance();
+		private readonly SceneService sceneService = SceneService.GetInstance();
 
 		#endregion
 
@@ -57,7 +58,7 @@ namespace Presenters.Gallery {
 			this.GalleryView = GameObject.Find( "Canvas" ).GetComponent<GalleryView>();
 
 			// ギャラリーViewのEventHandler設定
-			this.GalleryView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
+			this.GalleryView.OnClickedBackButton.Subscribe( _ => this.ClickedBackButtonEvent() );
 
 			this.LogDebug( "End" );
 		}

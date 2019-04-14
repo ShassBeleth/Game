@@ -1,4 +1,5 @@
 ﻿using System;
+using UniRx;
 using UnityEngine;
 
 namespace Views.Ranking {
@@ -9,16 +10,21 @@ namespace Views.Ranking {
 	public class RankingView : MonoBehaviour{
 
 		/// <summary>
-		/// 戻るボタン押下時イベントハンドラ
+		/// 戻るボタン押下時イベントSubject
 		/// </summary>
-		public Action OnClickBackButtonEventHandler { set; get; }
+		private readonly Subject<Unit> OnClickedBackButtonSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// 戻るボタン押下時イベント購読
+		/// </summary>
+		public IObservable<Unit> OnClickedBackButton => this.OnClickedBackButtonSubject;
 
 		/// <summary>
 		/// 戻るボタン押下時イベント
 		/// </summary>
 		public void OnClickBackButtonEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickBackButtonEventHandler?.Invoke();
+			this.OnClickedBackButtonSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 

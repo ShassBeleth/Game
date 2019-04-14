@@ -33,7 +33,7 @@ namespace Services.Chapters {
 
 		#region Repository
 
-		private ChapterRepository chapterRepository = ChapterRepository.GetInstance();
+		private readonly ChapterRepository chapterRepository = ChapterRepository.GetInstance();
 
 		#endregion
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,18 +19,18 @@ namespace Views.Customize {
 		/// 装備可能箇所名
 		/// </summary>
 		public string PartName { set; get; }
-		
+
 		/// <summary>
-		/// 決定ボタン押下時イベントハンドラ
+		/// 決定ボタン押下時イベントSubject
 		/// </summary>
-		public Action OnClickDecisionButtonEventHandler { set; get; }
+		public Subject<Unit> OnClickedDecisionButtonSubject = new Subject<Unit>();
 
 		/// <summary>
 		/// 決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickDecisionButtonEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickDecisionButtonEventHandler?.Invoke();
+			this.OnClickedDecisionButtonSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 		

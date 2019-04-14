@@ -28,12 +28,12 @@ namespace Presenters.Customize {
 		/// <summary>
 		/// 作成したキャラクター
 		/// </summary>
-		private ReactiveProperty<BodyModel> CreatedCharacterModel = new ReactiveProperty<BodyModel>( new BodyModel() );
+		private readonly ReactiveProperty<BodyModel> CreatedCharacterModel = new ReactiveProperty<BodyModel>( new BodyModel() );
 
 		/// <summary>
 		/// 選択された装備可能箇所ID
 		/// </summary>
-		private ReactiveProperty<int?> SelectedEquipablePlace = new ReactiveProperty<int?>( null );
+		private readonly ReactiveProperty<int?> SelectedEquipablePlace = new ReactiveProperty<int?>( null );
 
 		/// <summary>
 		/// パラメータチップ一覧
@@ -67,19 +67,19 @@ namespace Presenters.Customize {
 		/// <summary>
 		/// シーンService
 		/// </summary>
-		private SceneService sceneService = SceneService.GetInstance();
+		private readonly SceneService sceneService = SceneService.GetInstance();
 
 		/// <summary>
 		/// キャラクターService
 		/// </summary>
-		private CharacterService characterService = CharacterService.GetInstance();
+		private readonly CharacterService characterService = CharacterService.GetInstance();
 
 		#endregion
 
 		/// <summary>
 		/// セーブデータID
 		/// </summary>
-		private int saveId;
+		private readonly int saveId;
 
 		/// <summary>
 		/// コンストラクタ
@@ -125,21 +125,23 @@ namespace Presenters.Customize {
 			this.LogDebug( "Start" );
 			List<CustomizeView.Body> list = bodies
 				.Select( ( content , index ) => new { Content = content , Index = index } )
-				.Select( ( element ) => new CustomizeView.Body() {
-					Id = element.Content.Id.Value ?? -1 ,
-					Name = element.Content.Name ,
-					EquipablePlaces = element.Content.EquipablePlaces
-						.Select( ( equipablePlace ) => new CustomizeView.EquipablePlace() {
-							Id = equipablePlace.Id.Value ,
-							Name = equipablePlace.Name ,
-							OnClickDecisionEventHandler = () => {
-								this.ClickedEquipablePlaceNodeDecisionButtonEvent( equipablePlace.Id.Value );
-							}
-						} )
-						.ToList() ,
-					OnClickDecisionEventHandler = () => {
-						this.ClickedBodyNodeDecisionButtonEvent( element.Content.Id.Value ?? -1 );
-					}
+				.Select( ( element ) => {
+					CustomizeView.Body b = new CustomizeView.Body() {
+						Id = element.Content.Id.Value ?? -1 ,
+						Name = element.Content.Name ,
+						EquipablePlaces = element.Content.EquipablePlaces
+							.Select( ( equipablePlace ) => {
+								CustomizeView.EquipablePlace e = new CustomizeView.EquipablePlace() {
+									Id = equipablePlace.Id.Value ,
+									Name = equipablePlace.Name
+								};
+								e.OnClickedDecisionButtonSubject.Subscribe( _ => this.ClickedEquipablePlaceNodeDecisionButtonEvent( equipablePlace.Id.Value ) );
+								return e;
+							} )
+							.ToList()
+					};
+					b.OnClickedDecisionButtonSubject.Subscribe( _ => this.ClickedBodyNodeDecisionButtonEvent( element.Content.Id.Value ?? -1 ) );
+					return b;
 				} )
 				.ToList();
 			this.LogDebug( "End" );
@@ -155,12 +157,13 @@ namespace Presenters.Customize {
 			this.LogDebug( "Start" );
 			List<CustomizeView.Equipment> list = equipments
 				.Select( ( content , index ) => new { Content = content , Index = index } )
-				.Select( ( element ) => new CustomizeView.Equipment(){
-					Id = element.Content.Id.Value.Value ,
-					Name = element.Content.Name ,
-					OnClickDecisionEventHandler = () => {
-						this.ClickedEquipmentNodeDecisionButtonEvent( element.Content.Id.Value.Value );
-					}
+				.Select( ( element ) => {
+					CustomizeView.Equipment e = new CustomizeView.Equipment() {
+						Id = element.Content.Id.Value.Value ,
+						Name = element.Content.Name
+					};
+					e.OnClickedDecisionButtonSubject.Subscribe( _ => this.ClickedEquipmentNodeDecisionButtonEvent( element.Content.Id.Value.Value ) );
+					return e;
 				} )
 				.ToList();
 			this.LogDebug( "End" );
@@ -176,13 +179,14 @@ namespace Presenters.Customize {
 			this.LogDebug( "Start" );
 			List<CustomizeView.EquipablePlace> list = equipablePlaeces
 				.Select( ( content , index ) => new { Content = content , Index = index } )
-				.Select( ( element ) => new CustomizeView.EquipablePlace() {
-					Id = element.Content.Id.Value ,
-					Name = element.Content.Name ,
-					EquipmanetName = element.Content.EquipmentModel?.Name ,
-					OnClickDecisionEventHandler = () => {
-						this.ClickedEquipablePlaceNodeDecisionButtonEvent( element.Content.Id.Value );
-					}
+				.Select( ( element ) => {
+					CustomizeView.EquipablePlace e = new CustomizeView.EquipablePlace() {
+						Id = element.Content.Id.Value ,
+						Name = element.Content.Name ,
+						EquipmanetName = element.Content.EquipmentModel?.Name
+					};
+					e.OnClickedDecisionButtonSubject.Subscribe( _ => this.ClickedEquipablePlaceNodeDecisionButtonEvent( element.Content.Id.Value ) );
+					return e;
 				} )
 				.ToList();
 			this.LogDebug( "End" );
@@ -208,15 +212,15 @@ namespace Presenters.Customize {
 			this.ShowcaseView = GameObject.Find( "Showcase" ).GetComponent<ShowcaseView>();
 
 			// CutomizeViewのEventHandler設定
-			this.CustomizeView.OnClickEquipmentDecisionButtonEventHandler = this.ClickedEquipmentDecisionButtonEvent;
-			this.CustomizeView.OnClickBodyButtonEventHandler = this.ClickedBodyButtonFromMenuEvent;
-			this.CustomizeView.OnClickEquipablePlaceScrollViewEventHandler = this.ClickedEquipablePlaceScrollViewEvent;
-			this.CustomizeView.OnClickParameterDecisionButtonEventHandler = this.ClickedParameterChipDecisionButtonEvent;
-			this.CustomizeView.OnClickCustomFreeSquaresButtonEventHandler = this.ClickedCustomFreeSquaresButtonEvent;
-			this.CustomizeView.OnClickCustomParameterChipsButtonEventHandler = this.ClickedCustomParameterChipsButtonEvent;
-			this.CustomizeView.OnClickCustomParameterChipsDecisionButtonEventHandler = this.ClickedCustomParameterChipsDecisionButtonEvent;
-			this.CustomizeView.OnClickFreeSquaresDecisionButtonEventHandler = this.ClickedFreeSquaresDecisionButtonEvent;
-
+			this.CustomizeView.OnClickedEquipmentDecisionButton.Subscribe( _ => this.ClickedEquipmentDecisionButtonEvent() );
+			this.CustomizeView.OnClickedBodyButton.Subscribe( _ => this.ClickedBodyButtonFromMenuEvent () );
+			this.CustomizeView.OnClickedEquipablePlaceScrollView.Subscribe( _ => this.ClickedEquipablePlaceScrollViewEvent() );
+			this.CustomizeView.OnClickedParameterDecisionButton.Subscribe( _ => this.ClickedParameterChipDecisionButtonEvent() );
+			this.CustomizeView.OnClickedFreeSquaresButton.Subscribe( _ => this.ClickedCustomFreeSquaresButtonEvent () );
+			this.CustomizeView.OnClickedCustomParameterChipsButton.Subscribe( _ => this.ClickedCustomParameterChipsButtonEvent () );
+			this.CustomizeView.OnClickedCustomParameterChipsDecisionButton.Subscribe( _ => this.ClickedCustomParameterChipsDecisionButtonEvent() );
+			this.CustomizeView.OnClickedFreeSquaresDecisionButton.Subscribe( _ => this.ClickedFreeSquaresDecisionButtonEvent () );
+			
 			this.LogDebug( "End" );
 		}
 

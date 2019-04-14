@@ -38,12 +38,12 @@ namespace Services.Saves {
 		/// <summary>
 		/// セーブRepository
 		/// </summary>
-		private SaveRepository saveRepository = SaveRepository.GetInstance();
+		private readonly SaveRepository saveRepository = SaveRepository.GetInstance();
 
 		/// <summary>
 		/// チャプタークリア状況一覧
 		/// </summary>
-		private ChapterClearStatusRepository chapterClearStatusRepository = ChapterClearStatusRepository.GetInstance();
+		private readonly ChapterClearStatusRepository chapterClearStatusRepository = ChapterClearStatusRepository.GetInstance();
 
 		#endregion
 		

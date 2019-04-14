@@ -21,7 +21,7 @@ namespace Presenters.ChapterSelect {
 		/// <summary>
 		/// 選択中のチャプターID
 		/// </summary>
-		private ReactiveProperty<int> selectedChapterId = new ReactiveProperty<int>();
+		private readonly ReactiveProperty<int> selectedChapterId = new ReactiveProperty<int>();
 		
 		#endregion
 
@@ -44,29 +44,29 @@ namespace Presenters.ChapterSelect {
 		/// <summary>
 		/// シーンService
 		/// </summary>
-		private SceneService sceneService = SceneService.GetInstance();
+		private readonly SceneService sceneService = SceneService.GetInstance();
 
 		/// <summary>
 		/// チャプターService
 		/// </summary>
-		private ChapterService chapterService = ChapterService.GetInstance();
+		private readonly ChapterService chapterService = ChapterService.GetInstance();
 
 		#endregion
 
 		/// <summary>
 		/// 一人プレイかどうか
 		/// </summary>
-		private bool isSinglePlayMode;
+		private readonly bool isSinglePlayMode;
 
 		/// <summary>
 		/// セーブデータID
 		/// </summary>
-		private int SaveDataId;
+		private readonly int SaveDataId;
 
 		/// <summary>
 		/// クリア済みチャプターID一覧
 		/// </summary>
-		private List<int> clearedChapterIds;
+		private readonly List<int> clearedChapterIds;
 		
 		/// <summary>
 		/// コンストラクタ
@@ -130,17 +130,18 @@ namespace Presenters.ChapterSelect {
 			List<ChapterSelectView.Chapter> list = new List<ChapterSelectView.Chapter>();
 			foreach( int i in Enumerable.Range( 0 , models.Count ) ) {
 				int index = i;
-				list.Add( new ChapterSelectView.Chapter() {
+				ChapterSelectView.Chapter c = new ChapterSelectView.Chapter() {
 					Id = models[ index ].Id ,
 					Name = models[ index ].Name ,
 					NumberOrder = models[ index ].NumberOrder ,
 					TimelineOrder = 0 ,
-					OnClickDecisionButtonEventHandler = () => this.ClickedDecisionButtonEvent( models[ index ].Id ) ,
 					IsShownScrollView = models[ index ].IsCleared ,
 					IsShownTimeline = models[ index ].IsCleared ,
 					NodeCoodinate = 0 ,
 					CoodinateOnLine = 0
-				} );
+				};
+				c.OnClickedDecisionButtonSubject.Subscribe( _ => this.ClickedDecisionButtonEvent( models[ index ].Id ) );
+				list.Add( c );
 			}
 			this.LogDebug( "End" );
 			return list;

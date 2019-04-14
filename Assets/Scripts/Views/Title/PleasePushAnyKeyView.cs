@@ -13,11 +13,16 @@ namespace Views.Title {
 		/// 何かキーが押されたか判定
 		/// </summary>
 		private bool IsClickAnyKey { set; get; } = false;
-		
+
 		/// <summary>
-		/// 何かキーが押された時のイベントハンドラ
+		/// 何かキーが押された時のイベントSubject
 		/// </summary>
-		public Action OnClickAnyKeyEventHandler { set; get; }
+		private readonly Subject<Unit> OnClickedAnyKeySubject = new Subject<Unit>();
+
+		/// <summary>
+		/// 何かキーが押された時のイベント購読
+		/// </summary>
+		public IObservable<Unit> OnClickedAnyKey => this.OnClickedAnyKeySubject;
 
 		/// <summary>
 		/// Unity Update
@@ -29,7 +34,7 @@ namespace Views.Title {
 				this.IsClickAnyKey = true;
 				Observable.NextFrame().Subscribe( _ => {
 					this.LogDebug( "Start : Click Any Key is false." );
-					this.OnClickAnyKeyEventHandler?.Invoke();
+					this.OnClickedAnyKeySubject.OnNext( Unit.Default );
 				} );
 				this.LogDebug( "End" );
 			}

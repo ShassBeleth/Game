@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -38,29 +39,54 @@ namespace Views.SelectSaveData {
 			public DateTime latestUpdateDateTime { set; get; }
 
 			/// <summary>
-			/// セーブデータ選択時イベントハンドラ
+			/// セーブデータ選択時イベントSubject
 			/// </summary>
-			public Action OnClickedSaveData { set; get; }
+			public readonly Subject<Unit> OnClickedSaveDataSubject = new Subject<Unit>();
 
 			/// <summary>
-			/// 続きからボタン押下時イベントハンドラ
+			/// セーブデータ選択時イベント購読
 			/// </summary>
-			public Action OnClickContinueButtonEventHandler { set; get; }
+			public IObservable<Unit> OnClickedSaveData => this.OnClickedSaveDataSubject;
 
 			/// <summary>
-			/// チャプターセレクトボタン押下時イベントハンドラ
+			/// 続きからボタン押下時イベントSubject
 			/// </summary>
-			public Action OnClickChapterSelectButtonEventHandler { set; get; }
+			public readonly Subject<Unit> OnClickedContinueButtonSubject = new Subject<Unit>();
 
 			/// <summary>
-			/// コピーボタン押下時イベントハンドラ
+			/// 続きからボタン押下時イベント購読
 			/// </summary>
-			public Action OnClickCopyButtonEventHandler { set; get; }
+			public IObservable<Unit> OnClickedContinueButton => this.OnClickedContinueButtonSubject;
 
 			/// <summary>
-			/// 削除ボタン押下時イベントハンドラ
+			/// チャプターセレクトボタン押下時イベントSubject
 			/// </summary>
-			public Action OnClickDeleteButtonEventHandler { set; get; }
+			public readonly Subject<Unit> OnClickedChapterSelectButtonSubject = new Subject<Unit>();
+
+			/// <summary>
+			/// チャプターセレクトボタン押下時イベント購読
+			/// </summary>
+			public IObservable<Unit> OnClickedChapterSelectButton => this.OnClickedChapterSelectButtonSubject;
+
+			/// <summary>
+			/// コピーボタン押下時イベントSubject
+			/// </summary>
+			public readonly Subject<Unit> OnClickedCopyButtonSubject = new Subject<Unit>();
+
+			/// <summary>
+			/// コピーボタン押下時イベント購読
+			/// </summary>
+			public IObservable<Unit> OnClickedCopyButton => this.OnClickedCopyButtonSubject;
+
+			/// <summary>
+			/// 削除ボタン押下時イベントSubject
+			/// </summary>
+			public readonly Subject<Unit> OnClickedDeleteButtonSubject = new Subject<Unit>();
+
+			/// <summary>
+			/// 削除ボタン押下時イベント購読
+			/// </summary>
+			public IObservable<Unit> OnClickedDeleteButton => this.OnClickedDeleteButtonSubject;
 
 		}
 		
@@ -104,7 +130,7 @@ namespace Views.SelectSaveData {
 						: "----/--/-- --:--:--";
 
 				// 選択時イベント追加
-				save.GetComponent<Button>().onClick.AddListener( () => saveDataList[ i ].OnClickedSaveData() );
+				save.GetComponent<Button>().onClick.AddListener( () => saveDataList[ i ].OnClickedSaveDataSubject.OnNext( Unit.Default ) );
 
 			}
 
@@ -152,10 +178,10 @@ namespace Views.SelectSaveData {
 				Button deleteButton = this.ContentInPanel.transform.Find( "DeleteButton" ).GetComponent<Button>();
 
 				// ボタン押下時イベント設定
-				continueButton.onClick.AddListener( () => save.OnClickContinueButtonEventHandler() );
-				chapterSelectButton.onClick.AddListener( () => save.OnClickChapterSelectButtonEventHandler() );
-				copyButton.onClick.AddListener( () => save.OnClickCopyButtonEventHandler() );
-				deleteButton.onClick.AddListener( () => save.OnClickDeleteButtonEventHandler() );
+				continueButton.onClick.AddListener( () => save.OnClickedContinueButtonSubject.OnNext( Unit.Default ) );
+				chapterSelectButton.onClick.AddListener( () => save.OnClickedChapterSelectButtonSubject.OnNext( Unit.Default ) );
+				copyButton.onClick.AddListener( () => save.OnClickedCopyButtonSubject.OnNext( Unit.Default ) );
+				deleteButton.onClick.AddListener( () => save.OnClickedDeleteButtonSubject.OnNext( Unit.Default ) );
 			}
 			else {
 				this.Panel.SetActive( false );

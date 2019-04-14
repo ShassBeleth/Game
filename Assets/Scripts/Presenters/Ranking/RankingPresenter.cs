@@ -2,6 +2,7 @@
 using Services.Scenes.Parameters;
 using UnityEngine;
 using Views.Ranking;
+using UniRx;
 
 namespace Presenters.Ranking {
 
@@ -28,7 +29,7 @@ namespace Presenters.Ranking {
 		/// <summary>
 		/// シーンService
 		/// </summary>
-		private SceneService sceneService = SceneService.GetInstance();
+		private readonly SceneService sceneService = SceneService.GetInstance();
 
 		#endregion
 
@@ -57,7 +58,7 @@ namespace Presenters.Ranking {
 			this.rankingView = GameObject.Find( "Canvas" ).GetComponent<RankingView>();
 
 			// ランキングViewのEventHandler設定
-			this.rankingView.OnClickBackButtonEventHandler = this.ClickedBackButtonEvent;
+			this.rankingView.OnClickedBackButton.Subscribe( _ => this.ClickedBackButtonEvent() );
 
 			this.LogDebug( "End" );
 		}

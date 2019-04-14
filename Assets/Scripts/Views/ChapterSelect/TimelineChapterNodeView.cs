@@ -21,12 +21,7 @@ namespace Views.ChapterSelect {
 		// 仮
 		public void Update() {
 			Image image = this.GetComponent<Image>();
-			if( this.IsSelected ) {
-				image.color = Color.red;
-			}
-			else {
-				image.color = Color.blue;
-			}
+			image.color = this.IsSelected ? Color.red : Color.blue;
 		}
 
 		/// <summary>

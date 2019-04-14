@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -38,9 +39,9 @@ namespace Views.Customize {
 			public string EquipmanetName { set; get; }
 
 			/// <summary>
-			/// 決定ボタン押下時イベントハンドラ
+			/// 決定ボタン押下時イベントSubject
 			/// </summary>
-			public Action OnClickDecisionEventHandler { set; get; }
+			public Subject<Unit> OnClickedDecisionButtonSubject = new Subject<Unit>();
 
 		}
 
@@ -65,9 +66,9 @@ namespace Views.Customize {
 			public List<EquipablePlace> EquipablePlaces { set; get; }
 
 			/// <summary>
-			/// 決定ボタン押下時イベントハンドラ
+			/// 決定ボタン押下時イベントSubject
 			/// </summary>
-			public Action OnClickDecisionEventHandler { set; get; }
+			public Subject<Unit> OnClickedDecisionButtonSubject = new Subject<Unit>();
 
 		}
 
@@ -90,9 +91,9 @@ namespace Views.Customize {
 			public bool CanEquip { set; get; }
 
 			/// <summary>
-			/// 決定ボタン押下時イベントハンドラ
+			/// 決定ボタン押下時イベントSubject
 			/// </summary>
-			public Action OnClickDecisionEventHandler { set; get; }
+			public Subject<Unit> OnClickedDecisionButtonSubject = new Subject<Unit>();
 
 		}
 
@@ -154,16 +155,21 @@ namespace Views.Customize {
 		public GameObject BodyButton;
 
 		/// <summary>
-		/// 素体ボタン押下時イベントハンドラ
+		/// 素体ボタン押下時イベントSubject
 		/// </summary>
-		public Action OnClickBodyButtonEventHandler { set; get; }
+		private readonly Subject<Unit> OnClickedBodyButtonSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// 素体ボタン押下時イベント購読
+		/// </summary>
+		public IObservable<Unit> OnClickedBodyButton => this.OnClickedBodyButtonSubject;
 
 		/// <summary>
 		/// 素体ボタン押下時イベント
 		/// </summary>
 		public void OnClickBodyEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickBodyButtonEventHandler?.Invoke();
+			this.OnClickedBodyButtonSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 
@@ -197,7 +203,7 @@ namespace Views.Customize {
 				BodyNodeView view = node.GetComponent<BodyNodeView>();
 				view.Id = bodies[ i ].Id;
 				view.SetBodyName( bodies[ i ].Name );
-				view.OnClickDecisionEventHandler = bodies[ i ].OnClickDecisionEventHandler;
+				view.OnClickedDecisionButtonSubject = bodies[ i ].OnClickedDecisionButtonSubject;
 			}
 
 			foreach( int i in Enumerable.Range( 0 , bodyGameObjects.Count ) ) {
@@ -267,16 +273,21 @@ namespace Views.Customize {
 		public GameObject equipablePlaceScrollViewContent;
 
 		/// <summary>
-		/// 装備可能箇所一覧Scroll View選択時イベントハンドラ
+		/// 装備可能箇所一覧Scroll View選択時イベントSubject
 		/// </summary>
-		public Action OnClickEquipablePlaceScrollViewEventHandler { set; get; }
+		private readonly Subject<Unit> OnClickedEquipablePlaceScrollViewSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// 装備可能箇所一覧Scroll View選択時イベント購読
+		/// </summary>
+		public IObservable<Unit> OnClickedEquipablePlaceScrollView => this.OnClickedEquipablePlaceScrollViewSubject;
 
 		/// <summary>
 		/// 装備可能箇所一覧Scroll View選択時イベント
 		/// </summary>
 		public void OnClickEquipmentScrollViewEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickEquipablePlaceScrollViewEventHandler?.Invoke();
+			this.OnClickedEquipablePlaceScrollViewSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 
@@ -303,7 +314,7 @@ namespace Views.Customize {
 				view.Id = equipablePlace.Id;
 				view.PartName = equipablePlace.Name;
 
-				view.OnClickDecisionButtonEventHandler = equipablePlace.OnClickDecisionEventHandler;
+				view.OnClickedDecisionButtonSubject = equipablePlace.OnClickedDecisionButtonSubject;
 				view.SetText( equipablePlace.EquipmanetName );
 			} );
 
@@ -393,7 +404,7 @@ namespace Views.Customize {
 				node.transform.SetParent( this.equipmentScrollViewContent.transform , false );
 				equipmentGameObjects.Add( node );
 				EquipmentNodeView view = node.GetComponent<EquipmentNodeView>();
-				view.OnClickDecisionEventHandler = equipment.OnClickDecisionEventHandler;
+				view.OnClickedDecisionButtonSubject = equipment.OnClickedDecisionButtonSubject;
 				view.SetEquipmentName( equipment.Name );
 			} );
 
@@ -573,17 +584,23 @@ namespace Views.Customize {
 		#endregion
 
 		#region 装備決定ボタン
+
 		/// <summary>
-		/// 装備決定ボタン押下時イベントハンドラ
+		/// 装備決定ボタン押下時イベントSubject
 		/// </summary>
-		public Action OnClickEquipmentDecisionButtonEventHandler { set; get; }
+		private readonly Subject<Unit> OnClickedEquipmentDecisionButtonSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// 装備決定ボタン押下時イベント購読
+		/// </summary>
+		public IObservable<Unit> OnClickedEquipmentDecisionButton => this.OnClickedEquipmentDecisionButtonSubject;
 
 		/// <summary>
 		/// 装備決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickEquipmentDecisionButtonEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickEquipmentDecisionButtonEventHandler?.Invoke();
+			this.OnClickedEquipmentDecisionButtonSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 		#endregion
@@ -656,16 +673,21 @@ namespace Views.Customize {
 		public GameObject CustomFreeSquaresButton;
 
 		/// <summary>
-		/// 空きマスを変更するボタン押下時イベントハンドラ
+		/// 空きマスを変更するボタン押下時イベントSubject
 		/// </summary>
-		public Action OnClickCustomFreeSquaresButtonEventHandler;
+		private readonly Subject<Unit> OnClickedFreeSquaresButtonSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// 空きマスを変更するボタン押下時イベント購読
+		/// </summary>
+		public IObservable<Unit> OnClickedFreeSquaresButton => this.OnClickedFreeSquaresButtonSubject;
 
 		/// <summary>
 		/// 空きマスを変更するボタン押下時イベント
 		/// </summary>
 		public void OnClickCustomFreeSquaresButtonEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickCustomFreeSquaresButtonEventHandler?.Invoke();
+			this.OnClickedFreeSquaresButtonSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 
@@ -679,16 +701,21 @@ namespace Views.Customize {
 		public GameObject CustomParameterChipsButton;
 
 		/// <summary>
-		/// パラメータカスタマイズボタン押下時イベントハンドラ
+		/// パラメータカスタマイズボタン押下時イベントSubject
 		/// </summary>
-		public Action OnClickCustomParameterChipsButtonEventHandler;
+		private readonly Subject<Unit> OnClickedCustomParameterChipsButtonSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// パラメータカスタマイズボタン押下時イベント購読
+		/// </summary>
+		public IObservable<Unit> OnClickedCustomParameterChipsButton => this.OnClickedCustomParameterChipsButtonSubject;
 
 		/// <summary>
 		/// パラメータカスタマイズボタン押下時イベント
 		/// </summary>
 		public void OnClickCustomParameterChipsButtonEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickCustomParameterChipsButtonEventHandler?.Invoke();
+			this.OnClickedCustomParameterChipsButtonSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 
@@ -702,16 +729,21 @@ namespace Views.Customize {
 		public GameObject ParameterDecisionButton;
 
 		/// <summary>
-		/// パラメータカスタマイズの決定ボタン押下時イベントハンドラ
+		/// パラメータカスタマイズの決定ボタン押下時イベントSubject
 		/// </summary>
-		public Action OnClickParameterDecisionButtonEventHandler;
+		private readonly Subject<Unit> OnClickedParameterDecisionButtonSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// パラメータカスタマイズの決定ボタン押下時イベント購読
+		/// </summary>
+		public IObservable<Unit> OnClickedParameterDecisionButton => this.OnClickedParameterDecisionButtonSubject;
 
 		/// <summary>
 		/// パラメータカスタマイズの決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickParameterDecisionButtonEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickParameterDecisionButtonEventHandler?.Invoke();
+			this.OnClickedParameterDecisionButtonSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 
@@ -729,16 +761,21 @@ namespace Views.Customize {
 		public GameObject FreeSquaresDecisionButton;
 
 		/// <summary>
-		/// 空きマス変更の決定ボタン押下時イベントハンドラ
+		/// 空きマスの変更の決定ボタン押下時イベントSubject
 		/// </summary>
-		public Action OnClickFreeSquaresDecisionButtonEventHandler { set; get; }
+		private readonly Subject<Unit> OnClickedFreeSquaresDecisionButtonSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// 空きマスの変更の決定ボタン押下時イベント購読
+		/// </summary>
+		public IObservable<Unit> OnClickedFreeSquaresDecisionButton => this.OnClickedFreeSquaresDecisionButtonSubject;
 
 		/// <summary>
 		/// 空きマス変更の決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickFreeSquaresDecisionButtonEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickFreeSquaresDecisionButtonEventHandler?.Invoke();
+			this.OnClickedFreeSquaresDecisionButtonSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 
@@ -756,16 +793,21 @@ namespace Views.Customize {
 		public GameObject CustomParameterChipsDecisionButton;
 
 		/// <summary>
-		/// パラメータチップ変更の決定ボタン押下時イベントハンドラ
+		/// パラメータチップ変更の決定ボタン押下時イベントSubject
 		/// </summary>
-		public Action OnClickCustomParameterChipsDecisionButtonEventHandler { set; get; }
+		private readonly Subject<Unit> OnClickedCustomParameterChipsDecisionButtonSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// パラメータチップ変更の決定ボタン押下時イベント購読
+		/// </summary>
+		public IObservable<Unit> OnClickedCustomParameterChipsDecisionButton => this.OnClickedCustomParameterChipsDecisionButtonSubject;
 
 		/// <summary>
 		/// パラメータチップ変更の決定ボタン押下時イベント
 		/// </summary>
 		public void OnClickCustomParameterChipsDecisionButtonEvent() {
 			this.LogDebug( "Start" );
-			this.OnClickCustomParameterChipsDecisionButtonEventHandler?.Invoke();
+			this.OnClickedCustomParameterChipsDecisionButtonSubject.OnNext( Unit.Default );
 			this.LogDebug( "End" );
 		}
 

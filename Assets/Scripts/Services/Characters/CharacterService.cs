@@ -39,47 +39,47 @@ namespace Services.Characters {
 		/// <summary>
 		/// 所持している素体Repository
 		/// </summary>
-		private HavingBodyRepository havingBodyRepository = HavingBodyRepository.GetInstance();
+		private readonly HavingBodyRepository havingBodyRepository = HavingBodyRepository.GetInstance();
 
 		/// <summary>
 		/// 素体：装備可能箇所Repository
 		/// </summary>
-		private BodyEquipablePlaceRepository bodyEquipablePlaceRepository = BodyEquipablePlaceRepository.GetInstance();
+		private readonly BodyEquipablePlaceRepository bodyEquipablePlaceRepository = BodyEquipablePlaceRepository.GetInstance();
 
 		/// <summary>
 		/// 装備可能箇所Repository
 		/// </summary>
-		private EquipablePlaceRepository equipablePlaceRepository = EquipablePlaceRepository.GetInstance();
+		private readonly EquipablePlaceRepository equipablePlaceRepository = EquipablePlaceRepository.GetInstance();
 
 		/// <summary>
 		/// 素体Repository
 		/// </summary>
-		private BodyRepository bodyRepository = BodyRepository.GetInstance();
+		private readonly BodyRepository bodyRepository = BodyRepository.GetInstance();
 
 		/// <summary>
 		/// 装備Repository
 		/// </summary>
-		private EquipmentRepository equipmentRepository = EquipmentRepository.GetInstance();
+		private readonly EquipmentRepository equipmentRepository = EquipmentRepository.GetInstance();
 
 		/// <summary>
 		/// 所持している装備Repository
 		/// </summary>
-		private HavingEquipmentRepository havingEquipmentRepository = HavingEquipmentRepository.GetInstance();
+		private readonly HavingEquipmentRepository havingEquipmentRepository = HavingEquipmentRepository.GetInstance();
 
 		/// <summary>
 		/// 装備可能箇所に装備できる装備Repository
 		/// </summary>
-		private EquipmentEquipableInEquipablePlaceRepository equipmentEquipableInEquipablePlaceRepository = EquipmentEquipableInEquipablePlaceRepository.GetInstance();
+		private readonly EquipmentEquipableInEquipablePlaceRepository equipmentEquipableInEquipablePlaceRepository = EquipmentEquipableInEquipablePlaceRepository.GetInstance();
 
 		/// <summary>
 		/// 装備すると装備できなくなる装備可能箇所Repository
 		/// </summary>
-		private EquippedWhenUnequippingEquipablePlaceRepository equippedWhenUnequippingEquipablePlaceRepository = EquippedWhenUnequippingEquipablePlaceRepository.GetInstance();
+		private readonly EquippedWhenUnequippingEquipablePlaceRepository equippedWhenUnequippingEquipablePlaceRepository = EquippedWhenUnequippingEquipablePlaceRepository.GetInstance();
 
 		/// <summary>
 		/// 装備すると増える装備可能箇所Repository
 		/// </summary>
-		private EquippedWhenIncreasingEquipablePlaceRepository equippedWhenIncreasingEquipablePlaceRepository = EquippedWhenIncreasingEquipablePlaceRepository.GetInstance();
+		private readonly EquippedWhenIncreasingEquipablePlaceRepository equippedWhenIncreasingEquipablePlaceRepository = EquippedWhenIncreasingEquipablePlaceRepository.GetInstance();
 
 		#endregion
 

@@ -45,19 +45,19 @@ namespace Presenters.SelectSaveData {
 		/// <summary>
 		/// シーンService
 		/// </summary>
-		private SceneService sceneService = SceneService.GetInstance();
+		private readonly SceneService sceneService = SceneService.GetInstance();
 
 		/// <summary>
 		/// セーブService
 		/// </summary>
-		private SaveService saveService = SaveService.GetInstance();
+		private readonly SaveService saveService = SaveService.GetInstance();
 
 		#endregion
 		
 		/// <summary>
 		/// 一人プレイかどうか
 		/// </summary>
-		private bool isSinglePlayMode;
+		private readonly bool isSinglePlayMode;
 		
 		/// <summary>
 		/// コンストラクタ
@@ -77,7 +77,7 @@ namespace Presenters.SelectSaveData {
 
 			// セーブデータをViewに必要な情報に加工
 			List<SelectSaveDataView.SaveData> saveDataList = this.saveService.GetSaves()
-				.Select( s => ConvertSaveDataOfPresenterToSaveDataOfView( s ) )
+				.Select( s => this.ConvertSaveDataOfPresenterToSaveDataOfView( s ) )
 				.OrderBy( s => s.Id )
 				.ToList();
 
@@ -270,13 +270,14 @@ namespace Presenters.SelectSaveData {
 				Id = model.id ,
 				ExistsAlreadyData = model.exsitsAlreadyData ,
 				userName = model.userName ,
-				latestUpdateDateTime = model.latestUpdateDateTime ,
-				OnClickedSaveData = () => this.ClickedSaveData( model.id ) ,
-				OnClickContinueButtonEventHandler = () => this.ClickedContinueButtonEvent( model.id ) ,
-				OnClickChapterSelectButtonEventHandler = () => this.ClickedChapterSelectButtonEvent( model.id ) ,
-				OnClickCopyButtonEventHandler = () => this.ClickedCopyButtonEvent( model.id ) ,
-				OnClickDeleteButtonEventHandler = () => this.ClickedDeleteButtonEvent( model.id )
+				latestUpdateDateTime = model.latestUpdateDateTime
 			};
+			data.OnClickedSaveData.Subscribe( _ => this.ClickedSaveData( model.id ) );
+			data.OnClickedContinueButton.Subscribe( _ => this.ClickedContinueButtonEvent( model.id ) );
+			data.OnClickedChapterSelectButton.Subscribe( _ => this.ClickedChapterSelectButtonEvent( model.id ) );
+			data.OnClickedCopyButton.Subscribe( _ => this.ClickedCopyButtonEvent( model.id ) );
+			data.OnClickedDeleteButton.Subscribe( _ => this.ClickedDeleteButtonEvent( model.id ) );
+
 			this.LogDebug( "End" );
 			return data;
 		}

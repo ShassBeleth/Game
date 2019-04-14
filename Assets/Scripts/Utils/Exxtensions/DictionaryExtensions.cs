@@ -20,11 +20,9 @@ namespace Utils.Exxtensions {
 		public static TV GetOrDefault<TK, TV>(
 			this Dictionary<TK , TV> dictionary ,
 			TK key ,
-			TV defaultValue = default( TV ) 
-		) {
-			TV result;
-			return dictionary.TryGetValue( key , out result ) ? result : defaultValue;
-		}
+			TV defaultValue = default
+		)
+			=> dictionary.TryGetValue( key , out TV result ) ? result : defaultValue;
 
 	}
 

@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Configs.Logs;
 using UnityEditor;
 using UnityEngine;
+
 /// <summary>
 /// ログ出力拡張メソッド
 /// </summary>

@@ -65,10 +65,9 @@ namespace Editor.Logger {
 
 			EditorGUILayout.PropertyField( serializedObject.FindProperty( "checkList" ) , true );
 
-			serializedObject.ApplyModifiedProperties();
-
 			// ウィンドウで設定した情報をassetファイルに反映
 			this.config.CheckList = this.checkList;
+			serializedObject.ApplyModifiedProperties();
 
 		}
 
